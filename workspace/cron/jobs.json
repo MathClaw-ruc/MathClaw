@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "aa3187d3",
+      "name": "MathClaw Daily Summary",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "atMs": null,
+        "everyMs": null,
+        "expr": "0 22 * * *",
+        "tz": "Asia/Shanghai"
+      },
+      "payload": {
+        "kind": "agent_turn",
+        "message": "__mathclaw_daily_summary__",
+        "deliver": false,
+        "channel": null,
+        "to": null
+      },
+      "state": {
+        "nextRunAtMs": 1775138400000,
+        "lastRunAtMs": 1774965600003,
+        "lastStatus": "ok",
+        "lastError": null,
+        "runHistory": [
+          {
+            "runAtMs": 1774879200001,
+            "status": "ok",
+            "durationMs": 28547,
+            "error": null
+          },
+          {
+            "runAtMs": 1774965600003,
+            "status": "ok",
+            "durationMs": 46743,
+            "error": null
+          }
+        ]
+      },
+      "createdAtMs": 1774842443525,
+      "updatedAtMs": 1774965646746,
+      "deleteAfterRun": false
+    },
+    {
+      "id": "84ea0ad9",
+      "name": "MathClaw Weekly Summary",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "atMs": null,
+        "everyMs": null,
+        "expr": "10 22 * * 5",
+        "tz": "Asia/Shanghai"
+      },
+      "payload": {
+        "kind": "agent_turn",
+        "message": "__mathclaw_weekly_summary__",
+        "deliver": false,
+        "channel": null,
+        "to": null
+      },
+      "state": {
+        "nextRunAtMs": 1775225400000,
+        "lastRunAtMs": null,
+        "lastStatus": null,
+        "lastError": null,
+        "runHistory": []
+      },
+      "createdAtMs": 1774842443537,
+      "updatedAtMs": 1774842443537,
+      "deleteAfterRun": false
+    }
+  ]
+}
