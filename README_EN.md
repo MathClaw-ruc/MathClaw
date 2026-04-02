@@ -12,15 +12,20 @@ MathClaw combines a tutoring workspace, study planning, memory graphs, scheduled
 [![Console](https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square)](#console-modules)
 [![Channels](https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square)](#channels-and-integrations)
 [![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#what-ships-today)
+[![Heartbeat](https://img.shields.io/badge/Heartbeat-Summaries%20%26%20Cron-FF8A3D?style=flat-square)](#learning-memory-and-automation)
+[![MCP](https://img.shields.io/badge/MCP-Tools%20%26%20Providers-7A5AF8?style=flat-square)](#providers-and-tools)
 [![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
 
-[中文](README.md) · [English](README_EN.md) · [Quick Start](#quick-start) · [Core Modules](#core-modules) · [Console Modules](#console-modules) · [Communication](COMMUNICATION.md)
+[**中文**](README.md) · [**English**](README_EN.md) · [**🚀 Quick Start**](#quick-start) · [**🧩 Core Modules**](#core-modules) · [**🖥️ Console Modules**](#console-modules) · [**📡 Channels**](#channels-and-integrations) · [**🛠️ Providers & Tools**](#providers-and-tools) · [**💬 Communication**](COMMUNICATION.md)
+
+**🧠 Math Tutoring Workspace • 🗓️ Study Planning & Summaries • 🕸️ Knowledge / Error Graphs**  
+**📡 Multi-Channel Gateway • ⏰ Heartbeat + Cron • 🛠️ MCP / Tools / Skills**
 
 </div>
 
 ---
 
-## What This Repository Is
+## 🎯 What This Repository Is
 
 This repository is the current, runnable MathClaw version. It no longer matches the older README that mentioned `start.sh`, quickstart config APIs, or the old React/FastAPI stack.
 
@@ -31,20 +36,20 @@ Today, MathClaw is:
 - a learning workflow centered on **study plans, heartbeat tasks, structured memory, knowledge graphs, and error graphs**
 - a **multi-channel gateway** that can connect to WeCom, QQ, Feishu, Telegram, Slack, WhatsApp, and more
 
-## What Ships Today
+## 🧩 What Ships Today
 
 | Module | Current capability | Main code |
 | --- | --- | --- |
-| Chat Workspace | Single-thread tutoring workspace with text, image, and PDF upload; Markdown/table rendering | `console/main.js` · `console/serve.py` |
-| Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `nanobot/agent/memory.py` · `workspace/cron/jobs.json` |
-| Memory Graphs | Knowledge graph + error graph, focus/overview modes, node details, node deletion | `workspace/memory/graphs/*` · `console/main.js` |
-| Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `nanobot/cron/service.py` · `nanobot/heartbeat/service.py` |
-| Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `nanobot/channels/manager.py` · `nanobot/cli/commands.py` |
-| Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `nanobot/providers/registry.py` · `nanobot/agent/loop.py` |
-| Custom Output Skills | Optional follow-up output boxes after attachment replies | `nanobot/agent/custom_output_skills.py` |
-| Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `nanobot/session/manager.py` · `nanobot/agent/memory.py` |
+| 🧠 Chat Workspace | Single-thread tutoring workspace with text, image, and PDF upload; Markdown/table rendering | `console/main.js` · `console/serve.py` |
+| 🗓️ Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `nanobot/agent/memory.py` · `workspace/cron/jobs.json` |
+| 🕸️ Memory Graphs | Knowledge graph + error graph, focus/overview modes, node details, node deletion | `workspace/memory/graphs/*` · `console/main.js` |
+| ⏰ Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `nanobot/cron/service.py` · `nanobot/heartbeat/service.py` |
+| 📡 Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `nanobot/channels/manager.py` · `nanobot/cli/commands.py` |
+| 🛠️ Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `nanobot/providers/registry.py` · `nanobot/agent/loop.py` |
+| ✨ Custom Output Skills | Optional follow-up output boxes after attachment replies | `nanobot/agent/custom_output_skills.py` |
+| 🧾 Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `nanobot/session/manager.py` · `nanobot/agent/memory.py` |
 
-## Key Features
+## ✨ Key Features
 
 <table>
   <tr>
@@ -69,7 +74,7 @@ Today, MathClaw is:
 
 <a id="core-modules"></a>
 
-## Core Modules
+## 🔗 Core Modules
 
 <details>
 <summary><b>🧠 Chat Workspace</b></summary>
@@ -156,7 +161,7 @@ Today, MathClaw is:
 
 </details>
 
-## Architecture
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
@@ -176,20 +181,20 @@ flowchart LR
     C --> M["MathClaw Console"]
 ```
 
-## Console Modules
+## 🖥️ Console Modules
 
 | Page | Audience | Current purpose |
 | --- | --- | --- |
-| Chat Workspace | Student | Single-thread tutoring workspace with attachment upload and rich Markdown answers |
-| Study Plan | Student | Daily status, weekly plan, tomorrow suggestions, focus topics, practice load |
-| Memory | Student / Teacher | Knowledge graph, error graph, node details, relation browsing |
-| Runtime Status | Operator | Health summary, model chain, tool abilities, active channels, attachment pipeline |
-| Channels | Operator | Per-channel enablement, daily message count, active sessions, last activity |
-| Heartbeat | Operator | Scheduled summaries, heartbeat rhythm, latest result, troubleshooting order |
-| Skills | Operator | Manage custom output skills used after attachment replies |
-| MCP / Agent Config / Models | Operator | View current tools, agent boundaries, and model chain |
+| 🧠 Chat Workspace | Student | Single-thread tutoring workspace with attachment upload and rich Markdown answers |
+| 🗓️ Study Plan | Student | Daily status, weekly plan, tomorrow suggestions, focus topics, practice load |
+| 🕸️ Memory | Student / Teacher | Knowledge graph, error graph, node details, relation browsing |
+| 📊 Runtime Status | Operator | Health summary, model chain, tool abilities, active channels, attachment pipeline |
+| 📡 Channels | Operator | Per-channel enablement, daily message count, active sessions, last activity |
+| ❤️ Heartbeat | Operator | Scheduled summaries, heartbeat rhythm, latest result, troubleshooting order |
+| ✨ Skills | Operator | Manage custom output skills used after attachment replies |
+| 🛠️ MCP / Agent Config / Models | Operator | View current tools, agent boundaries, and model chain |
 
-## Quick Start
+## 🚀 Quick Start
 
 ### 1. Requirements
 
@@ -295,9 +300,9 @@ NANOBOT_CONSOLE_WORKSPACE=../workspace NANOBOT_CONSOLE_PORT=6008 python serve.py
 nanobot agent --workspace ./workspace -m "Teach me monotonicity from derivatives"
 ```
 
-## Channels and Integrations
+## 📡 Channels and Integrations
 
-### Built-in channels
+### 📮 Built-in channels
 
 The current repository includes built-in modules for:
 
@@ -316,7 +321,7 @@ The current repository includes built-in modules for:
 
 It also supports external channel plugins via Python entry points. See [docs/CHANNEL_PLUGIN_GUIDE.md](docs/CHANNEL_PLUGIN_GUIDE.md).
 
-### Runtime override examples
+### 🧪 Runtime override examples
 
 WeCom:
 
@@ -360,9 +365,9 @@ To inspect channel status:
 nanobot channels status
 ```
 
-## Providers and Tools
+## 🛠️ Providers and Tools
 
-### Supported providers
+### 🤖 Supported providers
 
 The current provider registry already includes:
 
@@ -386,7 +391,7 @@ The current provider registry already includes:
 - GitHub Copilot
 - custom OpenAI-compatible endpoints
 
-### Default agent tools
+### 🧰 Default agent tools
 
 `AgentLoop` currently registers:
 
@@ -398,7 +403,7 @@ The current provider registry already includes:
 - cron scheduling
 - MCP tool servers
 
-## Learning Memory and Automation
+## 🧠 Learning Memory and Automation
 
 What makes this repository distinctive is not just chat. It continuously turns tutoring activity into reusable learning memory:
 
@@ -418,7 +423,7 @@ Relevant workspace files:
 - `workspace/memory/graphs/knowledge_graph.json`
 - `workspace/memory/graphs/error_graph.json`
 
-## Repository Structure
+## 📁 Repository Structure
 
 ```text
 .
@@ -430,7 +435,7 @@ Relevant workspace files:
 └── tests/                   # Runtime, tool, security, and channel tests
 ```
 
-## README Scope
+## ℹ️ README Scope
 
 This README has been rewritten against the current codebase and is intentionally aligned with:
 
@@ -442,6 +447,6 @@ This README has been rewritten against the current codebase and is intentionally
 
 It does not describe the old quickstart APIs, old startup scripts, or the previous frontend/backend stack.
 
-## License
+## 📄 License
 
 This project is released under the [MIT License](LICENSE).
