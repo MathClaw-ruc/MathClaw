@@ -14,7 +14,7 @@
 [![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#当前能力一览)
 [![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
 
-[中文](README.md) · [English](README_EN.md) · [Quick Start](#快速开始) · [控制台模块](#控制台模块) · [通道与接入方式](#通道与接入方式) · [Communication](COMMUNICATION.md)
+[中文](README.md) · [English](README_EN.md) · [Quick Start](#快速开始) · [核心模块](#core-modules) · [控制台模块](#控制台模块) · [Communication](COMMUNICATION.md)
 
 </div>
 
@@ -95,6 +95,128 @@ MathClaw 是当前这套仓库里真正运行中的版本，不再沿用旧版 R
     </td>
   </tr>
 </table>
+
+<a id="core-modules"></a>
+
+## 核心模块
+
+<details>
+<summary><b>🧠 解题工作台</b></summary>
+<br />
+<table>
+  <tr>
+    <td width="46%" align="center" valign="top">
+      <img src="case/search.gif" alt="MathClaw Chat Workspace" width="100%" />
+    </td>
+    <td width="54%" valign="top">
+
+- 面向学生的单对话数学工作台
+- 支持文本、图片、截图和 PDF 上传
+- 回答区域支持 Markdown、列表、代码块和表格渲染
+- 支持连续追问，不再依赖旧版多会话历史列表
+- 附件回复后可叠加自定义输出 Skill，例如“竞赛教练点拨”
+
+    </td>
+  </tr>
+</table>
+</details>
+
+<hr />
+
+<details>
+<summary><b>🗓️ 学习计划</b></summary>
+<br />
+<table>
+  <tr>
+    <td width="46%" align="center" valign="top">
+      <img src="case/scedule.gif" alt="MathClaw Study Plan" width="100%" />
+    </td>
+    <td width="54%" valign="top">
+
+- 自动汇总今日状态、本周计划和明日建议
+- 从学习记忆里抽取优先复习知识点与重点纠错方向
+- 给出每天建议主题与练习量/难度剂量
+- 页面设计偏学生工作台，不是后台报表
+
+    </td>
+  </tr>
+</table>
+</details>
+
+<hr />
+
+<details>
+<summary><b>🕸️ 知识点图谱与错题图谱</b></summary>
+<br />
+<table>
+  <tr>
+    <td width="46%" align="center" valign="top">
+      <img src="case/memory.gif" alt="MathClaw Memory Graphs" width="100%" />
+    </td>
+    <td width="54%" valign="top">
+
+- 同时维护知识点图谱与错题图谱两套视图
+- 支持焦点 / 总览切换、节点高亮、关系图例和详情面板
+- 知识点图谱强调前置、相似、包含、关联关系
+- 错题图谱强调错误模式、重复出现、纠正建议和风险等级
+- 节点详情支持直接删除，便于老师或管理员清理图谱
+
+    </td>
+  </tr>
+</table>
+</details>
+
+<hr />
+
+<details>
+<summary><b>⏰ 自动总结与心跳</b></summary>
+<br />
+
+- 工作区内置 `MathClaw Daily Summary` 与 `MathClaw Weekly Summary`
+- `HEARTBEAT.md` 会被周期性检查，用于执行持续性任务而不是一次性提醒
+- `cron/jobs.json` 保存定时任务、上下次执行时间与历史结果
+- 控制台内有独立的心跳页面展示状态、节律与排查顺序
+
+</details>
+
+<hr />
+
+<details>
+<summary><b>📡 多通道接入</b></summary>
+<br />
+
+- 当前内置 WeCom、QQ、Feishu、Telegram、Slack、Email、Discord、Matrix、Weixin、DingTalk、WhatsApp、MoChat
+- `nanobot gateway` 统一负责通道启动、消息接入、流式输出聚合和失败重试
+- 支持运行时参数直接覆盖通道配置，适合部署与调试
+- 同时支持 Python entry points 方式扩展 channel plugin
+
+</details>
+
+<hr />
+
+<details>
+<summary><b>🛠️ 模型、工具与 MCP</b></summary>
+<br />
+
+- Provider registry 已内置 DashScope、OpenAI、Anthropic、DeepSeek、Gemini、OpenRouter、Ollama 等多种路由
+- 默认工具链包括文件系统、Shell、Web Search、Web Fetch、Cron、消息回写、子代理与 MCP
+- 可通过控制台查看当前模型链路、上下文窗口、工具能力和工作区限制
+- 适合把“教学能力”和“运维能力”放在同一套系统里统一管理
+
+</details>
+
+<hr />
+
+<details>
+<summary><b>✨ 自定义输出 Skill</b></summary>
+<br />
+
+- 支持在附件类回复结束后追加第二个风格化回复框
+- Skill 存储在 `workspace/custom_output_skills.json`
+- 当前仓库已支持启用、停用、删除与控制台查看
+- 适合扩展“竞赛教练点拨”“压轴题提醒”“考试规范检查”等附加输出风格
+
+</details>
 
 ## 系统架构
 
