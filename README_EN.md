@@ -67,34 +67,6 @@ Today, MathClaw is:
   </tr>
 </table>
 
-## Showcase
-
-<table>
-  <tr>
-    <td width="33%" align="center">
-      <img src="case/search.gif" alt="Chat Workspace" />
-      <br />
-      <strong>Chat workspace</strong>
-      <br />
-      Text / image / PDF input with structured answers
-    </td>
-    <td width="33%" align="center">
-      <img src="case/scedule.gif" alt="Study Plan" />
-      <br />
-      <strong>Study plan + scheduled summaries</strong>
-      <br />
-      Daily rhythm, weekly planning, heartbeat-driven updates
-    </td>
-    <td width="33%" align="center">
-      <img src="case/memory.gif" alt="Memory Graphs" />
-      <br />
-      <strong>Knowledge + error graphs</strong>
-      <br />
-      Visual memory for revision priorities and recurring mistakes
-    </td>
-  </tr>
-</table>
-
 <a id="core-modules"></a>
 
 ## Core Modules
@@ -102,22 +74,11 @@ Today, MathClaw is:
 <details>
 <summary><b>🧠 Chat Workspace</b></summary>
 <br />
-<table>
-  <tr>
-    <td width="46%" align="center" valign="top">
-      <img src="case/search.gif" alt="MathClaw Chat Workspace" width="100%" />
-    </td>
-    <td width="54%" valign="top">
-
 - A single-thread math tutoring workspace for students
 - Supports text, image, screenshot, and PDF input
 - Answer area renders Markdown, lists, code blocks, and tables
 - Follow-up conversation no longer depends on the old multi-session history UI
 - Attachment replies can be extended with custom output skills such as a “competition coach” box
-
-    </td>
-  </tr>
-</table>
 </details>
 
 <hr />
@@ -125,21 +86,10 @@ Today, MathClaw is:
 <details>
 <summary><b>🗓️ Study Plan</b></summary>
 <br />
-<table>
-  <tr>
-    <td width="46%" align="center" valign="top">
-      <img src="case/scedule.gif" alt="MathClaw Study Plan" width="100%" />
-    </td>
-    <td width="54%" valign="top">
-
 - Automatically summarizes daily status, weekly plan, and tomorrow suggestions
 - Pulls revision priorities and correction directions from structured learning memory
 - Presents daily themes and practice dosage in a student-facing layout
 - Designed as a study cockpit rather than an admin report
-
-    </td>
-  </tr>
-</table>
 </details>
 
 <hr />
@@ -147,22 +97,11 @@ Today, MathClaw is:
 <details>
 <summary><b>🕸️ Knowledge Graphs and Error Graphs</b></summary>
 <br />
-<table>
-  <tr>
-    <td width="46%" align="center" valign="top">
-      <img src="case/memory.gif" alt="MathClaw Memory Graphs" width="100%" />
-    </td>
-    <td width="54%" valign="top">
-
 - Maintains both a knowledge graph and an error graph
 - Supports focus/overview modes, node highlighting, relation legends, and detail panels
 - Knowledge graphs emphasize prerequisites, similarity, containment, and relation links
 - Error graphs emphasize mistake patterns, recurrence, correction suggestions, and risk
 - Node details support deletion for curation by teachers or operators
-
-    </td>
-  </tr>
-</table>
 </details>
 
 <hr />
@@ -487,7 +426,6 @@ Relevant workspace files:
 ├── console/                 # MathClaw console: static frontend shell + serve.py API layer
 ├── workspace/               # Repo-owned MathClaw persona, plans, and templates
 ├── bridge/                  # WhatsApp bridge (Node 20+)
-├── case/                    # GIF demos used in the README
 ├── docs/                    # Docs such as the channel plugin guide
 └── tests/                   # Runtime, tool, security, and channel tests
 ```
