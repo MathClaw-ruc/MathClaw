@@ -308,11 +308,49 @@ What makes this repository distinctive is not just chat. It continuously turns t
 
 Relevant workspace files:
 
+- `workspace/sessions/*.jsonl`
+- `workspace/memory/daily_conversations/*/events.jsonl`
+- `workspace/memory/daily_memory/*/*`
+- `workspace/memory/weekly_memory/*/*`
 - `workspace/HEARTBEAT.md`
 - `workspace/cron/jobs.json`
 - `workspace/custom_output_skills.json`
 - `workspace/memory/graphs/knowledge_graph.json`
 - `workspace/memory/graphs/error_graph.json`
+
+### 🗂️ What each history path is for
+
+| Path | Purpose |
+| --- | --- |
+| `workspace/sessions/*.jsonl` | Raw session logs for the console and external channels |
+| `workspace/memory/daily_conversations/*/events.jsonl` | Day-bucketed event streams used as input to memory and summary jobs |
+| `workspace/memory/daily_memory/*/*.json` / `.md` | Daily learning memory snapshots that power today-status and tomorrow-suggestion outputs |
+| `workspace/memory/weekly_memory/*/*.md` | Weekly summaries and weekly plans used by the study-plan page and scheduled reports |
+| `workspace/memory/graphs/*.json` | The actual data sources behind the knowledge graph and error graph views |
+| `workspace/cron/jobs.json` | Scheduled job definitions plus runtime state such as last/next execution and run history |
+| `workspace/HEARTBEAT.md` | Persistent task instructions checked by the heartbeat service |
+
+### 🔄 How the data flows
+
+```mermaid
+flowchart LR
+    A["workspace/sessions/*.jsonl<br/>raw conversations"] --> B["daily_conversations/*/events.jsonl<br/>day-level event stream"]
+    B --> C["daily_memory/*<br/>daily learning memory"]
+    C --> D["weekly_memory/*<br/>weekly summary and plan"]
+    C --> E["graphs/*.json<br/>knowledge / error graphs"]
+    D --> F["Study Plan page<br/>today status / weekly plan / tomorrow suggestions"]
+    E --> G["Memory page<br/>knowledge graph / error graph"]
+    H["HEARTBEAT.md"] --> I["cron/jobs.json<br/>scheduled task state"]
+    I --> J["Heartbeat page<br/>automatic sends / rhythm / troubleshooting"]
+```
+
+In one sentence:
+
+- `sessions` keeps raw chat history
+- `daily_conversations` keeps normalized day-level event input
+- `daily_memory / weekly_memory` keep distilled learning memory
+- `graphs` keeps graph structure
+- `jobs.json` keeps scheduled-task state
 
 ## 📁 Repository Structure
 
