@@ -1,382 +1,387 @@
-<p align="center">
-  <br>
-  <img src="logo.png" alt="MathClaw Logo" width="180">
-  <br>
-</p>
+<div align="center">
 
-<h1 align="center">MathClaw</h1>
+<img src="logo.png" alt="MathClaw Logo" width="148" />
 
-<p align="center">
-  A Multimodal Learning Assistant for Middle and High School Mathematics
-</p>
+# MathClaw
 
-<p align="center">
-  <a href="README.md">中文</a> &nbsp｜&nbsp English
-</p>
+**A multi-channel AI learning assistant for junior and senior high school mathematics**
 
-<p align="center">
-  <img src="https://img.shields.io/badge/python-3.10%20--%203.13-3776AB">
-  <img src="https://img.shields.io/badge/node.js-18%2B-339933">
-  <img src="https://img.shields.io/badge/npm-9%2B-CB3837">
-  <img src="https://img.shields.io/badge/license-Apache%202.0-2ea44f">
-</p>
+MathClaw combines a tutoring workspace, study planning, memory graphs, scheduled summaries, and channel integrations in one workflow.
 
-> ⭐ If you find this project helpful, please click the "Star" button in the top right corner. Your support means a lot!
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Console](https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square)](#console-modules)
+[![Channels](https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square)](#channels-and-integrations)
+[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#what-ships-today)
+[![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
 
-## 📝 Introduction
+[中文](README.md) · [English](README_EN.md) · [Quick Start](#quick-start) · [Console Modules](#console-modules) · [Channels](#channels-and-integrations) · [Communication](COMMUNICATION.md)
 
-MathClaw is a multimodal learning assistant designed for middle and high school mathematics. It supports image, screenshot, PDF, and text input, and operates around the following core pipeline:
+</div>
 
+---
+
+## What This Repository Is
+
+This repository is the current, runnable MathClaw version. It no longer matches the older README that mentioned `start.sh`, quickstart config APIs, or the old React/FastAPI stack.
+
+Today, MathClaw is:
+
+- a **math tutoring agent** built on top of the `nanobot` runtime
+- a customized **MathClaw console** with both student-facing and operator-facing pages
+- a learning workflow centered on **study plans, heartbeat tasks, structured memory, knowledge graphs, and error graphs**
+- a **multi-channel gateway** that can connect to WeCom, QQ, Feishu, Telegram, Slack, WhatsApp, and more
+
+## What Ships Today
+
+| Module | Current capability | Main code |
+| --- | --- | --- |
+| Chat Workspace | Single-thread tutoring workspace with text, image, and PDF upload; Markdown/table rendering | `console/main.js` · `console/serve.py` |
+| Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `nanobot/agent/memory.py` · `workspace/cron/jobs.json` |
+| Memory Graphs | Knowledge graph + error graph, focus/overview modes, node details, node deletion | `workspace/memory/graphs/*` · `console/main.js` |
+| Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `nanobot/cron/service.py` · `nanobot/heartbeat/service.py` |
+| Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `nanobot/channels/manager.py` · `nanobot/cli/commands.py` |
+| Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `nanobot/providers/registry.py` · `nanobot/agent/loop.py` |
+| Custom Output Skills | Optional follow-up output boxes after attachment replies | `nanobot/agent/custom_output_skills.py` |
+| Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `nanobot/session/manager.py` · `nanobot/agent/memory.py` |
+
+## Key Features
+
+<table>
+  <tr>
+    <td width="25%">
+      <strong>Math-first tutoring workflow</strong><br/>
+      Built for secondary-school mathematics, with guided explanations, weakness analysis, and correction-oriented feedback.
+    </td>
+    <td width="25%">
+      <strong>Student + operator console</strong><br/>
+      One console includes both the student workspace and the management surfaces for runtime, channels, models, and heartbeat.
+    </td>
+    <td width="25%">
+      <strong>Unified channel gateway</strong><br/>
+      Connect the same MathClaw agent to multiple messaging platforms and route everything through one backend.
+    </td>
+    <td width="25%">
+      <strong>Extensible toolchain</strong><br/>
+      Filesystem, web, shell, cron, MCP, and channel plugins are all part of the current runtime.
+    </td>
+  </tr>
+</table>
+
+## Showcase
+
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <img src="case/search.gif" alt="Chat Workspace" />
+      <br />
+      <strong>Chat workspace</strong>
+      <br />
+      Text / image / PDF input with structured answers
+    </td>
+    <td width="33%" align="center">
+      <img src="case/scedule.gif" alt="Study Plan" />
+      <br />
+      <strong>Study plan + scheduled summaries</strong>
+      <br />
+      Daily rhythm, weekly planning, heartbeat-driven updates
+    </td>
+    <td width="33%" align="center">
+      <img src="case/memory.gif" alt="Memory Graphs" />
+      <br />
+      <strong>Knowledge + error graphs</strong>
+      <br />
+      Visual memory for revision priorities and recurring mistakes
+    </td>
+  </tr>
+</table>
+
+## Architecture
+
+```mermaid
+flowchart LR
+    A["Student / Teacher / Operator"] --> B["Channels<br/>WeCom / QQ / Feishu / ..."]
+    B --> C["nanobot gateway"]
+    C --> D["MathClaw AgentLoop"]
+
+    D --> E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]
+    D --> F["Tools<br/>Web · Filesystem · Shell · Cron · MCP"]
+    D --> G["Sessions<br/>JSONL conversation history"]
+    D --> H["Memory Runtime<br/>Daily / Weekly / Graphs"]
+    D --> I["Heartbeat / Cron"]
+
+    H --> J["Study Plan page"]
+    H --> K["Memory Graph page"]
+    I --> L["Heartbeat page"]
+    C --> M["MathClaw Console"]
 ```
-OCR → Solving & Verification → Weakness Diagnosis → Guided Explanation → Variant Problem Generation → Learning Memory Update
-```
 
-The repository ships with a set of ready-to-run defaults:
+## Console Modules
 
-- Default model provider: `dashscope`
-- Default base URL: `https://dashscope.aliyuncs.com/compatible-mode/v1`
-- Default model: `qwen3-vl-plus`
-- Default vision support: enabled
-- Default QQ / WeCom channel: disabled
-- Default Tavily / Playwright / Filesystem MCP: disabled
+| Page | Audience | Current purpose |
+| --- | --- | --- |
+| Chat Workspace | Student | Single-thread tutoring workspace with attachment upload and rich Markdown answers |
+| Study Plan | Student | Daily status, weekly plan, tomorrow suggestions, focus topics, practice load |
+| Memory | Student / Teacher | Knowledge graph, error graph, node details, relation browsing |
+| Runtime Status | Operator | Health summary, model chain, tool abilities, active channels, attachment pipeline |
+| Channels | Operator | Per-channel enablement, daily message count, active sessions, last activity |
+| Heartbeat | Operator | Scheduled summaries, heartbeat rhythm, latest result, troubleshooting order |
+| Skills | Operator | Manage custom output skills used after attachment replies |
+| MCP / Agent Config / Models | Operator | View current tools, agent boundaries, and model chain |
 
-For a first deployment, you typically only need a DashScope Qwen API Key. Everything else is opt-in.
+## Quick Start
 
-## ✨ Key Features
+### 1. Requirements
 
-- **📐 Math-Optimized Out of the Box**: Default model combination is tuned for math image problems — works immediately after setup.
-- **🖼️ Multimodal Input**: Supports images, screenshots, PDFs, and plain text to cover real-world problem-solving scenarios.
-- **🔗 Full Learning Pipeline**: From OCR recognition to variant practice problems, covering the complete math learning loop.
-- **⚙️ Low Setup Barrier**: Built-in defaults mean first deployment usually only requires adding an `api_key`.
-- **🚀 Clear Startup Path**: `start.sh` launches both backend and frontend in one command.
-- **🔌 Config API Ready**: Use `GET /api/config/template` and `POST /api/config/quickstart` to configure on first run.
-- **📁 Centralized Runtime Directory**: Config, secrets, and logs are written inside the repo directory for easy inspection and migration.
+- Python `3.11+`
+- Linux / macOS / WSL recommended for deployment
+- a usable model API key
+- optional: Node.js `20+` only if you need the WhatsApp bridge
 
-## 🛠️ Requirements
-
-**Recommended environment:**
-
-- Python `3.10` - `3.13`
-- Node.js `18+`
-- npm `9+`
-- Linux server or Linux container
-- Access to your configured model API
-
-**Additional dependencies for optional features:**
-
-- Playwright MCP / Filesystem MCP: requires `npx`
-- Tavily search enhancement: requires a `Tavily API Key`
-
-We recommend using an isolated Python environment. `venv` is preferred.
-
-### Option 1: Using `venv` (Recommended)
+### 2. Install
 
 ```bash
-cd /path/to/mathclaw
-python3 -m venv .venv
+git clone https://github.com/MathClaw-ruc/MathClaw.git
+cd MathClaw
+
+python -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e .
+```
 
+If you need WeCom support:
+
+```bash
+python -m pip install -e ".[wecom]"
+```
+
+### 3. Initialize config and workspace
+
+```bash
+nanobot onboard --workspace ./workspace
+```
+
+This creates:
+
+- config: `~/.nanobot/config.json`
+- workspace templates: `./workspace/AGENTS.md`, `USER.md`, `HEARTBEAT.md`, `cron/jobs.json`
+
+Interactive setup is also available:
+
+```bash
+nanobot onboard --workspace ./workspace --wizard
+```
+
+### 4. Minimal config example
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/path/to/MathClaw/workspace",
+      "model": "qwen3.5-plus",
+      "provider": "dashscope",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  "providers": {
+    "dashscope": {
+      "api_key": "YOUR_DASHSCOPE_API_KEY"
+    }
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "provider": "tavily",
+        "api_key": "YOUR_TAVILY_API_KEY"
+      }
+    }
+  }
+}
+```
+
+### 5. Start the gateway
+
+```bash
+nanobot gateway --workspace ./workspace
+```
+
+Default gateway port: `18790`
+
+### 6. Start the console
+
+```bash
 cd console
-npm install
+NANOBOT_CONSOLE_WORKSPACE=../workspace python serve.py
 ```
 
-After reopening a terminal, re-activate the environment first:
+Default console address:
 
-```bash
-cd /path/to/mathclaw
-source .venv/bin/activate
+```text
+http://127.0.0.1:6006
 ```
 
-If `python3` is not available, specify the Python executable explicitly:
+If you want to use port `6008` instead:
 
 ```bash
-/root/miniconda3/bin/python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -U pip
-python -m pip install -e .
-```
-
-### Option 2: Using `conda`
-
-```bash
-cd /path/to/mathclaw
-conda create -n mathclaw python=3.11 -y
-conda activate mathclaw
-python -m pip install -U pip
-python -m pip install -e .
-
 cd console
-npm install
+NANOBOT_CONSOLE_WORKSPACE=../workspace NANOBOT_CONSOLE_PORT=6008 python serve.py
 ```
 
-All subsequent Python commands assume this environment is active.
-
-## 🚀 Quick Start
-
-### 1. Start the Service
-
-**Using `venv`:**
+### 7. Talk to the agent from CLI
 
 ```bash
-cd /path/to/mathclaw
-source .venv/bin/activate
-bash start.sh
+nanobot agent --workspace ./workspace -m "Teach me monotonicity from derivatives"
 ```
 
-**Using `conda`:**
+## Channels and Integrations
+
+### Built-in channels
+
+The current repository includes built-in modules for:
+
+- WeCom
+- QQ
+- Feishu
+- Telegram
+- Slack
+- Email
+- Discord
+- Matrix
+- Weixin
+- DingTalk
+- WhatsApp
+- MoChat
+
+It also supports external channel plugins via Python entry points. See [docs/CHANNEL_PLUGIN_GUIDE.md](docs/CHANNEL_PLUGIN_GUIDE.md).
+
+### Runtime override examples
+
+WeCom:
 
 ```bash
-cd /path/to/mathclaw
-conda activate mathclaw
-bash start.sh
+nanobot gateway --workspace ./workspace \
+  --wecom \
+  --wecom-bot-id YOUR_WECOM_BOT_ID \
+  --wecom-secret YOUR_WECOM_SECRET \
+  --wecom-allow-from "*"
 ```
 
-Default addresses after startup:
-
-| Service | Address |
-|---------|---------|
-| Backend | `http://127.0.0.1:6006` |
-| Frontend | `http://127.0.0.1:6008` |
-
-`start.sh` pins the runtime directories inside the repo:
-
-| Directory | Path |
-|-----------|------|
-| Working directory | `$REPO/.mathclaw` |
-| Secrets directory | `$REPO/.mathclaw.secret` |
-| Log directory | `$REPO/.runtime` |
-
-To start the backend only:
+QQ:
 
 ```bash
-cd /path/to/mathclaw
-source .venv/bin/activate
-python scripts/start_mathclaw6006.py
+nanobot gateway --workspace ./workspace \
+  --qq \
+  --qq-app-id YOUR_QQ_APP_ID \
+  --qq-secret YOUR_QQ_SECRET \
+  --qq-allow-from "*"
 ```
 
-### 2. Verify the Service
+Feishu:
 
 ```bash
-curl http://127.0.0.1:6006/api/health
-curl http://127.0.0.1:6006/api/config/template
+nanobot gateway --workspace ./workspace \
+  --feishu \
+  --feishu-app-id YOUR_FEISHU_APP_ID \
+  --feishu-app-secret YOUR_FEISHU_APP_SECRET \
+  --feishu-allow-from "*"
 ```
 
-- `/api/health`: Confirms the backend process is running
-- `/api/config/template`: Shows the default config template and fields supported by quickstart
-
-### 3. Write Minimal Config
-
-To get the system running, just submit an API Key:
+For channels that require interactive auth:
 
 ```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>"
-  }'
+nanobot channels login <channel_name>
 ```
 
-This request will automatically:
-
-- Set the default provider to `dashscope`, model to `qwen3-vl-plus`, and enable vision support
-- Write config to `.mathclaw/config.json` and `.mathclaw.secret/providers.json`
-- Attempt to hot-load the model if the API Key is valid
-
-## ⚙️ Configuration
-
-### Minimum Required Config
-
-| Parameter | Description |
-|-----------|-------------|
-| `api_key` | Model provider API Key (the only required field) |
-
-The following parameters have built-in defaults and do not need to be set manually:
-
-| Parameter | Default |
-|-----------|---------|
-| `provider` | `dashscope` |
-| `base_url` | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| `model_name` | `qwen3-vl-plus` |
-| `supports_vision` | `true` |
-
-### Optional Parameters
-
-To switch models or adjust vision support, modify: `provider`, `base_url`, `model_name`, `supports_vision`.
-
-### Channel Configuration
-
-**WeCom (企业微信):**
-
-Before filling in the parameters, create an AI bot in the WeCom admin console:
-
-1. Go to **WeCom Admin Console → AI Bots → Create Bot**
-2. Select **API mode** and enable **persistent connection**
-3. Copy the generated **Bot ID** and **Secret**, corresponding to `wecom_bot_id` and `wecom_secret`
-
-| Parameter | Description |
-|-----------|-------------|
-| `wecom_bot_id` | Required, Bot ID |
-| `wecom_secret` | Required, Bot Secret |
-| `wecom_bot_prefix` | Optional, bot message prefix |
-| `wecom_welcome_message` | Optional, bot welcome message |
-
-**QQ:**
-
-| Parameter | Description |
-|-----------|-------------|
-| `qq_app_id` | Required |
-| `qq_client_secret` | Required |
-| `qq_bot_prefix` | Optional |
-
-### Search Enhancement
-
-To enable Tavily search, provide: `enable_tavily`, `tavily_api_key`.
-
-## 📡 Config API
-
-The backend provides two endpoints for first-time deployment:
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/config/template` | View defaults, field list, and optional modules |
-| `POST /api/config/quickstart` | Write config and attempt to hot-load the model |
-
-### Configuration Examples
-
-<details><summary><b>DashScope Qwen + WeCom + Tavily ✅ Recommended</b></summary>
+To inspect channel status:
 
 ```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "provider": "dashscope",
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "model_name": "qwen3-vl-plus",
-    "supports_vision": true,
-    "wecom_enabled": true,
-    "wecom_bot_id": "<YOUR_WECOM_BOT_ID>",
-    "wecom_secret": "<YOUR_WECOM_SECRET>",
-    "wecom_bot_prefix": "",
-    "wecom_welcome_message": "Hi, I am MathClaw.",
-    "enable_tavily": true,
-    "tavily_api_key": "<YOUR_TAVILY_API_KEY>"
-  }'
+nanobot channels status
 ```
 
-</details>
+## Providers and Tools
 
-<details><summary><b>DashScope Qwen + QQ</b></summary>
+### Supported providers
 
-```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "qq_enabled": true,
-    "qq_app_id": "<YOUR_QQ_APP_ID>",
-    "qq_client_secret": "<YOUR_QQ_CLIENT_SECRET>",
-    "qq_bot_prefix": ""
-  }'
+The current provider registry already includes:
+
+- DashScope
+- OpenAI
+- Anthropic
+- DeepSeek
+- Gemini
+- OpenRouter
+- Azure OpenAI
+- Zhipu AI
+- Moonshot
+- MiniMax
+- Mistral
+- Step Fun
+- Groq
+- Ollama
+- vLLM
+- OpenVINO Model Server
+- OpenAI Codex
+- GitHub Copilot
+- custom OpenAI-compatible endpoints
+
+### Default agent tools
+
+`AgentLoop` currently registers:
+
+- file read / write / edit / list
+- shell execution
+- web search / web fetch
+- outbound message tool
+- subagent spawn
+- cron scheduling
+- MCP tool servers
+
+## Learning Memory and Automation
+
+What makes this repository distinctive is not just chat. It continuously turns tutoring activity into reusable learning memory:
+
+- daily learning memory
+- weekly summaries
+- knowledge graphs
+- error graphs
+- tomorrow suggestions
+- heartbeat tasks
+- persisted cron schedules
+
+Relevant workspace files:
+
+- `workspace/HEARTBEAT.md`
+- `workspace/cron/jobs.json`
+- `workspace/custom_output_skills.json`
+- `workspace/memory/graphs/knowledge_graph.json`
+- `workspace/memory/graphs/error_graph.json`
+
+## Repository Structure
+
+```text
+.
+├── nanobot/                 # Core runtime: agent, channels, providers, memory, cron, heartbeat
+├── console/                 # MathClaw console: static frontend shell + serve.py API layer
+├── workspace/               # Repo-owned MathClaw persona, plans, and templates
+├── bridge/                  # WhatsApp bridge (Node 20+)
+├── case/                    # GIF demos used in the README
+├── docs/                    # Docs such as the channel plugin guide
+└── tests/                   # Runtime, tool, security, and channel tests
 ```
 
-</details>
+## README Scope
 
-<details><summary><b>DashScope Qwen + Tavily Search</b></summary>
+This README has been rewritten against the current codebase and is intentionally aligned with:
 
-```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "enable_tavily": true,
-    "tavily_api_key": "<YOUR_TAVILY_API_KEY>"
-  }'
-```
+- `nanobot gateway`
+- `nanobot agent`
+- `console/serve.py`
+- `workspace/*`
+- `nanobot/agent/*`
 
-</details>
+It does not describe the old quickstart APIs, old startup scripts, or the previous frontend/backend stack.
 
-<details><summary><b>Full Config in One Request</b></summary>
+## License
 
-```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "provider": "dashscope",
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "model_name": "qwen3-vl-plus",
-    "supports_vision": true,
-    "wecom_enabled": true,
-    "wecom_bot_id": "<YOUR_WECOM_BOT_ID>",
-    "wecom_secret": "<YOUR_WECOM_SECRET>",
-    "wecom_bot_prefix": "",
-    "wecom_welcome_message": "Hi, I am MathClaw.",
-    "enable_tavily": true,
-    "tavily_api_key": "<YOUR_TAVILY_API_KEY>"
-  }'
-```
-
-> We recommend submitting the full config in a single request. Multiple calls may cause later submissions to overwrite earlier toggle states.
-
-</details>
-
-## ✅ Verifying Config
-
-Key fields in the `POST /api/config/quickstart` response:
-
-| Field | Meaning |
-|-------|---------|
-| `runner_started` | Whether the model was successfully hot-loaded |
-| `restart_required` | Whether a backend restart is needed for channels or MCP to take effect |
-| `missing_required` | Any required parameters still missing |
-| `summary` | Current config summary (secrets are not echoed back) |
-
-- `runner_started=true`: Model is ready, text and image Q&A can be tested immediately
-- `restart_required=true`: QQ, WeCom, or MCP config was changed — restart the backend once
-- `missing_required` non-empty: Config is incomplete, continue adding the missing parameters
-
-## 🔍 Further Verification
-
-After configuration, check service status with:
-
-```bash
-curl http://127.0.0.1:6006/api/config/model
-curl http://127.0.0.1:6006/api/providers
-```
-
-Access the frontend directly in your browser:
-
-```
-http://127.0.0.1:6008
-```
-
-If running on a cloud server, expose ports `6006` and `6008` through your platform's port mapping.
-
-## 📁 Runtime Files
-
-| File Path | Description |
-|-----------|-------------|
-| `./.mathclaw/config.json` | Main config file |
-| `./.mathclaw.secret/providers.json` | Model provider config |
-| `./.runtime/mathclaw6006-live.log` | Backend log |
-| `./.runtime/console6008-live.log` | Frontend log |
-
-## ℹ️ Notes
-
-- The codebase has shifted to math learning, but some historical `research` naming and paper-related modules remain in the repo. They do not affect the math pipeline.
-
-## 🙏 Acknowledgements
-
-MathClaw builds on the following open-source projects:
-
-- [**ResearchClaw**](https://github.com/HKUDS/ResearchClaw): The predecessor of MathClaw, providing the core architecture and early implementation foundation.
-- [**nanobot**](https://github.com/HKUDS/nanobot): An ultra-lightweight AI assistant framework. The WeCom and QQ channel integration approach is inspired by this project.
-
-## 📄 License
-
-Copyright 2025-2026 MathClaw Contributors
-
-This project is licensed under the [Apache License 2.0](LICENSE).
+This project is released under the [MIT License](LICENSE).

@@ -1,385 +1,396 @@
-<p align="center">
-  <br>
-  <img src="logo.png" alt="MathClaw Logo" width="180">
-  <br>
-</p>
+<div align="center">
 
-<h1 align="center">MathClaw</h1>
+<img src="logo.png" alt="MathClaw Logo" width="148" />
 
-<p align="center">
-  面向初高中数学学习场景的多模态智能学习助手
-</p>
+# MathClaw
 
-<p align="center">
-  中文 &nbsp｜&nbsp <a href="README_EN.md">English</a>
-</p>
+**面向初高中数学学习场景的多通道 AI 学习助手**
 
-<p align="center">
-  <img src="https://img.shields.io/badge/python-3.10%20--%203.13-3776AB">
-  <img src="https://img.shields.io/badge/node.js-18%2B-339933">
-  <img src="https://img.shields.io/badge/npm-9%2B-CB3837">
-  <img src="https://img.shields.io/badge/license-Apache%202.0-2ea44f">
-</p>
+把解题工作台、学习计划、知识图谱、自动总结和多平台消息接入，收进同一套工作流。
 
-> ⭐ 如果你喜欢这个项目，请点击右上角的 "Star" 按钮支持我们。你的支持是我们前进的动力！
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Console](https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square)](#控制台模块)
+[![Channels](https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square)](#通道与接入方式)
+[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#当前能力一览)
+[![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
 
-## 📝 简介
+[中文](README.md) · [English](README_EN.md) · [Quick Start](#快速开始) · [控制台模块](#控制台模块) · [通道与接入方式](#通道与接入方式) · [Communication](COMMUNICATION.md)
 
-MathClaw 是一款面向初高中数学学习场景的多模态学习助手，支持图片、截图、PDF 和文本输入，围绕以下核心链路工作：
+</div>
 
+---
+
+## 项目定位
+
+MathClaw 是当前这套仓库里真正运行中的版本，不再沿用旧版 README 里提到的 `start.sh`、`/api/config/quickstart` 或 React/FastAPI 那套路径。  
+现在的产品形态是：
+
+- 以 `nanobot` 运行时为底座的 **数学学习 Agent**
+- 一套定制过的 **MathClaw 控制台**，同时覆盖学生工作区和管理工作区
+- 一套面向学习场景的 **记忆、计划、心跳、错题图谱** 工作流
+- 一套可直接接入 **企业微信 / QQ / 飞书 / Telegram / Slack / WhatsApp / Email / Matrix / Discord / 微信 / 钉钉 / MoChat** 的多通道网关
+
+如果你要理解这仓库“现在到底能做什么”，看下面这张表最直接。
+
+## 当前能力一览
+
+| 模块 | 当前能力 | 对应代码 |
+| --- | --- | --- |
+| 解题工作台 | 单对话工作台；支持文本、图片、PDF 上传；前端支持 Markdown、列表、表格渲染 | `console/main.js` · `console/serve.py` |
+| 学习计划 | 根据每日/每周学习记忆生成今日状态、本周计划、优先复习知识点、重点纠错方向 | `nanobot/agent/memory.py` · `workspace/cron/jobs.json` |
+| 记忆图谱 | 生成知识点图谱与错题图谱，支持焦点/总览视图、节点详情、删除节点 | `workspace/memory/graphs/*` · `console/main.js` |
+| 自动总结与心跳 | 支持日报、周报、定时任务与 `HEARTBEAT.md` 周期唤醒执行 | `nanobot/cron/service.py` · `nanobot/heartbeat/service.py` |
+| 多通道网关 | 渠道收消息、路由到 Agent、聚合流式输出、重试发送 | `nanobot/channels/manager.py` · `nanobot/cli/commands.py` |
+| 模型与工具 | 多模型提供商路由、Web Search/Web Fetch、文件系统、Shell、Cron、消息回写、MCP、子代理 | `nanobot/providers/registry.py` · `nanobot/agent/loop.py` |
+| 自定义输出 Skill | 为附件回复追加风格化的二次输出框，例如“竞赛教练点拨” | `nanobot/agent/custom_output_skills.py` |
+| 会话与学习记忆 | 会话 JSONL 持久化、每日记忆、周总结、图谱快照、学习状态沉淀 | `nanobot/session/manager.py` · `nanobot/agent/memory.py` |
+
+## 核心特性
+
+<table>
+  <tr>
+    <td width="25%">
+      <strong>数学学习工作流</strong><br/>
+      围绕初高中数学场景定制，强调分步讲解、薄弱点识别、错因归纳和后续复习。
+    </td>
+    <td width="25%">
+      <strong>学生 / 管理双视角</strong><br/>
+      同一套控制台里既有学生工作区，也有通道、模型、心跳、运行状态等后台视图。
+    </td>
+    <td width="25%">
+      <strong>多通道统一接入</strong><br/>
+      可将同一个 MathClaw Agent 接到企业微信、QQ、飞书等多个入口，消息与状态统一回流。
+    </td>
+    <td width="25%">
+      <strong>可扩展工具链</strong><br/>
+      除内置文件、Web、Shell、Cron 外，还支持 MCP 服务和 channel plugin 扩展。
+    </td>
+  </tr>
+</table>
+
+## 界面预览
+
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <img src="case/search.gif" alt="Chat Workspace" />
+      <br />
+      <strong>解题工作台</strong>
+      <br />
+      文本 / 图片 / PDF 输入与表格化回答
+    </td>
+    <td width="33%" align="center">
+      <img src="case/scedule.gif" alt="Study Plan" />
+      <br />
+      <strong>学习计划与自动总结</strong>
+      <br />
+      每日节律、周计划与心跳任务
+    </td>
+    <td width="33%" align="center">
+      <img src="case/memory.gif" alt="Memory Graphs" />
+      <br />
+      <strong>知识点 / 错题图谱</strong>
+      <br />
+      把复习重点和错误模式可视化
+    </td>
+  </tr>
+</table>
+
+## 系统架构
+
+```mermaid
+flowchart LR
+    A["学生 / 老师 / 管理员"] --> B["多通道入口<br/>WeCom / QQ / Feishu / ..."]
+    B --> C["nanobot gateway"]
+    C --> D["MathClaw AgentLoop"]
+
+    D --> E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]
+    D --> F["Tools<br/>Web · Filesystem · Shell · Cron · MCP"]
+    D --> G["Sessions<br/>JSONL 会话历史"]
+    D --> H["Memory Runtime<br/>日报 · 周报 · 双图谱"]
+    D --> I["Heartbeat / Cron"]
+
+    H --> J["学习计划页"]
+    H --> K["知识图谱页"]
+    I --> L["心跳与自动发送页"]
+    C --> M["MathClaw Console"]
 ```
-OCR → 求解与验证 → 薄弱点诊断 → 引导式讲解 → 变式题生成 → 学习记忆更新
-```
 
-当前仓库已内置一套适合首跑的默认配置：
+## 控制台模块
 
-- 默认模型提供商：`dashscope`
-- 默认基座地址：`https://dashscope.aliyuncs.com/compatible-mode/v1`
-- 默认模型：`qwen3-vl-plus`
-- 默认视觉能力：开启
-- 默认 QQ / 企业微信通道：关闭
-- 默认 Tavily / Playwright / Filesystem MCP：关闭
+当前前端不是“一个简单聊天页”，而是围绕学习和运营拆出来的一组页面：
 
-首次部署通常只需要准备一个百炼 Qwen API Key，其余均为按需启用的增强项。
+| 页面 | 面向角色 | 当前用途 |
+| --- | --- | --- |
+| 解题工作台 | 学生 | 单对话学习工作台，支持附件上传、追问、Markdown 表格回答 |
+| 学习计划 | 学生 | 展示今日状态、本周计划、明日建议、复习优先级与练习量 |
+| 记忆 | 学生 / 教师 | 查看知识点图谱、错题图谱、节点详情与关联关系 |
+| 运行状态 | 管理员 | 查看系统健康、模型链路、工具能力、启用通道与附件处理链路 |
+| 频道 | 管理员 | 查看各通道启用状态、今日消息量、会话数、最近活跃时间 |
+| 心跳 | 管理员 | 查看自动发送任务、日报/周报节律、最近结果与排查顺序 |
+| Skills | 管理员 | 管理附件回复后的额外输出 Skill |
+| MCP / Agent 配置 / 模型配置 | 管理员 | 查看当前工具摘要、Agent 边界和模型链路 |
 
-## ✨ 主要特性
+## 快速开始
 
-- **📐 数学场景专项优化**：默认模型组合针对数学图片题进行首跑优化，开箱即用。
-- **🖼️ 多模态输入支持**：支持图片、截图、PDF 和文本多种输入形式，适应真实做题场景。
-- **🔗 完整学习链路**：从 OCR 识题到变式练习，覆盖数学学习的全流程闭环。
-- **⚙️ 首跑门槛低**：默认配置已内置，首次部署通常只需补充 `api_key` 即可启动。
-- **🚀 启动路径清晰**：提供 `start.sh`，可同时启动后端和前端，一键拉起服务。
-- **🔌 配置接口直接可用**：通过 `GET /api/config/template` 和 `POST /api/config/quickstart` 完成首轮配置。
-- **📁 运行目录集中**：配置、密钥和日志默认写入仓库内部目录，便于排查和迁移。
+### 1. 环境要求
 
-## 🛠️ 环境准备
+- Python `3.11+`
+- Linux / macOS / WSL 环境更适合部署
+- 一个可用的模型 API Key
+- 可选：Node.js `20+`（只有在使用 WhatsApp bridge 时需要）
 
-**推荐环境：**
-
-- Python `3.10` - `3.13`
-- Node.js `18+`
-- npm `9+`
-- Linux 服务器或 Linux 容器
-- 可访问所配置的模型 API
-
-**可选能力的额外依赖：**
-
-- Playwright MCP / Filesystem MCP：需要 `npx`
-- Tavily 搜索增强：需要 `Tavily API Key`
-
-建议使用隔离环境安装 Python 依赖，优先推荐 `venv`。
-
-### 方式一：使用 `venv`（推荐）
+### 2. 安装
 
 ```bash
-cd /path/to/mathclaw
-python3 -m venv .venv
+git clone https://github.com/MathClaw-ruc/MathClaw.git
+cd MathClaw
+
+python -m venv .venv
 source .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e .
+```
 
+如果你需要企业微信 SDK：
+
+```bash
+python -m pip install -e ".[wecom]"
+```
+
+### 3. 初始化配置与工作区
+
+```bash
+nanobot onboard --workspace ./workspace
+```
+
+默认会生成：
+
+- 配置文件：`~/.nanobot/config.json`
+- 工作区模板：`./workspace/AGENTS.md`、`USER.md`、`HEARTBEAT.md`、`cron/jobs.json`
+
+你也可以使用交互式初始化：
+
+```bash
+nanobot onboard --workspace ./workspace --wizard
+```
+
+### 4. 写入最小配置
+
+下面是一个和当前 MathClaw 工作流匹配的最小示例：
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/path/to/MathClaw/workspace",
+      "model": "qwen3.5-plus",
+      "provider": "dashscope",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  "providers": {
+    "dashscope": {
+      "api_key": "YOUR_DASHSCOPE_API_KEY"
+    }
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "provider": "tavily",
+        "api_key": "YOUR_TAVILY_API_KEY"
+      }
+    }
+  }
+}
+```
+
+> 当前代码里默认的控制台演示链路也是围绕 DashScope / Qwen 与 Tavily 这类搜索增强来组织的。
+
+### 5. 启动网关
+
+```bash
+nanobot gateway --workspace ./workspace
+```
+
+默认网关端口是 `18790`。
+
+### 6. 启动控制台
+
+```bash
 cd console
-npm install
+NANOBOT_CONSOLE_WORKSPACE=../workspace python serve.py
 ```
 
-重新打开终端后，需先重新激活环境：
+默认控制台地址：
 
-```bash
-cd /path/to/mathclaw
-source .venv/bin/activate
+```text
+http://127.0.0.1:6006
 ```
 
-若机器上没有 `python3` 命令，可显式指定 Python 可执行文件：
+如果你想沿用当前线上部署常见的 `6008` 端口：
 
 ```bash
-/root/miniconda3/bin/python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -U pip
-python -m pip install -e .
-```
-
-### 方式二：使用 `conda`
-
-```bash
-cd /path/to/mathclaw
-conda create -n mathclaw python=3.11 -y
-conda activate mathclaw
-python -m pip install -U pip
-python -m pip install -e .
-
 cd console
-npm install
+NANOBOT_CONSOLE_WORKSPACE=../workspace NANOBOT_CONSOLE_PORT=6008 python serve.py
 ```
 
-后续所有 Python 命令默认在激活该环境后执行。
-
-## 🚀 快速开始
-
-### 1. 启动服务
-
-**使用 `venv`：**
+### 7. 直接用 CLI 对话
 
 ```bash
-cd /path/to/mathclaw
-source .venv/bin/activate
-bash start.sh
+nanobot agent --workspace ./workspace -m "帮我讲一下导数单调性判断"
 ```
 
-**使用 `conda`：**
+## 通道与接入方式
+
+### 内置通道
+
+当前仓库内置的 channel 模块包括：
+
+- WeCom
+- QQ
+- Feishu
+- Telegram
+- Slack
+- Email
+- Discord
+- Matrix
+- Weixin
+- DingTalk
+- WhatsApp
+- MoChat
+
+此外还支持通过 Python entry points 加载外部 channel plugin，参考：[docs/CHANNEL_PLUGIN_GUIDE.md](docs/CHANNEL_PLUGIN_GUIDE.md)。
+
+### 运行时覆盖示例
+
+企业微信：
 
 ```bash
-cd /path/to/mathclaw
-conda activate mathclaw
-bash start.sh
+nanobot gateway --workspace ./workspace \
+  --wecom \
+  --wecom-bot-id YOUR_WECOM_BOT_ID \
+  --wecom-secret YOUR_WECOM_SECRET \
+  --wecom-allow-from "*"
 ```
 
-启动后默认访问地址：
-
-| 服务 | 地址 |
-|------|------|
-| 后端 | `http://127.0.0.1:6006` |
-| 前端 | `http://127.0.0.1:6008` |
-
-`start.sh` 会将运行目录固定到仓库内部：
-
-| 目录 | 路径 |
-|------|------|
-| 工作目录 | `$REPO/.mathclaw` |
-| 密钥目录 | `$REPO/.mathclaw.secret` |
-| 日志目录 | `$REPO/.runtime` |
-
-如果只需要启动后端：
+QQ：
 
 ```bash
-cd /path/to/mathclaw
-source .venv/bin/activate
-python scripts/start_mathclaw6006.py
+nanobot gateway --workspace ./workspace \
+  --qq \
+  --qq-app-id YOUR_QQ_APP_ID \
+  --qq-secret YOUR_QQ_SECRET \
+  --qq-allow-from "*"
 ```
 
-### 2. 验证服务
+飞书：
 
 ```bash
-curl http://127.0.0.1:6006/api/health
-curl http://127.0.0.1:6006/api/config/template
+nanobot gateway --workspace ./workspace \
+  --feishu \
+  --feishu-app-id YOUR_FEISHU_APP_ID \
+  --feishu-app-secret YOUR_FEISHU_APP_SECRET \
+  --feishu-allow-from "*"
 ```
 
-- `/api/health`：确认后端进程已正常启动
-- `/api/config/template`：查看默认配置模板及 quickstart 支持的字段
-
-### 3. 写入最小配置
-
-如果只是想先把系统跑起来，通常只需提交一个 API Key：
+对于需要交互式授权的通道，可以使用：
 
 ```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>"
-  }'
+nanobot channels login <channel_name>
 ```
 
-该请求将自动完成以下操作：
-
-- 设置默认提供商为 `dashscope`，模型为 `qwen3-vl-plus`，并开启视觉能力
-- 将配置写入 `.mathclaw/config.json` 和 `.mathclaw.secret/providers.json`
-- 若 API Key 有效，后端将尝试热加载该模型
-
-## ⚙️ 配置说明
-
-### 最小必填配置
-
-| 参数 | 说明 |
-|------|------|
-| `api_key` | 模型提供商的 API Key（唯一必填项）|
-
-以下参数已内置默认值，无需手动填写：
-
-| 参数 | 默认值 |
-|------|--------|
-| `provider` | `dashscope` |
-| `base_url` | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| `model_name` | `qwen3-vl-plus` |
-| `supports_vision` | `true` |
-
-### 可选配置项
-
-如需切换模型或调整视觉能力，可修改：`provider`、`base_url`、`model_name`、`supports_vision`。
-
-### 通道配置
-
-**企业微信：**
-
-填写参数前，需先在企业微信工作台创建智能机器人：
-
-1. 进入 **企业微信工作台 → 智能机器人 → 创建机器人**
-2. 选择 **API 模式**并开启**长连接**
-3. 复制生成的**机器人 ID** 和**密钥**，分别对应 `wecom_bot_id` 和 `wecom_secret`
-
-| 参数 | 说明 |
-|------|------|
-| `wecom_bot_id` | 必填，机器人 ID |
-| `wecom_secret` | 必填，机器人密钥 |
-| `wecom_bot_prefix` | 可选，Bot 消息前缀 |
-| `wecom_welcome_message` | 可选，Bot 欢迎语 |
-
-**QQ：**
-
-| 参数 | 说明 |
-|------|------|
-| `qq_app_id` | 必填 |
-| `qq_client_secret` | 必填 |
-| `qq_bot_prefix` | 可选 |
-
-### 搜索增强配置
-
-启用 Tavily 搜索增强需补充：`enable_tavily`、`tavily_api_key`。
-
-## 📡 配置接口说明
-
-后端提供两个适合首次部署时使用的配置接口：
-
-| 接口 | 说明 |
-|------|------|
-| `GET /api/config/template` | 查看默认值、字段列表和可选模块 |
-| `POST /api/config/quickstart` | 写入配置并尝试热加载模型 |
-
-### 常见配置示例
-
-<details><summary><b>百炼 Qwen + 企业微信 + Tavily 搜索 ✅ 推荐</b></summary>
+查看当前通道启用情况：
 
 ```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "provider": "dashscope",
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "model_name": "qwen3-vl-plus",
-    "supports_vision": true,
-    "wecom_enabled": true,
-    "wecom_bot_id": "<YOUR_WECOM_BOT_ID>",
-    "wecom_secret": "<YOUR_WECOM_SECRET>",
-    "wecom_bot_prefix": "",
-    "wecom_welcome_message": "你好，我是 MathClaw。",
-    "enable_tavily": true,
-    "tavily_api_key": "<YOUR_TAVILY_API_KEY>"
-  }'
+nanobot channels status
 ```
 
-</details>
+## 模型与工具能力
 
-<details><summary><b>百炼 Qwen + QQ</b></summary>
+### 当前支持的模型提供商
 
-```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "qq_enabled": true,
-    "qq_app_id": "<YOUR_QQ_APP_ID>",
-    "qq_client_secret": "<YOUR_QQ_CLIENT_SECRET>",
-    "qq_bot_prefix": ""
-  }'
+当前 provider registry 已内置：
+
+- DashScope
+- OpenAI
+- Anthropic
+- DeepSeek
+- Gemini
+- OpenRouter
+- Azure OpenAI
+- Zhipu AI
+- Moonshot
+- MiniMax
+- Mistral
+- Step Fun
+- Groq
+- Ollama
+- vLLM
+- OpenVINO Model Server
+- OpenAI Codex
+- GitHub Copilot
+- 自定义 OpenAI-compatible endpoint
+
+### Agent 默认工具
+
+`AgentLoop` 默认注册的能力包括：
+
+- 文件读取 / 写入 / 编辑 / 列目录
+- Shell 执行
+- Web Search / Web Fetch
+- 消息回写
+- 子代理拉起
+- Cron 定时任务
+- MCP 工具接入
+
+这些能力会在运行时按工作区、MCP 配置和安全限制组合起来。
+
+## 学习记忆与自动化
+
+MathClaw 当前这套仓库最有辨识度的能力，不是“会聊天”，而是把学习状态沉淀成可持续使用的结构化记忆：
+
+- 每日学习记忆
+- 每周学习总结
+- 知识点图谱
+- 错题图谱
+- 明日建议
+- 周期性 heartbeat 任务
+- 可直接落盘的 cron 任务
+
+相关工作区文件：
+
+- `workspace/HEARTBEAT.md`
+- `workspace/cron/jobs.json`
+- `workspace/custom_output_skills.json`
+- `workspace/memory/graphs/knowledge_graph.json`
+- `workspace/memory/graphs/error_graph.json`
+
+## 仓库结构
+
+```text
+.
+├── nanobot/                 # 核心运行时：agent、channels、providers、memory、cron、heartbeat
+├── console/                 # MathClaw 控制台：静态前端 + serve.py API 壳层
+├── workspace/               # 仓库自带的 MathClaw persona、计划与模板
+├── bridge/                  # WhatsApp bridge（Node 20+）
+├── case/                    # README 演示 GIF
+├── docs/                    # 文档，如 channel plugin guide
+└── tests/                   # 运行时、工具、安全、通道等测试
 ```
 
-</details>
+## 这版 README 特别说明
 
-<details><summary><b>百炼 Qwen + Tavily 搜索</b></summary>
+这份 README 是按照当前仓库真实存在的实现重写的，重点对应的是：
 
-```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "enable_tavily": true,
-    "tavily_api_key": "<YOUR_TAVILY_API_KEY>"
-  }'
-```
+- `nanobot gateway`
+- `nanobot agent`
+- `console/serve.py`
+- `workspace/*`
+- `nanobot/agent/*`
 
-</details>
+因此它不会再描述旧版 quickstart API、旧版启动脚本或旧版前后端架构。
 
-<details><summary><b>一次性提交完整配置</b></summary>
+## License
 
-```bash
-curl -X POST http://127.0.0.1:6006/api/config/quickstart \
-  -H "Content-Type: application/json" \
-  -d '{
-    "provider": "dashscope",
-    "api_key": "<YOUR_DASHSCOPE_API_KEY>",
-    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    "model_name": "qwen3-vl-plus",
-    "supports_vision": true,
-    "wecom_enabled": true,
-    "wecom_bot_id": "<YOUR_WECOM_BOT_ID>",
-    "wecom_secret": "<YOUR_WECOM_SECRET>",
-    "wecom_bot_prefix": "",
-    "wecom_welcome_message": "你好，我是 MathClaw。",
-    "enable_tavily": true,
-    "tavily_api_key": "<YOUR_TAVILY_API_KEY>"
-  }'
-```
-
-> 建议尽量一次性提交完整配置，避免多次调用时后一次覆盖前一次的开关状态。
-
-</details>
-
-## ✅ 验证配置是否生效
-
-`POST /api/config/quickstart` 返回值中的关键字段：
-
-| 字段 | 含义 |
-|------|------|
-| `runner_started` | 模型是否已成功热加载 |
-| `restart_required` | 是否需要重启后端以让通道或 MCP 生效 |
-| `missing_required` | 当前缺少的关键参数 |
-| `summary` | 当前配置摘要（不回显密钥）|
-
-- `runner_started=true`：模型已可用，可直接进行文本或图片问答
-- `restart_required=true`：已修改 QQ、企业微信或 MCP 配置，建议重启一次后端
-- `missing_required` 非空：配置不完整，需继续补充参数
-
-## 🔍 进一步验证
-
-配置完成后，可通过以下接口进一步检查服务状态：
-
-```bash
-curl http://127.0.0.1:6006/api/config/model
-curl http://127.0.0.1:6006/api/providers
-```
-
-浏览器直接访问前端界面：
-
-```
-http://127.0.0.1:6008
-```
-
-若在云主机上运行，将 `6006` 和 `6008` 端口映射到公网即可。
-
-## 📁 运行后的常见文件
-
-| 文件路径 | 说明 |
-|----------|------|
-| `./.mathclaw/config.json` | 主配置文件 |
-| `./.mathclaw.secret/providers.json` | 模型提供商配置 |
-| `./.runtime/mathclaw6006-live.log` | 后端日志 |
-| `./.runtime/console6008-live.log` | 前端日志 |
-
-
-
-## ℹ️ 补充说明
-
-- 当前代码虽然已转向数学学习场景，但仓库中仍保留了部分历史 `research` 命名和论文相关模块，不影响数学主链路运行。
-- 文档中如提到 `NanoBot`，仅用于说明 QQ 和企业微信的注册思路；实际字段以 MathClaw 当前代码为准。
-
-## 🙏 致谢
- 
-MathClaw 的开发离不开以下优秀开源项目的支持与启发：
- 
-- [**ResearchClaw**](https://github.com/HKUDS/ResearchClaw)：MathClaw 的前身，提供了核心架构与早期实现基础。
-- [**nanobot**](https://github.com/HKUDS/nanobot)：超轻量级 AI 助手框架，企业微信和 QQ 通道的接入思路参考自该项目。
- 
-## 📄 许可证
- 
-Copyright 2025-2026 MathClaw Contributors
- 
-本项目基于 [Apache License 2.0](LICENSE) 开源。
+This project is released under the [MIT License](LICENSE).
