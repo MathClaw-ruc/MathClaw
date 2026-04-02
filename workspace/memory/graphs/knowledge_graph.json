@@ -1,0 +1,939 @@
+{
+  "graph": "knowledge",
+  "updated_at": "2026-04-02T22:00:24.335925",
+  "nodes": [
+    {
+      "id": "kp:导数应用-极值最值-c738e3dd57",
+      "type": "knowledge_point",
+      "label": "导数应用-极值最值",
+      "occurrences": 3,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "求闭区间上函数最值",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "端点值+极值点比较取最值",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "端点值与极值点比较",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.75,
+      "mastery": 0.4625,
+      "importance": 0.95,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "高考压轴题核心考点；需同时考虑极值点和端点值；高考压轴题核心考点",
+      "display_size": 131.4,
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "id": "kp:函数单调性判断-754d3b9907",
+      "type": "knowledge_point",
+      "label": "函数单调性判断",
+      "occurrences": 3,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "讨论f(x)=ax²+bx+c的单调区间",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "导数法判断单调性",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求导后找零点分段讨论",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "证明f(x)在区间单调递增",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求导→找零点→画数轴→逐段讨论符号",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.8,
+      "mastery": 0.475,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "含参函数分类讨论临界点找法不清晰；学生函数概念风险0.5-0.65，需强化单调性判断；导数法与定义法混用；含参函数需通过求导找零点后分类讨论",
+      "display_size": 126.8,
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "id": "kp:函数定义域-529f5ee4fd",
+      "type": "knowledge_point",
+      "label": "函数定义域",
+      "occurrences": 2,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "分母≠0、根号内≥0、对数真数>0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "y=2x+1的定义域",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "二次函数值域判断",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求f(x)=√(x-1)/(x-2)定义域",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "分式分母不为零",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "根式被开方数非负",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "对数真数大于零",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.85,
+      "mastery": 0.4,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "分式/根式/对数函数定义域是高频失分点；概念辨析不清，图像与解析式对应关系薄弱；分式、根式、对数函数定义域求法是薄弱环节；分式、根式、对数函数定义域易错；分式、根式、对数函数定义域求法是薄弱环节；分式、根式、对数函数定义域求法易错；分式、根式、对数函数定义域求法易错；学生基础薄弱点，分式/根式/对数定义域需专项巩固",
+      "display_size": 126.8,
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "id": "kp:恒成立问题-96616dcc39",
+      "type": "knowledge_point",
+      "label": "恒成立问题",
+      "occurrences": 3,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "f(x)≥0在R上恒成立求参数范围",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "含参不等式恒成立",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "f(x)≥0恒成立→求最小值≥0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "f(x)≥a恒成立→a≤f(x)min",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.65,
+      "mastery": 0.475,
+      "importance": 0.85,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "分离参数与最值法选择策略不清；分离参数或直接求最值两种思路；分离参数法或最值法两种思路",
+      "display_size": 122.2,
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "id": "kp:代数基础运算-9e5c7bf289",
+      "type": "knowledge_point",
+      "label": "代数基础运算",
+      "occurrences": 2,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "整式加减",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "一元一次方程",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "3x-(2x-5)",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "(a+b)-(a-b)",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.6,
+      "mastery": 0.5,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "待诊断确认薄弱环节；去括号变号、合并同类项易出错",
+      "display_size": 126.8,
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "id": "kp:分类讨论方法-1dcc3d2b26",
+      "type": "knowledge_point",
+      "label": "分类讨论方法",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "参数分界点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "导数零点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "定义域边界",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.8,
+      "mastery": 0.4,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "参数分界点和导数零点是关键临界点",
+      "display_size": 126.8
+    },
+    {
+      "id": "kp:构造函数证明不等式-2172238039",
+      "type": "knowledge_point",
+      "label": "构造函数证明不等式",
+      "occurrences": 2,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "证f(x)≥g(x)→构造h(x)=f(x)-g(x)",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "证明e^x≥x+1",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "利用导数证不等式",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "移项构造→求导→单调性→最值",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.7,
+      "mastery": 0.45,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "导数综合应用难点；构造辅助函数技巧不熟练；构造h(x)=f(x)-g(x)证h(x)≥0",
+      "display_size": 117.6,
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "id": "kp:含参函数分类讨论-783240a8c0",
+      "type": "knowledge_point",
+      "label": "含参函数分类讨论",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "讨论f(x)=ax-lnx的单调性",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "参数对极值的影响",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "参数影响单调性",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "参数影响极值点位置",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "导数零点求解",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "参数分界点确定",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "区间符号判断",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求导后令f'(x)=0找临界点",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.7,
+      "mastery": 0.35,
+      "importance": 0.95,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "临界点确定与分段标准易遗漏；临界点确定和数轴辅助分段能力不足；临界点确定不完整，数轴辅助分段易遗漏；临界点确定不完整，数轴辅助分段能力弱；临界点确定不完整，曾漏掉x=-1；临界点确定不完整，数轴辅助分段能力弱",
+      "display_size": 131.4
+    },
+    {
+      "id": "kp:函数三要素-8a987b1bc1",
+      "type": "knowledge_point",
+      "label": "函数三要素",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "求f(x)=√(x-1)/(x-2)的定义域",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "二次函数值域求解",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.65,
+      "mastery": 0.45,
+      "importance": 0.95,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "定义域易忽略，值域求解方法不熟练",
+      "display_size": 131.4
+    },
+    {
+      "id": "kp:一元一次方程解法-d5a0b8e4ab",
+      "type": "knowledge_point",
+      "label": "一元一次方程解法",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "3x+5=2x-1",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "2(x-3)=4x+1",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "含参方程求解",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "移项变号",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "系数化简",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "检验代入",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "去括号",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "系数化为1",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.7,
+      "mastery": 0.4,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "移项变号易错，需强化步骤规范；基础运算能力需巩固；基础运算能力需巩固；基础运算能力需巩固；基础运算需巩固；基础运算能力需巩固",
+      "display_size": 126.8
+    },
+    {
+      "id": "kp:导数与单调性-ccd9730b2c",
+      "type": "knowledge_point",
+      "label": "导数与单调性",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "求导找零点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "画数轴分段",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "逐段讨论符号",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.7,
+      "mastery": 0.5,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "含参函数单调区间讨论是高考高频考点",
+      "display_size": 126.8
+    },
+    {
+      "id": "kp:导数与函数综合-b2f1524e01",
+      "type": "knowledge_point",
+      "label": "导数与函数综合",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "导数判断单调性",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "导数求极值",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "恒成立问题转化",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求单调区间",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "极值最值比较",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "恒成立转化",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求导分析单调性",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "端点值+极值点比较最值",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.6,
+      "mastery": 0.5,
+      "importance": 0.95,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "高考压轴题核心，含单调区间、极值、恒成立、零点问题；单调性、极值、恒成立、零点问题需系统复习；单调性、极值、恒成立、零点问题综合应用；单调性、极值、恒成立、零点问题；单调性、极值、恒成立、零点问题综合应用",
+      "display_size": 131.4
+    },
+    {
+      "id": "kp:函数定义域与值域-3a2992daa7",
+      "type": "knowledge_point",
+      "label": "函数定义域与值域",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "分式分母≠0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "根式被开方数≥0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "对数真数>0",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.65,
+      "mastery": 0.45,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "分式、根式、对数函数定义域易错；分式、根式、对数函数定义域求法不熟练",
+      "display_size": 126.8
+    },
+    {
+      "id": "kp:零点个数判断-450454de5c",
+      "type": "knowledge_point",
+      "label": "零点个数判断",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "零点存在定理+特殊点函数值",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "判断f(x)=e^x-x-2的零点个数",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "数形结合找零点",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.6,
+      "mastery": 0.45,
+      "importance": 0.85,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "数形结合+单调性分析；零点存在定理应用条件易忽略",
+      "display_size": 122.2
+    },
+    {
+      "id": "kp:导数应用-单调性-极值-最值-6050c86fb4",
+      "type": "knowledge_point",
+      "label": "导数应用（单调性/极值/最值）",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "单调区间求解",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "闭区间最值比较",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "极值点判断",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.6,
+      "mastery": 0.5,
+      "importance": 0.85,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "求导后分析步骤不规范，端点值易遗漏",
+      "display_size": 122.2
+    },
+    {
+      "id": "kp:闭区间最值问题-200fc8c2fa",
+      "type": "knowledge_point",
+      "label": "闭区间最值问题",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "只算极值点忽略端点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "开区间闭区间混淆",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.65,
+      "mastery": 0.4,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "端点值检验易遗漏",
+      "display_size": 117.6
+    },
+    {
+      "id": "kp:导数求导公式-8e9d4ce67e",
+      "type": "knowledge_point",
+      "label": "导数求导公式",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "求f(x)=ln(x²+1)的导数",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "乘积求导法则",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.5,
+      "mastery": 0.6,
+      "importance": 0.9,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "复合函数求导链式法则易错",
+      "display_size": 126.8
+    },
+    {
+      "id": "kp:恒成立问题解法-5e864229b3",
+      "type": "knowledge_point",
+      "label": "恒成立问题解法",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "f(x)≥a恒成立→a≤f(x)min",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "直接求最值比较",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "risk": 0.6,
+      "mastery": 0.5,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "分离参数法和最值法两种核心思路",
+      "display_size": 117.6
+    },
+    {
+      "id": "kp:构造函数法-ddd79b1b30",
+      "type": "knowledge_point",
+      "label": "构造函数法",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "证f(x)≥g(x)→构造h(x)=f(x)-g(x)",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "证h(x)≥0",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "risk": 0.6,
+      "mastery": 0.5,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "不等式证明的核心技巧，需保证等价性",
+      "display_size": 117.6
+    },
+    {
+      "id": "kp:函数概念理解-5733674fee",
+      "type": "knowledge_point",
+      "label": "函数概念理解",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "一次函数图像",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "二次函数顶点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "判断两函数是否相同",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "函数定义辨析",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "对应关系理解",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "图像与解析式对应",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "判断是否为函数",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求函数值",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "risk": 0.5,
+      "mastery": 0.4,
+      "importance": 0.85,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "函数图像与解析式对应关系易混淆；基础概念需巩固；函数三要素对应关系不清；定义域、值域、解析式三要素辨析；定义域、值域、对应关系三要素",
+      "display_size": 122.2
+    },
+    {
+      "id": "kp:函数奇偶性-2e7799f7ca",
+      "type": "knowledge_point",
+      "label": "函数奇偶性",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "判断f(x)=x³+x的奇偶性",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "分段函数奇偶性",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "risk": 0.55,
+      "mastery": 0.55,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "定义域对称性检查易遗漏",
+      "display_size": 117.6
+    },
+    {
+      "id": "kp:函数性质判断-7ec37548d4",
+      "type": "knowledge_point",
+      "label": "函数性质判断",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "candidate",
+      "risk": 0.55,
+      "mastery": 0.45,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "单调性、奇偶性、周期性判断",
+      "display_size": 117.6
+    },
+    {
+      "id": "kp:函数概念基础-910cfbe05b",
+      "type": "knowledge_point",
+      "label": "函数概念基础",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "定义域值域辨析",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "单调性奇偶性判断",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "图像平移伸缩",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "risk": 0.5,
+      "mastery": 0.4,
+      "importance": 0.8,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "三要素理解不清晰，图像变换掌握弱",
+      "display_size": 117.6
+    },
+    {
+      "id": "kp:函数图像变换-25a7252963",
+      "type": "knowledge_point",
+      "label": "函数图像变换",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "candidate",
+      "risk": 0.5,
+      "mastery": 0.5,
+      "importance": 0.75,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "平移、伸缩、对称变换",
+      "display_size": 113.0
+    },
+    {
+      "id": "kp:几何图形性质-425fd53874",
+      "type": "knowledge_point",
+      "label": "几何图形性质",
+      "occurrences": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "全等三角形判定",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "平行四边形性质",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "risk": 0.5,
+      "mastery": 0.5,
+      "importance": 0.7,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "三角形与四边形性质待评估",
+      "display_size": 108.4
+    }
+  ],
+  "edges": [
+    {
+      "source": "kp:函数定义域-529f5ee4fd",
+      "target": "kp:函数三要素-8a987b1bc1",
+      "relation": "similar",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "kp:函数概念理解-5733674fee",
+      "target": "kp:函数三要素-8a987b1bc1",
+      "relation": "related",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "kp:函数定义域-529f5ee4fd",
+      "target": "kp:函数概念基础-910cfbe05b",
+      "relation": "similar",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "kp:导数应用-单调性-极值-最值-6050c86fb4",
+      "target": "kp:含参函数分类讨论-783240a8c0",
+      "relation": "similar",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "kp:函数概念基础-910cfbe05b",
+      "target": "kp:函数定义域-529f5ee4fd",
+      "relation": "similar",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "kp:函数定义域与值域-3a2992daa7",
+      "target": "kp:函数三要素-8a987b1bc1",
+      "relation": "similar",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    }
+  ],
+  "archived_nodes": [],
+  "focus_node_ids": [
+    "kp:导数应用-极值最值-c738e3dd57",
+    "kp:函数单调性判断-754d3b9907",
+    "kp:函数定义域-529f5ee4fd",
+    "kp:恒成立问题-96616dcc39",
+    "kp:代数基础运算-9e5c7bf289",
+    "kp:分类讨论方法-1dcc3d2b26",
+    "kp:构造函数证明不等式-2172238039",
+    "kp:含参函数分类讨论-783240a8c0"
+  ],
+  "stats": {
+    "active": 18,
+    "candidate": 7,
+    "archived": 0
+  }
+}

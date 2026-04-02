@@ -1,0 +1,171 @@
+{
+  "date": "2026-04-02",
+  "high_risk_knowledge_points": [
+    {
+      "label": "函数定义域与值域",
+      "risk": 0.65,
+      "mastery": 0.45,
+      "importance": 0.9,
+      "notes": "分式、根式、对数函数定义域求法不熟练",
+      "last_seen": "2026-04-02",
+      "examples": [
+        "分式分母≠0",
+        "根式被开方数≥0",
+        "对数真数>0"
+      ],
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "label": "含参函数分类讨论",
+      "risk": 0.7,
+      "mastery": 0.35,
+      "importance": 0.95,
+      "notes": "临界点确定不完整，数轴辅助分段能力弱",
+      "last_seen": "2026-04-02",
+      "examples": [
+        "导数零点遗漏",
+        "参数分界点未考虑"
+      ],
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "label": "导数与函数综合",
+      "risk": 0.6,
+      "mastery": 0.5,
+      "importance": 0.85,
+      "notes": "单调性、极值、恒成立、零点问题综合应用",
+      "last_seen": "2026-04-02",
+      "examples": [
+        "求导后分类讨论",
+        "构造函数证明不等式"
+      ],
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "label": "闭区间最值问题",
+      "risk": 0.65,
+      "mastery": 0.4,
+      "importance": 0.8,
+      "notes": "端点值检验易遗漏",
+      "last_seen": "2026-04-02",
+      "examples": [
+        "只算极值点忽略端点",
+        "开区间闭区间混淆"
+      ],
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    },
+    {
+      "label": "一元一次方程解法",
+      "risk": 0.7,
+      "mastery": 0.4,
+      "importance": 0.7,
+      "notes": "基础运算能力需巩固",
+      "last_seen": "2026-04-02",
+      "examples": [
+        "移项变号错误",
+        "系数化1遗漏"
+      ],
+      "prerequisites": [],
+      "similar_points": [],
+      "contains_points": [],
+      "related_points": []
+    }
+  ],
+  "high_frequency_error_types": [
+    {
+      "label": "定义域忽略",
+      "severity": 0.8,
+      "repeated": true,
+      "notes": "解题第一步未写定义域，导致后续讨论范围错误",
+      "last_seen": "2026-04-02",
+      "classic_example": "求f(x)=ln(x-1)/(x-2)定义域时漏掉x≠2",
+      "examples": [],
+      "related_knowledge_points": [],
+      "similar_errors": [],
+      "correction_suggestions": [
+        "每道题强制第一步写定义域",
+        "用集合表示法规范书写"
+      ]
+    },
+    {
+      "label": "分类讨论遗漏",
+      "severity": 0.85,
+      "repeated": true,
+      "notes": "含参问题临界点找不全，区间分段不完整",
+      "last_seen": "2026-04-02",
+      "classic_example": "讨论f(x)=ax²+bx+c单调性时漏掉a=0情况",
+      "examples": [],
+      "related_knowledge_points": [],
+      "similar_errors": [],
+      "correction_suggestions": [
+        "先列出所有临界点再分段",
+        "画数轴辅助验证"
+      ]
+    },
+    {
+      "label": "端点值遗漏",
+      "severity": 0.75,
+      "repeated": true,
+      "notes": "闭区间最值问题未检验端点",
+      "last_seen": "2026-04-02",
+      "classic_example": "求[0,3]上最值只算极值点未算f(0)和f(3)",
+      "examples": [],
+      "related_knowledge_points": [],
+      "similar_errors": [],
+      "correction_suggestions": [
+        "建立端点值检查清单",
+        "极值点与端点值比较"
+      ]
+    },
+    {
+      "label": "构造函数错误",
+      "severity": 0.7,
+      "repeated": true,
+      "notes": "不等式证明时构造的函数与原目标不等价",
+      "last_seen": "2026-04-02",
+      "classic_example": "证e^x≥x+1却构造h(x)=e^x-x而非e^x-x-1",
+      "examples": [],
+      "related_knowledge_points": [],
+      "similar_errors": [],
+      "correction_suggestions": [
+        "移项使一边为0再构造",
+        "验证构造后目标等价"
+      ]
+    },
+    {
+      "label": "步骤跳跃",
+      "severity": 0.65,
+      "repeated": true,
+      "notes": "解题过程省略关键变形步骤，高考按步给分易失分",
+      "last_seen": "2026-04-02",
+      "classic_example": "求导后直接写结论未写令f'(x)=0过程",
+      "examples": [],
+      "related_knowledge_points": [],
+      "similar_errors": [],
+      "correction_suggestions": [
+        "每步变形写清楚",
+        "模仿标准答案格式"
+      ]
+    }
+  ],
+  "learning_status_summary": "高考冲刺阶段，函数专题为重点突破方向。基础掌握度0.4-0.5，定义域和分类讨论是主要失分点。今日多次请求视频资源，显示突击复习紧迫感强。需先巩固基础概念再攻压轴题。",
+  "tomorrow_study_suggestions": [
+    "完成10道定义域专项练习（分式/根式/对数）",
+    "复习含参分类讨论解题模板，画数轴辅助分段",
+    "重做3道曾出错的闭区间最值题，强制检验端点",
+    "观看导数基础视频后做5道导数计算规范练习",
+    "整理构造函数法证明不等式的标准步骤模板"
+  ]
+}

@@ -26,8 +26,3 @@ uv.lock
 .runtime/
 console/.uploads/
 console/serve.log
-workspace/sessions/
-workspace/memory/daily_conversations/
-workspace/memory/daily_memory/
-workspace/memory/weekly_memory/
-workspace/memory/graphs/

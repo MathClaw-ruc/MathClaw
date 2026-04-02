@@ -1,0 +1,1189 @@
+{
+  "graph": "error",
+  "updated_at": "2026-04-02T22:00:24.339630",
+  "nodes": [
+    {
+      "id": "err:解题步骤跳跃-30fc3ac43f",
+      "type": "error_pattern",
+      "label": "解题步骤跳跃",
+      "error_count": 5,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "求导后未写零点方程",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "单调性未列表说明",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "结论无推导过程",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "求导未写公式",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "分类讨论未写依据",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "结论未写综上所述",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.7,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "高考大题按步骤给分，跳跃会导致失分；解题过程省略关键步骤，高考按步骤给分易失分；关键代数变形未写清楚；与解题步骤跳跃本质相同，合并更简洁；高考大题按步骤给分，关键变形未写清楚导致失分；高考大题按步骤给分，关键步骤未写清楚；解题过程省略关键步骤；原标签不够明确，改为描述解题过程缺陷；标签过于宽泛，建议细化为具体步骤缺失类型",
+      "related_knowledge_points": [
+        "导数应用",
+        "函数概念基础",
+        "导数与函数综合",
+        "规范解题"
+      ],
+      "classic_example": "求导后直接写单调区间，未写'令f'(x)=0'和解零点过程",
+      "correction_suggestions": [
+        "每步变形写清楚",
+        "求导后明确写出临界点求解过程",
+        "按评分标准写步骤",
+        "关键变形单独成行",
+        "对照答案检查完整性",
+        "求导后明确写'令f'(x)=0'",
+        "分类讨论写'综上'结论"
+      ],
+      "display_size": 134.62,
+      "similar_errors": []
+    },
+    {
+      "id": "err:端点值遗漏-76a21cec42",
+      "type": "error_pattern",
+      "label": "端点值遗漏",
+      "error_count": 4,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "开区间误用闭区间方法",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "定义域边界未检验",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "极值点与最值混淆",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "闭区间未算端点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "开区间误算端点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "端点与极值点未比较",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "闭区间最值漏端点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "开区间极限未分析",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.8,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "闭区间最值问题忘记比较端点值；只分析极值点忘记验证区间端点；闭区间最值问题未检验端点；闭区间最值问题常忘记计算端点；闭区间最值问题未比较端点值与极值点；闭区间最值问题忘记检验端点；闭区间最值问题未检验端点；闭区间最值问题未检验端点",
+      "related_knowledge_points": [
+        "极值最值问题",
+        "闭区间连续函数性质",
+        "导数与函数综合",
+        "导数应用",
+        "含参函数分类讨论"
+      ],
+      "classic_example": "求[0,3]上f(x)最值时只算极值点未算f(0),f(3)",
+      "correction_suggestions": [
+        "牢记闭区间最值三步：极值点+两端点",
+        "用表格列出所有候选值",
+        "闭区间必验端点",
+        "开区间考虑极限趋势",
+        "闭区间最值三步检查：求导零点、算端点、比较大小",
+        "建立端点值检查清单",
+        "最后一步强制比较端点",
+        "建立'三步检查法'模板"
+      ],
+      "display_size": 128.64,
+      "similar_errors": []
+    },
+    {
+      "id": "err:分类讨论遗漏-1a61191f26",
+      "type": "error_pattern",
+      "label": "分类讨论遗漏",
+      "error_count": 3,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "参数正负未讨论",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "判别式Δ符号未讨论",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "端点与极值点大小未比较",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "漏掉参数为零情况",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "漏掉导数不存在点",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "区间端点未单独讨论",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "导数零点求解遗漏",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "参数分界点未考虑",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.85,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "含参问题临界点找不全或分段标准混乱；求导后未完整找出所有零点导致讨论不完整；含参函数临界点遗漏或边界值未检验；含参问题漏掉临界点或边界情况；含参问题易漏掉参数分界点或导数零点；含参问题临界点找不全，数轴分段不完整；含参问题临界点找不全，数轴分段不完整；含参问题中容易漏掉临界点或参数分界情况；含参问题临界点找不全，曾漏掉x=-1；含参问题临界点找不全，区间分段不完整",
+      "related_knowledge_points": [
+        "含参函数分类讨论",
+        "临界点分析",
+        "导数与函数综合",
+        "导数应用"
+      ],
+      "classic_example": "讨论f(x)=ax²+bx+c单调性时漏掉a=0的情况",
+      "correction_suggestions": [
+        "列出所有临界点再分段",
+        "用数轴辅助分析参数范围",
+        "解方程后验算所有根",
+        "画数轴标记临界点",
+        "列出所有临界点",
+        "端点值单独检验",
+        "先列出所有临界点",
+        "用数轴辅助分段"
+      ],
+      "display_size": 120.13,
+      "similar_errors": []
+    },
+    {
+      "id": "err:定义域忽略错误-ec554d7aaa",
+      "type": "error_pattern",
+      "label": "定义域忽略错误",
+      "error_count": 3,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "分式函数未考虑分母不为零",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "根式函数未考虑被开方数非负",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "对数函数未考虑真数大于零",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "分式未检验分母",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "根式未检验被开方数",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "对数未检验真数",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.85,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "求函数性质前未先确定定义域，导致后续分析全部错误；求函数性质时忘记先确定定义域；解题第一步未写定义域导致后续错误；解题第一步未写定义域，导致后续讨论范围错误；解题前未先确定函数定义域；解题第一步未写定义域，导致后续讨论范围错误",
+      "related_knowledge_points": [
+        "函数三要素",
+        "定义域优先原则",
+        "函数定义域与值域",
+        "函数概念基础"
+      ],
+      "classic_example": "求f(x)=√(x-1)/(x-2)定义域时漏掉x≠2",
+      "correction_suggestions": [
+        "养成先写定义域的习惯",
+        "用集合形式明确标注定义域",
+        "解题第一步先写定义域",
+        "含参问题分类讨论定义域",
+        "每道题第一步强制写定义域",
+        "圈出所有限制条件",
+        "强制第一步写'定义域为...'",
+        "建立定义域检查清单"
+      ],
+      "display_size": 120.13,
+      "similar_errors": []
+    },
+    {
+      "id": "err:恒成立方法误用-5c2af2cda5",
+      "type": "error_pattern",
+      "label": "恒成立方法误用",
+      "error_count": 2,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "分离参数后忘记讨论分母符号",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "最值法未考虑定义域限制",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "参数移到错误一侧",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.7,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "分离参数与最值法选择不当，或分离后最值求解错误；分离参数时不等号方向或最值类型搞错",
+      "related_knowledge_points": [
+        "恒成立问题",
+        "分离参数法"
+      ],
+      "classic_example": "f(x)≥0恒成立时错误分离参数导致分类复杂化",
+      "correction_suggestions": [
+        "优先尝试分离参数，若复杂则用最值法",
+        "分离后检查新函数定义域",
+        "明确≥对应最小值，≤对应最大值",
+        "分离后检查不等号方向"
+      ],
+      "display_size": 101.5,
+      "similar_errors": []
+    },
+    {
+      "id": "err:构造函数错误-ef233f8803",
+      "type": "error_pattern",
+      "label": "构造函数错误",
+      "error_count": 2,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "移项方向错误",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "构造后无法求导简化",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "未利用已知不等式",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "移项不完整",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "常数项遗漏",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "目标不等价",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "目标函数变形错误",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "等价变形错误",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.7,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "移项构造时符号搞反导致证明失败；不等式证明时辅助函数构造不合理，导致无法利用单调性；候选节点，标签明确可保留；方向错误只是构造函数问题的一种，简化为通用标签；不等式证明时构造的函数与原不等式不等价；构造辅助函数时常数项处理错误；不等式证明时构造的辅助函数与原问题不等价；不等式证明时构造的函数与原目标不等价；不等式证明时构造的函数与原目标不等价",
+      "related_knowledge_points": [
+        "不等式证明-构造函数法",
+        "导数应用",
+        "导数与函数综合",
+        "不等式证明"
+      ],
+      "classic_example": "证明e^x≥x+1时构造h(x)=e^x-x而非h(x)=e^x-x-1",
+      "correction_suggestions": [
+        "统一移项到一侧",
+        "构造后验证目标等价",
+        "将不等式移项为一侧≥0形式",
+        "构造后验证h(x)在边界处的值",
+        "构造后验证h(x)≥0是否等价于原不等式",
+        "移项时所有项移到一边",
+        "移项后整体构造",
+        "验证构造后目标等价"
+      ],
+      "display_size": 101.5,
+      "similar_errors": []
+    },
+    {
+      "id": "err:去括号符号错误-97483c613b",
+      "type": "error_pattern",
+      "label": "去括号符号错误",
+      "error_count": 2,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "-(a+b)=-a+b",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "2(x-3)=2x-3",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.65,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "括号前是负号时，括号内各项未变号；正负号、括号展开易出错",
+      "related_knowledge_points": [
+        "整式加减运算",
+        "乘法分配律"
+      ],
+      "classic_example": "3-(2x-5)=3-2x-5（应为3-2x+5）",
+      "correction_suggestions": [
+        "括号前负号，逐项变号",
+        "先用分配律展开再合并"
+      ],
+      "display_size": 98.97,
+      "similar_errors": []
+    },
+    {
+      "id": "err:定义域忽略-c93d5baee7",
+      "type": "error_pattern",
+      "label": "定义域忽略",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "分式未考虑分母≠0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "根式未考虑被开方数≥0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "对数未考虑真数>0",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.8,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "解题前未先确定函数定义域导致后续错误；解题第一步未写定义域，导致后续错误；解题第一步未写定义域，导致后续讨论范围错误",
+      "related_knowledge_points": [
+        "函数定义域与值域",
+        "函数三要素"
+      ],
+      "classic_example": "求f(x)=ln(x-1)/(x-2)定义域时漏掉x≠2",
+      "correction_suggestions": [
+        "解题第一步写定义域",
+        "分式/根式/对数单独检查",
+        "定义域参与最终答案",
+        "每道题第一步强制写'定义域为...'",
+        "建立定义域检查清单",
+        "每道题强制第一步写定义域",
+        "用集合表示法规范书写"
+      ],
+      "display_size": 95.52
+    },
+    {
+      "id": "err:临界点求解不完整-cf2105123b",
+      "type": "error_pattern",
+      "label": "临界点求解不完整",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "active",
+      "severity": 0.75,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "求导零点时漏解或忽略参数分界；求导零点时易漏解或忽略参数分界点，需补充典型例子",
+      "related_knowledge_points": [],
+      "classic_example": "f'(x)=0只解出一个根，漏掉参数讨论情况",
+      "correction_suggestions": [
+        "因式分解要彻底",
+        "参数系数为0单独讨论"
+      ],
+      "display_size": 92.99
+    },
+    {
+      "id": "err:移项不变号-98fe2bcb54",
+      "type": "error_pattern",
+      "label": "移项不变号",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "x-3=5 → x=5-3",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "2x+1=3x-2 → 2x-3x=-2-1",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.7,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "方程移项时忘记改变符号",
+      "related_knowledge_points": [
+        "一元一次方程解法",
+        "等式性质"
+      ],
+      "classic_example": "3x+5=2 → 3x=5+2（应为3x=2-5）",
+      "correction_suggestions": [
+        "移项必变号，默念口诀",
+        "每步写清楚符号变化"
+      ],
+      "display_size": 90.46
+    },
+    {
+      "id": "err:导数计算符号错误-a018b2b092",
+      "type": "error_pattern",
+      "label": "导数计算符号错误",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "链式法则内层导数符号错",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "乘积求导展开错误",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "商法则分子符号错",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.7,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "求导过程中符号处理不当，尤其是复合函数",
+      "related_knowledge_points": [
+        "导数求导公式",
+        "复合函数求导"
+      ],
+      "classic_example": "求f(x)=ln(1-x)导数时符号出错",
+      "correction_suggestions": [
+        "分步求导并标注每步",
+        "求导后代入特殊值验证"
+      ],
+      "display_size": 90.46
+    },
+    {
+      "id": "err:数形结合不充分-e44848739b",
+      "type": "error_pattern",
+      "label": "数形结合不充分",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "函数图像趋势判断错误",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "交点个数目测不准确",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "极值点位置与图像不符",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.65,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "零点问题、不等式问题未充分利用图像辅助分析；候选节点需补充典型例子，标签可保留",
+      "related_knowledge_points": [
+        "零点个数判断",
+        "函数图像绘制"
+      ],
+      "classic_example": "判断零点个数时未画草图导致漏解",
+      "correction_suggestions": [
+        "复杂函数先画草图再分析",
+        "标注关键点：零点、极值点、端点"
+      ],
+      "display_size": 87.93
+    },
+    {
+      "id": "err:步骤跳跃-4d04b2234a",
+      "type": "error_pattern",
+      "label": "步骤跳跃",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "求导后未写令导数=0",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "单调区间未列表说明",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "关键变形未展示",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "active",
+      "severity": 0.65,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "高考大题按步骤给分，跳跃导致失分；解题过程省略关键变形步骤，高考按步给分易失分",
+      "related_knowledge_points": [
+        "导数与函数综合",
+        "解题规范"
+      ],
+      "classic_example": "求导后直接写结论，未写'令f'(x)=0'及列表过程",
+      "correction_suggestions": [
+        "按评分标准写完整步骤",
+        "每步变形写清楚",
+        "关键步骤标注",
+        "模仿标准答案格式"
+      ],
+      "display_size": 87.93
+    },
+    {
+      "id": "err:构造函数不等价-a8c101cea5",
+      "type": "error_pattern",
+      "label": "构造函数不等价",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "active",
+      "severity": 0.6,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "构造辅助函数时移项错误或常数项遗漏",
+      "related_knowledge_points": [],
+      "classic_example": "证e^x≥x+1时构造h(x)=e^x-x而非h(x)=e^x-x-1",
+      "correction_suggestions": [
+        "移项后检查等价性",
+        "常数项不能遗漏",
+        "验证h(x)≥0与原命题等价"
+      ],
+      "display_size": 85.4
+    },
+    {
+      "id": "err:函数概念混淆-1cb6d3e5a2",
+      "type": "error_pattern",
+      "label": "函数概念混淆",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "candidate",
+      "severity": 0.5,
+      "repeated": true,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "相似概念区分不清；原标签过于宽泛，细化为函数相关概念混淆；标签已较通用，保留但补充典型例子；标签过于宽泛，建议细化为具体概念混淆类型；相似函数概念区分不清，需强化概念辨析训练",
+      "related_knowledge_points": [],
+      "classic_example": "定义域与值域概念互换使用",
+      "correction_suggestions": [],
+      "display_size": 80.34
+    },
+    {
+      "id": "err:构造函数方法不当-e74cfc0d68",
+      "type": "error_pattern",
+      "label": "构造函数方法不当",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "candidate",
+      "severity": 0.65,
+      "repeated": false,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "导数压轴题中辅助函数构造思路不清晰",
+      "related_knowledge_points": [],
+      "classic_example": "证明不等式时不知如何构造g(x)=f(x)-h(x)",
+      "correction_suggestions": [
+        "总结常见构造模型",
+        "多练移项构造函数题型"
+      ],
+      "display_size": 87.93
+    },
+    {
+      "id": "err:图像解析式对应错误-f2e80d198b",
+      "type": "error_pattern",
+      "label": "图像解析式对应错误",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "斜率正负判断错误",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "截距位置混淆",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "severity": 0.6,
+      "repeated": false,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "无法根据解析式判断图像特征或反之；标签简化，保持核心含义；候选节点，可简化为'函数图像与解析式对应错误'；简化标签保持核心含义",
+      "related_knowledge_points": [
+        "一次函数图像",
+        "函数定义域与值域"
+      ],
+      "classic_example": "y=-2x+1误判为上升直线",
+      "correction_suggestions": [
+        "先找斜率正负，再找截距",
+        "多画几个点验证图像"
+      ],
+      "display_size": 85.4
+    },
+    {
+      "id": "err:切线方程错误-5c21745b05",
+      "type": "error_pattern",
+      "label": "切线方程错误",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [
+        {
+          "text": "斜率与导数值混淆",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "点斜式公式记错",
+          "timestamp": "2026-04-02"
+        },
+        {
+          "text": "法线斜率计算错误",
+          "timestamp": "2026-04-02"
+        }
+      ],
+      "status": "candidate",
+      "severity": 0.55,
+      "repeated": false,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "切线方程点斜式与导数几何意义混淆；候选节点，标签明确可保留；公式记错只是切线问题的一种，简化为通用标签",
+      "related_knowledge_points": [
+        "导数几何意义",
+        "直线方程"
+      ],
+      "classic_example": "求y=x²在(1,1)处切线写成y-1=2x而非y-1=2(x-1)",
+      "correction_suggestions": [
+        "牢记点斜式：y-y₀=f'(x₀)(x-x₀)",
+        "求完切线代入切点验证"
+      ],
+      "display_size": 82.87
+    },
+    {
+      "id": "err:数形结合不足-fb3b62d3af",
+      "type": "error_pattern",
+      "label": "数形结合不足",
+      "error_count": 1,
+      "time_points": [
+        "2026-04-02"
+      ],
+      "examples": [],
+      "status": "candidate",
+      "severity": 0.5,
+      "repeated": false,
+      "first_seen": "2026-04-02",
+      "last_seen": "2026-04-02",
+      "notes": "零点问题未充分利用图像分析",
+      "related_knowledge_points": [],
+      "classic_example": "判断方程根个数仅代数推导未画图",
+      "correction_suggestions": [
+        "零点问题先画草图",
+        "特殊点函数值标注"
+      ],
+      "display_size": 80.34
+    }
+  ],
+  "edges": [
+    {
+      "source": "err:移项不变号-98fe2bcb54",
+      "target": "kp:一元一次方程解法-d5a0b8e4ab",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:移项不变号-98fe2bcb54",
+      "target": "kp:等式性质-1d1bea063d",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:去括号符号错误-97483c613b",
+      "target": "kp:整式加减运算-e5db30cbf3",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:去括号符号错误-97483c613b",
+      "target": "kp:乘法分配律-338ef8eb27",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:去括号符号错误-97483c613b",
+      "target": "err:移项不变号-98fe2bcb54",
+      "relation": "similar_error",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:图像解析式对应错误-f2e80d198b",
+      "target": "kp:一次函数图像-271b0425f4",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "err:图像解析式对应错误-f2e80d198b",
+      "target": "kp:函数定义域与值域-3a2992daa7",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "err:定义域忽略错误-ec554d7aaa",
+      "target": "kp:函数三要素-8a987b1bc1",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:定义域忽略错误-ec554d7aaa",
+      "target": "kp:定义域优先原则-a085754062",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:分类讨论遗漏-1a61191f26",
+      "target": "kp:含参函数分类讨论-783240a8c0",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:分类讨论遗漏-1a61191f26",
+      "target": "kp:临界点分析-2c7abe1cfa",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:导数计算符号错误-a018b2b092",
+      "target": "kp:导数求导公式-8e9d4ce67e",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:导数计算符号错误-a018b2b092",
+      "target": "kp:复合函数求导-ea5ebbbfbc",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:端点值遗漏-76a21cec42",
+      "target": "kp:极值最值问题-006abce996",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:端点值遗漏-76a21cec42",
+      "target": "kp:闭区间连续函数性质-11a3fd3665",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:恒成立方法误用-5c2af2cda5",
+      "target": "kp:恒成立问题-96616dcc39",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:恒成立方法误用-5c2af2cda5",
+      "target": "kp:分离参数法-7f8c058cf6",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:数形结合不充分-e44848739b",
+      "target": "kp:零点个数判断-450454de5c",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:数形结合不充分-e44848739b",
+      "target": "kp:函数图像绘制-4d12eb7ae5",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:构造函数错误-ef233f8803",
+      "target": "kp:不等式证明-构造函数法-8536edce92",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:构造函数错误-ef233f8803",
+      "target": "kp:导数应用-37178b9b46",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:切线方程错误-5c21745b05",
+      "target": "kp:导数几何意义-c2829b3a17",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "err:切线方程错误-5c21745b05",
+      "target": "kp:直线方程-3a639b6e65",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "candidate"
+    },
+    {
+      "source": "err:定义域忽略错误-ec554d7aaa",
+      "target": "kp:函数定义域与值域-3a2992daa7",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:分类讨论遗漏-1a61191f26",
+      "target": "kp:导数与函数综合-b2f1524e01",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:端点值遗漏-76a21cec42",
+      "target": "kp:导数与函数综合-b2f1524e01",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:构造函数错误-ef233f8803",
+      "target": "kp:导数与函数综合-b2f1524e01",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:构造函数错误-ef233f8803",
+      "target": "kp:不等式证明-f5ecd8f29b",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:解题步骤跳跃-30fc3ac43f",
+      "target": "kp:导数与函数综合-b2f1524e01",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:解题步骤跳跃-30fc3ac43f",
+      "target": "kp:规范解题-22bd3f64c6",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:定义域忽略错误-ec554d7aaa",
+      "target": "kp:函数概念基础-910cfbe05b",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:分类讨论遗漏-1a61191f26",
+      "target": "kp:导数应用-37178b9b46",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:分类讨论遗漏-1a61191f26",
+      "target": "err:端点值遗漏-76a21cec42",
+      "relation": "similar_error",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:端点值遗漏-76a21cec42",
+      "target": "kp:导数应用-37178b9b46",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:端点值遗漏-76a21cec42",
+      "target": "kp:含参函数分类讨论-783240a8c0",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:端点值遗漏-76a21cec42",
+      "target": "err:分类讨论遗漏-1a61191f26",
+      "relation": "similar_error",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:解题步骤跳跃-30fc3ac43f",
+      "target": "kp:导数应用-37178b9b46",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:解题步骤跳跃-30fc3ac43f",
+      "target": "kp:函数概念基础-910cfbe05b",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:定义域忽略-c93d5baee7",
+      "target": "kp:函数定义域与值域-3a2992daa7",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:定义域忽略-c93d5baee7",
+      "target": "kp:函数三要素-8a987b1bc1",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:步骤跳跃-4d04b2234a",
+      "target": "kp:导数与函数综合-b2f1524e01",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    },
+    {
+      "source": "err:步骤跳跃-4d04b2234a",
+      "target": "kp:解题规范-0dba496f1a",
+      "relation": "corresponds_to",
+      "occurrences": 1,
+      "strength": 0.48,
+      "updated_at": "2026-04-02",
+      "status": "active"
+    }
+  ],
+  "archived_nodes": [],
+  "focus_node_ids": [
+    "err:解题步骤跳跃-30fc3ac43f",
+    "err:端点值遗漏-76a21cec42",
+    "err:分类讨论遗漏-1a61191f26",
+    "err:定义域忽略错误-ec554d7aaa",
+    "err:恒成立方法误用-5c2af2cda5",
+    "err:构造函数错误-ef233f8803",
+    "err:去括号符号错误-97483c613b",
+    "err:定义域忽略-c93d5baee7"
+  ],
+  "stats": {
+    "active": 14,
+    "candidate": 5,
+    "archived": 0
+  }
+}
