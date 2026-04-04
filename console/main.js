@@ -356,6 +356,26 @@ const skillsState = {
   error: "",
   notice: "",
 };
+const SKILL_TEMPLATE_PRESETS = [
+  {
+    id: "coach",
+    title: "竞赛教练",
+    hint: "关键突破口 + 反问引导",
+    prompt: "请像竞赛教练一样追加一个点拨输出框，先指出题目的关键突破口，再给学生两个反问，引导他自己发现下一步思路，语气要克制、锋利、启发性强。",
+  },
+  {
+    id: "diagnosis",
+    title: "错因点拨",
+    hint: "先诊断，再给修正动作",
+    prompt: "请追加一个错因点拨输出框，先判断学生最可能卡住的步骤或概念，再给出 2 条具体修正动作，帮助他下次避免同类错误。",
+  },
+  {
+    id: "guided",
+    title: "追问引导",
+    hint: "不直接说答案，逼近思路",
+    prompt: "请追加一个追问式引导输出框，不直接给出完整答案，而是用连续 2 到 3 个问题把学生带到正确思路上，语言尽量自然、耐心、简洁。",
+  },
+];
 const dashboardState = {
   data: null,
   loading: false,
@@ -2432,22 +2452,62 @@ function formatSkillTime(timestamp) {
   });
 }
 
-function renderCustomOutputSkillCard(skill) {
+function resolveSkillTemplateId(draft) {
+  const normalized = String(draft || "").trim();
+  if (!normalized) {
+    return "";
+  }
+  const matched = SKILL_TEMPLATE_PRESETS.find((template) => template.prompt === normalized);
+  return matched?.id || "";
+}
+
+function renderSkillTemplateButtons(activeTemplateId) {
+  return SKILL_TEMPLATE_PRESETS.map((template) => `
+      <button
+        type="button"
+        class="skills-template${activeTemplateId === template.id ? " is-active" : ""}"
+        data-skill-template="${template.id}"
+      >
+        <strong>${escapeHtml(template.title)}</strong>
+        <span>${escapeHtml(template.hint)}</span>
+      </button>
+    `).join("");
+}
+
+function renderSkillChannelChips() {
+  return ["企业微信", "QQ", "飞书"]
+    .map((label) => `<span class="skills-channel-chip">${escapeHtml(label)}</span>`)
+    .join("");
+}
+
+function renderCustomOutputSkillCard(skill, index) {
+  const enabledLabel = skill.enabled ? "已启用" : "已停用";
   return `
     <article class="skill-box-card">
       <div class="skill-box-card__head">
-        <div>
+        <div class="skill-box-card__title-wrap">
+          <span class="skill-box-card__eyebrow">附加位 ${index + 1}</span>
           <div class="skill-box-card__title">${escapeHtml(skill.title)}</div>
           <p class="skill-box-card__desc">${escapeHtml(skill.description)}</p>
         </div>
-        <label class="skill-toggle">
-          <input type="checkbox" data-skill-toggle="${escapeHtml(skill.id)}" ${skill.enabled ? "checked" : ""} />
-          <span>${skill.enabled ? "已启用" : "已停用"}</span>
-        </label>
+        <div class="skill-box-card__head-actions">
+          <span class="skill-state-pill skill-state-pill--${skill.enabled ? "enabled" : "muted"}">${enabledLabel}</span>
+          <label class="skill-toggle" title="${skill.enabled ? "停用" : "启用"}这个 Skill">
+            <input type="checkbox" data-skill-toggle="${escapeHtml(skill.id)}" ${skill.enabled ? "checked" : ""} />
+            <span class="skill-toggle__track"><span class="skill-toggle__thumb"></span></span>
+          </label>
+        </div>
       </div>
-      <div class="skill-box-card__body">${escapeHtml(skill.instruction)}</div>
+      <div class="skill-box-card__meta">
+        <span class="skill-meta-chip">${formatSkillTime(skill.createdAt) || "刚刚创建"}</span>
+        <span class="skill-meta-chip">仅在附件回复后追加</span>
+      </div>
+      <div class="skill-box-card__body-wrap">
+        <span class="skill-box-card__body-label">输出内容预览</span>
+        <div class="skill-box-card__body">${escapeHtml(skill.instruction)}</div>
+      </div>
       <div class="skill-box-card__foot">
-        <span>${formatSkillTime(skill.createdAt) || "刚刚创建"}</span>
+        <div class="skill-box-card__channels">${renderSkillChannelChips()}</div>
         <button type="button" class="ghost-button skill-box-card__delete" data-skill-delete="${escapeHtml(skill.id)}">删除</button>
       </div>
     </article>
@@ -2466,36 +2526,81 @@ function syncSkillSubmitState(root) {
 }
 
 function renderSkillsPage(root) {
+  const used = skillsState.skills.length;
+  const enabledCount = skillsState.skills.filter((skill) => skill.enabled).length;
   const remaining = Math.max(0, skillsState.limit - skillsState.skills.length);
   const disabled = skillsState.saving || skillsState.skills.length >= skillsState.limit;
+  const activeTemplateId = resolveSkillTemplateId(skillsState.draft);
+  const slotsLabel = used
+    ? `正常输出 -> ${skillsState.skills.map((_, index) => `自定义框 ${index + 1}`).join(" -> ")}`
+    : "正常输出 -> 等待新增自定义框";
 
   root.innerHTML = `
     <section class="page-head">
       <div>
         <h2>Skills</h2>
-        <p>这里管理企业微信、QQ、飞书里在附件回复后追加的自定义输出框，最多 2 个。</p>
+        <p>管理附件回复后的附加输出风格，让企业微信、QQ、飞书在正常回答后再追加最多 2 个自定义输出框。</p>
       </div>
+    </section>
+    <section class="skills-overview">
+      <article class="panel skills-overview__card skills-overview__card--primary">
+        <span class="page-kicker">附加输出工作台</span>
+        <h3>让三通道的附件回复更像你想要的老师风格</h3>
+        <p>左侧负责生成新的输出框，右侧负责管理已保存 Skill。只有带附件时，才会按启用顺序追加到正常回答后面。</p>
+      </article>
+      <article class="panel skills-overview__card">
+        <span>已启用</span>
+        <strong>${enabledCount}/${skillsState.limit}</strong>
+      </article>
+      <article class="panel skills-overview__card">
+        <span>生效通道</span>
+        <strong>企业微信 / QQ / 飞书</strong>
+      </article>
+      <article class="panel skills-overview__card">
+        <span>当前顺序</span>
+        <strong>${escapeHtml(slotsLabel)}</strong>
+      </article>
     </section>
     <section class="skills-shell">
       <section class="panel skills-pane">
-        <div class="skills-pane__head">
-          <div>
-            <strong>三通道附加输出</strong>
-            <p>正常输出保留不动，只有带附件时才会按启用顺序追加在最后。</p>
+        <div class="skills-pane__hero">
+          <div class="skills-pane__head">
+            <div>
+              <strong>创建自定义输出</strong>
+              <p>正常输出保留不动，只有带附件时才会按启用顺序追加在最后。</p>
+            </div>
+            <div class="skills-counter">${skillsState.skills.length}/${skillsState.limit}</div>
           </div>
-          <div class="skills-counter">${skillsState.skills.length}/${skillsState.limit}</div>
+          <div class="skills-flow-card">
+            <div class="skills-flow-card__head">
+              <strong>当前追加路径</strong>
+              <span>按启用顺序依次追加</span>
+            </div>
+            <div class="skills-flow">
+              <span class="skills-flow__chip skills-flow__chip--base">正常输出</span>
+              <span class="skills-flow__arrow">+</span>
+              <span class="skills-flow__chip">自定义框 1</span>
+              <span class="skills-flow__arrow">+</span>
+              <span class="skills-flow__chip">自定义框 2</span>
+            </div>
+          </div>
         </div>
-        <div class="skills-flow">
-          <span class="skills-flow__chip">正常输出</span>
-          <span class="skills-flow__arrow">+</span>
-          <span class="skills-flow__chip">自定义框 1</span>
-          <span class="skills-flow__arrow">+</span>
-          <span class="skills-flow__chip">自定义框 2</span>
+        <div class="skills-template-strip">
+          <div>
+            <strong>风格模板</strong>
+            <p>先选一个更接近的模板，再补充你的具体要求，会更快收敛。</p>
+          </div>
+          <div class="skills-template-list">
+            ${renderSkillTemplateButtons(activeTemplateId)}
+          </div>
         </div>
         ${skillsState.error ? `<div class="skills-status skills-status--error">${escapeHtml(skillsState.error)}</div>` : ""}
         ${skillsState.notice ? `<div class="skills-status skills-status--success">${escapeHtml(skillsState.notice)}</div>` : ""}
         <form class="skills-creator" data-skill-form>
-          <label class="skills-creator__label" for="custom-output-skill-input">新增 1 个自定义输出 Skill</label>
+          <div class="skills-creator__head">
+            <label class="skills-creator__label" for="custom-output-skill-input">新增 1 个自定义输出 Skill</label>
+            <span>描述你希望追加的老师风格、重点和措辞方式。</span>
+          </div>
           <textarea
             id="custom-output-skill-input"
             class="skills-creator__input"
@@ -2519,12 +2624,15 @@ function renderSkillsPage(root) {
       </section>
       <section class="panel skills-list-panel">
         <div class="skills-list-panel__head">
-          <strong>当前已保存的自定义输出 Skill</strong>
-          <span>对企业微信、QQ、飞书生效</span>
+          <div>
+            <strong>已保存的自定义输出 Skill</strong>
+            <span>对企业微信、QQ、飞书生效，只有带附件的回复才会触发追加。</span>
+          </div>
+          <div class="skills-list-panel__channels">${renderSkillChannelChips()}</div>
         </div>
         <div class="skills-list">
           ${skillsState.skills.length
-            ? skillsState.skills.map(renderCustomOutputSkillCard).join("")
+            ? skillsState.skills.map((skill, index) => renderCustomOutputSkillCard(skill, index)).join("")
             : `
               <div class="skills-empty">
                 <strong>还没有自定义输出 Skill</strong>
@@ -2664,6 +2772,23 @@ function mountSkillsPage(root) {
   };
 
   const handleClick = (event) => {
+    const templateButton = event.target.closest("[data-skill-template]");
+    if (templateButton) {
+      event.preventDefault();
+      const template = SKILL_TEMPLATE_PRESETS.find((item) => item.id === templateButton.dataset.skillTemplate);
+      if (!template) {
+        return;
+      }
+      skillsState.draft = template.prompt;
+      renderSkillsPage(root);
+      syncSkillSubmitState(root);
+      const input = root.querySelector("[data-skill-input]");
+      if (input instanceof HTMLTextAreaElement) {
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+      return;
+    }
     const removeButton = event.target.closest("[data-skill-delete]");
     if (!removeButton) {
       return;
