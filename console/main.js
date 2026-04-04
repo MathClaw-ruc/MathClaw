@@ -3090,6 +3090,15 @@ function visualNodeSize(node) {
   return clamp(Math.round(normalized || 32), 24, 46);
 }
 
+function stablePlacementSeed(seed) {
+  let hash = 0;
+  const text = String(seed || "");
+  for (let index = 0; index < text.length; index += 1) {
+    hash = (hash * 31 + text.charCodeAt(index)) % 9973;
+  }
+  return hash;
+}
+
 function graphNodeAnchor(node) {
   if (node.x > GRAPH_STAGE.width - 220) {
     return "left";
@@ -3107,10 +3116,26 @@ function graphNodeAnchor(node) {
   const centerY = GRAPH_STAGE.height / 2;
   const dx = node.x - centerX;
   const dy = node.y - centerY;
-  if (Math.abs(dx) > Math.abs(dy) + 48) {
+  const horizontalWeight = Math.abs(dx) * 1.18;
+  const verticalWeight = Math.abs(dy);
+  if (horizontalWeight > verticalWeight + 20) {
     return dx > 0 ? "left" : "right";
   }
+  if (Math.abs(horizontalWeight - verticalWeight) < 42) {
+    return stablePlacementSeed(node.id) % 2 === 0 ? "left" : "right";
+  }
   return dy > 0 ? "top" : "bottom";
+}
+
+function graphBadgeAnchor(node, titleAnchor) {
+  if (titleAnchor === "bottom") {
+    return "top";
+  }
+  if (titleAnchor === "top") {
+    return "bottom";
+  }
+  const centerY = GRAPH_STAGE.height / 2;
+  return node.y >= centerY ? "top" : "bottom";
 }
 
 function stableEdgeCurve(sourceId, targetId, relation) {
@@ -3509,17 +3534,18 @@ function renderGraphNodes(graph, highlightNode, selectedNode) {
       const isLinked = activeNodeIds && !isActive && !isMuted;
       const coreSize = visualNodeSize(node);
       const anchor = graphNodeAnchor(node);
+      const badgeAnchor = graphBadgeAnchor(node, anchor);
 
       return `
           <button
-            class="graph-node graph-node--${graph.accent} graph-node--anchor-${anchor}${isActive ? " is-active" : ""}${isSelected ? " is-selected" : ""}${isLinked ? " is-linked" : ""}${isMuted ? " is-muted" : ""}${node.status === "candidate" ? " is-candidate" : ""}${node.isFocus ? " is-focus" : ""}"
+            class="graph-node graph-node--${graph.accent} graph-node--anchor-${anchor} graph-node--badge-${badgeAnchor}${isActive ? " is-active" : ""}${isSelected ? " is-selected" : ""}${isLinked ? " is-linked" : ""}${isMuted ? " is-muted" : ""}${node.status === "candidate" ? " is-candidate" : ""}${node.isFocus ? " is-focus" : ""}"
             type="button"
             data-node-id="${node.id}"
             style="left:${node.x}px; top:${node.y}px; width:${coreSize}px; height:${coreSize}px;"
         >
           <span class="graph-node__core" aria-hidden="true"></span>
           <span class="graph-node__title">${node.label}</span>
-          <span class="graph-node__badge">${node.badge}</span>
+          ${node.badge ? `<span class="graph-node__badge">${node.badge}</span>` : ""}
         </button>
       `;
     })

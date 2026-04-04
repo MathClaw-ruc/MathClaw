@@ -3014,26 +3014,33 @@ button {
 .graph-node__title {
   position: absolute;
   z-index: 2;
-  width: 136px;
-  max-width: 136px;
+  width: 120px;
+  max-width: 120px;
+  display: -webkit-box;
   font-size: 12px;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1.16;
   letter-spacing: -0.01em;
   white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  max-height: calc(2 * 1.16em);
   color: rgba(74, 84, 108, 0.96);
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.96),
     0 0 12px rgba(255, 255, 255, 0.82);
   transition: color 160ms ease, opacity 160ms ease;
+  pointer-events: none;
 }
 
 .graph-node__badge {
   position: absolute;
   z-index: 2;
-  left: 50%;
-  top: calc(100% + 10px);
-  transform: translate(-50%, 4px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
   padding: 4px 8px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.94);
@@ -3041,15 +3048,16 @@ button {
   font-size: 10px;
   letter-spacing: 0.01em;
   white-space: nowrap;
+  border: 1px solid rgba(217, 224, 242, 0.88);
   box-shadow: 0 10px 22px rgba(67, 82, 117, 0.08);
   opacity: 0;
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition: opacity 160ms ease;
+  pointer-events: none;
 }
 
 .graph-node.is-active .graph-node__badge,
 .graph-node.is-selected .graph-node__badge {
   opacity: 1;
-  transform: translate(-50%, 0);
 }
 
 .graph-node.is-muted .graph-node__title {
@@ -3100,14 +3108,14 @@ button {
 }
 
 .graph-node--anchor-right .graph-node__title {
-  left: calc(100% + 10px);
+  left: calc(100% + 14px);
   top: 50%;
   transform: translateY(-50%);
   text-align: left;
 }
 
 .graph-node--anchor-left .graph-node__title {
-  right: calc(100% + 10px);
+  right: calc(100% + 14px);
   top: 50%;
   transform: translateY(-50%);
   text-align: right;
@@ -3115,16 +3123,28 @@ button {
 
 .graph-node--anchor-top .graph-node__title {
   left: 50%;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 18px);
   transform: translateX(-50%);
   text-align: center;
 }
 
 .graph-node--anchor-bottom .graph-node__title {
   left: 50%;
-  top: calc(100% + 10px);
+  top: calc(100% + 18px);
   transform: translateX(-50%);
   text-align: center;
+}
+
+.graph-node--badge-top .graph-node__badge {
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+}
+
+.graph-node--badge-bottom .graph-node__badge {
+  left: 50%;
+  top: calc(100% + 10px);
+  transform: translateX(-50%);
 }
 
 .graph-overlay {
@@ -4077,11 +4097,11 @@ button {
 }
 
 .graph-node__title {
-  width: 126px;
-  max-width: 126px;
+  width: 120px;
+  max-width: 120px;
   font-size: 11px;
   font-weight: 700;
-  line-height: 1.18;
+  line-height: 1.16;
   letter-spacing: -0.01em;
   white-space: normal;
 }
