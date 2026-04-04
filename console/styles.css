@@ -3689,8 +3689,8 @@ button {
 
 .graph-workspace {
   position: relative;
-  gap: 18px;
-  padding: 20px;
+  gap: 12px;
+  padding: 16px 18px 18px;
   border-radius: 28px;
   overflow: hidden;
   background:
@@ -3713,7 +3713,7 @@ button {
 .graph-summary {
   display: grid;
   grid-template-columns: minmax(0, 1.12fr) minmax(360px, 0.88fr);
-  gap: 14px;
+  gap: 10px;
   align-items: stretch;
 }
 
@@ -3721,7 +3721,7 @@ button {
 .graph-summary__tile {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 22px;
   border: 1px solid var(--graph-accent-border);
   box-shadow: 0 18px 40px rgba(67, 82, 117, 0.08);
 }
@@ -3729,9 +3729,10 @@ button {
 .graph-summary__main {
   display: flex;
   flex-direction: column;
+  gap: 6px;
   justify-content: center;
-  min-height: 136px;
-  padding: 18px 22px;
+  min-height: 102px;
+  padding: 12px 18px;
   background: var(--graph-surface);
 }
 
@@ -3739,9 +3740,9 @@ button {
 .detail-hero::after {
   content: "";
   position: absolute;
-  inset: auto -36px -78px auto;
-  width: 148px;
-  height: 148px;
+  inset: auto -28px -68px auto;
+  width: 126px;
+  height: 126px;
   border-radius: 999px;
   background: radial-gradient(circle, var(--graph-accent-glow), transparent 70%);
   pointer-events: none;
@@ -3749,50 +3750,50 @@ button {
 
 .graph-summary__main h3 {
   margin: 0;
-  font-size: 20px;
-  line-height: 1.18;
+  font-size: 18px;
+  line-height: 1.14;
   letter-spacing: -0.03em;
 }
 
 .graph-summary__main p {
   margin: 0;
   max-width: 640px;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.45;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   overflow: hidden;
 }
 
 .graph-summary__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  min-height: 136px;
+  gap: 10px;
+  min-height: 102px;
 }
 
 .graph-summary__tile {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 14px 16px;
+  padding: 10px 14px;
   background: rgba(255, 255, 255, 0.95);
 }
 
 .graph-summary__tile span {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.04em;
 }
 
 .graph-summary__tile strong {
   display: block;
-  font-size: 15px;
-  line-height: 1.35;
+  font-size: 14px;
+  line-height: 1.28;
   color: var(--text);
 }
 
