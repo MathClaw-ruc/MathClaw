@@ -4,11 +4,11 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.base import BaseChannel
-from nanobot.channels.manager import ChannelManager
-from nanobot.config.schema import Config
+from mathclaw.bus.events import OutboundMessage
+from mathclaw.bus.queue import MessageBus
+from mathclaw.channels.base import BaseChannel
+from mathclaw.channels.manager import ChannelManager
+from mathclaw.config.schema import Config
 
 
 class MockChannel(BaseChannel):

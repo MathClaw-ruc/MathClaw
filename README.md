@@ -30,7 +30,7 @@
 MathClaw 是当前这套仓库里真正运行中的版本，不再沿用旧版 README 里提到的 `start.sh`、`/api/config/quickstart` 或 React/FastAPI 那套路径。  
 现在的产品形态是：
 
-- 以 `nanobot` 运行时为底座的 **数学学习 Agent**
+- 以 `mathclaw` 运行时为底座的 **数学学习 Agent**
 - 一套定制过的 **MathClaw 控制台**，同时覆盖学生工作区和管理工作区
 - 一套面向学习场景的 **记忆、计划、心跳、错题图谱** 工作流
 - 一套可直接接入 **企业微信 / QQ / 飞书 / Telegram / Slack / WhatsApp / Email / Matrix / Discord / 微信 / 钉钉 / MoChat** 的多通道网关
@@ -42,13 +42,13 @@ MathClaw 是当前这套仓库里真正运行中的版本，不再沿用旧版 R
 | 模块 | 当前能力 | 对应代码 |
 | --- | --- | --- |
 | 🧠 解题工作台 | 单对话工作台；支持文本、图片、PDF 上传；前端支持 Markdown、列表、表格渲染 | `console/main.js` · `console/serve.py` |
-| 🗓️ 学习计划 | 根据每日/每周学习记忆生成今日状态、本周计划、优先复习知识点、重点纠错方向 | `nanobot/agent/memory.py` · `workspace/cron/jobs.json` |
+| 🗓️ 学习计划 | 根据每日/每周学习记忆生成今日状态、本周计划、优先复习知识点、重点纠错方向 | `mathclaw/agent/memory.py` · `workspace/cron/jobs.json` |
 | 🕸️ 记忆图谱 | 生成知识点图谱与错题图谱，支持焦点/总览视图、节点详情、删除节点 | `workspace/memory/graphs/*` · `console/main.js` |
-| ⏰ 自动总结与心跳 | 支持日报、周报、定时任务与 `HEARTBEAT.md` 周期唤醒执行 | `nanobot/cron/service.py` · `nanobot/heartbeat/service.py` |
-| 📡 多通道网关 | 渠道收消息、路由到 Agent、聚合流式输出、重试发送 | `nanobot/channels/manager.py` · `nanobot/cli/commands.py` |
-| 🛠️ 模型与工具 | 多模型提供商路由、Web Search/Web Fetch、文件系统、Shell、Cron、消息回写、MCP、子代理 | `nanobot/providers/registry.py` · `nanobot/agent/loop.py` |
-| ✨ 自定义输出 Skill | 为附件回复追加风格化的二次输出框，例如“竞赛教练点拨” | `nanobot/agent/custom_output_skills.py` |
-| 🧾 会话与学习记忆 | 会话 JSONL 持久化、每日记忆、周总结、图谱快照、学习状态沉淀 | `nanobot/session/manager.py` · `nanobot/agent/memory.py` |
+| ⏰ 自动总结与心跳 | 支持日报、周报、定时任务与 `HEARTBEAT.md` 周期唤醒执行 | `mathclaw/cron/service.py` · `mathclaw/heartbeat/service.py` |
+| 📡 多通道网关 | 渠道收消息、路由到 Agent、聚合流式输出、重试发送 | `mathclaw/channels/manager.py` · `mathclaw/cli/commands.py` |
+| 🛠️ 模型与工具 | 多模型提供商路由、Web Search/Web Fetch、文件系统、Shell、Cron、消息回写、MCP、子代理 | `mathclaw/providers/registry.py` · `mathclaw/agent/loop.py` |
+| ✨ 自定义输出 Skill | 为附件回复追加风格化的二次输出框，例如“竞赛教练点拨” | `mathclaw/agent/custom_output_skills.py` |
+| 🧾 会话与学习记忆 | 会话 JSONL 持久化、每日记忆、周总结、图谱快照、学习状态沉淀 | `mathclaw/session/manager.py` · `mathclaw/agent/memory.py` |
 
 ## ✨ 核心特性
 
@@ -118,18 +118,18 @@ python -m pip install -e ".[wecom]"
 ### 3. 初始化配置与工作区
 
 ```bash
-nanobot onboard --workspace ./workspace
+mathclaw onboard --workspace ./workspace
 ```
 
 默认会生成：
 
-- 配置文件：`~/.nanobot/config.json`
+- 配置文件：`~/.mathclaw/config.json`
 - 工作区模板：`./workspace/AGENTS.md`、`USER.md`、`HEARTBEAT.md`、`cron/jobs.json`
 
 你也可以使用交互式初始化：
 
 ```bash
-nanobot onboard --workspace ./workspace --wizard
+mathclaw onboard --workspace ./workspace --wizard
 ```
 
 ### 4. 写入最小配置
@@ -167,7 +167,7 @@ nanobot onboard --workspace ./workspace --wizard
 ### 5. 启动网关
 
 ```bash
-nanobot gateway --workspace ./workspace
+mathclaw gateway --workspace ./workspace
 ```
 
 默认网关端口是 `18790`。
@@ -195,7 +195,7 @@ NANOBOT_CONSOLE_WORKSPACE=../workspace NANOBOT_CONSOLE_PORT=6008 python serve.py
 ### 7. 直接用 CLI 对话
 
 ```bash
-nanobot agent --workspace ./workspace -m "帮我讲一下导数单调性判断"
+mathclaw agent --workspace ./workspace -m "帮我讲一下导数单调性判断"
 ```
 
 ## 📡 通道与接入方式
@@ -224,7 +224,7 @@ nanobot agent --workspace ./workspace -m "帮我讲一下导数单调性判断"
 企业微信：
 
 ```bash
-nanobot gateway --workspace ./workspace \
+mathclaw gateway --workspace ./workspace \
   --wecom \
   --wecom-bot-id YOUR_WECOM_BOT_ID \
   --wecom-secret YOUR_WECOM_SECRET \
@@ -234,7 +234,7 @@ nanobot gateway --workspace ./workspace \
 QQ：
 
 ```bash
-nanobot gateway --workspace ./workspace \
+mathclaw gateway --workspace ./workspace \
   --qq \
   --qq-app-id YOUR_QQ_APP_ID \
   --qq-secret YOUR_QQ_SECRET \
@@ -244,7 +244,7 @@ nanobot gateway --workspace ./workspace \
 飞书：
 
 ```bash
-nanobot gateway --workspace ./workspace \
+mathclaw gateway --workspace ./workspace \
   --feishu \
   --feishu-app-id YOUR_FEISHU_APP_ID \
   --feishu-app-secret YOUR_FEISHU_APP_SECRET \
@@ -254,13 +254,13 @@ nanobot gateway --workspace ./workspace \
 对于需要交互式授权的通道，可以使用：
 
 ```bash
-nanobot channels login <channel_name>
+mathclaw channels login <channel_name>
 ```
 
 查看当前通道启用情况：
 
 ```bash
-nanobot channels status
+mathclaw channels status
 ```
 
 ## 🛠️ 模型与工具能力
@@ -365,7 +365,7 @@ flowchart LR
 
 ```text
 .
-├── nanobot/                 # 核心运行时：agent、channels、providers、memory、cron、heartbeat
+├── mathclaw/                 # 核心运行时：agent、channels、providers、memory、cron、heartbeat
 ├── console/                 # MathClaw 控制台：静态前端 + serve.py API 壳层
 ├── workspace/               # 仓库自带的 MathClaw persona、计划与模板
 ├── bridge/                  # WhatsApp bridge（Node 20+）
@@ -430,7 +430,7 @@ flowchart LR
 <br />
 
 - 当前内置 WeCom、QQ、Feishu、Telegram、Slack、Email、Discord、Matrix、Weixin、DingTalk、WhatsApp、MoChat
-- `nanobot gateway` 统一负责通道启动、消息接入、流式输出聚合和失败重试
+- `mathclaw gateway` 统一负责通道启动、消息接入、流式输出聚合和失败重试
 - 支持运行时参数直接覆盖通道配置，适合部署与调试
 - 同时支持 Python entry points 方式扩展 channel plugin
 
@@ -467,7 +467,7 @@ flowchart LR
 ```mermaid
 flowchart LR
     A["学生 / 老师 / 管理员"] --> B["多通道入口<br/>WeCom / QQ / Feishu / ..."]
-    B --> C["nanobot gateway"]
+    B --> C["mathclaw gateway"]
     C --> D["MathClaw AgentLoop"]
 
     D --> E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]
@@ -486,11 +486,11 @@ flowchart LR
 
 这份 README 是按照当前仓库真实存在的实现重写的，重点对应的是：
 
-- `nanobot gateway`
-- `nanobot agent`
+- `mathclaw gateway`
+- `mathclaw agent`
 - `console/serve.py`
 - `workspace/*`
-- `nanobot/agent/*`
+- `mathclaw/agent/*`
 
 因此它不会再描述旧版 quickstart API、旧版启动脚本或旧版前后端架构。
 

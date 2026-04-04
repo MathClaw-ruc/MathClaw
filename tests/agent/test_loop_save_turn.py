@@ -1,6 +1,6 @@
-from nanobot.agent.context import ContextBuilder
-from nanobot.agent.loop import AgentLoop
-from nanobot.session.manager import Session
+from mathclaw.agent.context import ContextBuilder
+from mathclaw.agent.loop import AgentLoop
+from mathclaw.session.manager import Session
 
 
 def _mk_loop() -> AgentLoop:

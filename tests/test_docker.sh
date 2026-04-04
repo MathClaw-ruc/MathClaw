@@ -2,19 +2,19 @@
 set -euo pipefail
 cd "$(dirname "$0")/.." || exit 1
 
-IMAGE_NAME="nanobot-test"
+IMAGE_NAME="mathclaw-test"
 
 echo "=== Building Docker image ==="
 docker build -t "$IMAGE_NAME" .
 
 echo ""
-echo "=== Running 'nanobot onboard' ==="
-docker run --name nanobot-test-run "$IMAGE_NAME" onboard
+echo "=== Running 'mathclaw onboard' ==="
+docker run --name mathclaw-test-run "$IMAGE_NAME" onboard
 
 echo ""
-echo "=== Running 'nanobot status' ==="
-STATUS_OUTPUT=$(docker commit nanobot-test-run nanobot-test-onboarded > /dev/null && \
-    docker run --rm nanobot-test-onboarded status 2>&1) || true
+echo "=== Running 'mathclaw status' ==="
+STATUS_OUTPUT=$(docker commit mathclaw-test-run mathclaw-test-onboarded > /dev/null && \
+    docker run --rm mathclaw-test-onboarded status 2>&1) || true
 
 echo "$STATUS_OUTPUT"
 
@@ -31,7 +31,7 @@ check() {
     fi
 }
 
-check "nanobot Status"
+check "mathclaw Status"
 check "Config:"
 check "Workspace:"
 check "Model:"
@@ -50,7 +50,7 @@ fi
 # Cleanup
 echo ""
 echo "=== Cleanup ==="
-docker rm -f nanobot-test-run 2>/dev/null || true
-docker rmi -f nanobot-test-onboarded 2>/dev/null || true
+docker rm -f mathclaw-test-run 2>/dev/null || true
+docker rmi -f mathclaw-test-onboarded 2>/dev/null || true
 docker rmi -f "$IMAGE_NAME" 2>/dev/null || true
 echo "Done."

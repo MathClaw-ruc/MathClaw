@@ -35,11 +35,11 @@ UPLOAD_LOG = UPLOAD_DIR / "events.jsonl"
 
 sys.path.insert(0, str(REPO_ROOT))
 
-from nanobot.agent.loop import AgentLoop
-from nanobot.bus.queue import MessageBus
-from nanobot.cli.commands import _load_runtime_config, _make_provider
-from nanobot.cron.service import CronService
-from nanobot.utils.helpers import sync_workspace_templates
+from mathclaw.agent.loop import AgentLoop
+from mathclaw.bus.queue import MessageBus
+from mathclaw.cli.commands import _load_runtime_config, _make_provider
+from mathclaw.cron.service import CronService
+from mathclaw.utils.helpers import sync_workspace_templates
 
 
 def build_runtime_config():
@@ -1071,7 +1071,7 @@ class ConsoleHandler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     server = ThreadingHTTPServer((HOST, PORT), ConsoleHandler)
-    print(f"Serving nanobot console at http://{HOST}:{PORT}")
+    print(f"Serving MathClaw console at http://{HOST}:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

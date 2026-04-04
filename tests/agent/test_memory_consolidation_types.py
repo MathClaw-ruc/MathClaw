@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from nanobot.agent.memory import MemoryStore
+from mathclaw.agent.memory import MemoryStore
 
 
 def _make_messages(day: str) -> list[dict[str, str]]:

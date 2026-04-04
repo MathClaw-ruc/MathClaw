@@ -1,6 +1,7 @@
-"""
-nanobot - A lightweight AI agent framework
-"""
+"""Compatibility package for legacy nanobot imports."""
 
-__version__ = "0.1.0"
-__logo__ = "🐈"
+from mathclaw import *  # noqa: F401,F403
+from mathclaw import __logo__, __version__
+import mathclaw as _mathclaw
+
+__path__ = _mathclaw.__path__

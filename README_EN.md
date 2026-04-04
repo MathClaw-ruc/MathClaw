@@ -31,7 +31,7 @@ This repository is the current, runnable MathClaw version. It no longer matches 
 
 Today, MathClaw is:
 
-- a **math tutoring agent** built on top of the `nanobot` runtime
+- a **math tutoring agent** built on top of the `mathclaw` runtime
 - a customized **MathClaw console** with both student-facing and operator-facing pages
 - a learning workflow centered on **study plans, heartbeat tasks, structured memory, knowledge graphs, and error graphs**
 - a **multi-channel gateway** that can connect to WeCom, QQ, Feishu, Telegram, Slack, WhatsApp, and more
@@ -41,13 +41,13 @@ Today, MathClaw is:
 | Module | Current capability | Main code |
 | --- | --- | --- |
 | 🧠 Chat Workspace | Single-thread tutoring workspace with text, image, and PDF upload; Markdown/table rendering | `console/main.js` · `console/serve.py` |
-| 🗓️ Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `nanobot/agent/memory.py` · `workspace/cron/jobs.json` |
+| 🗓️ Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `mathclaw/agent/memory.py` · `workspace/cron/jobs.json` |
 | 🕸️ Memory Graphs | Knowledge graph + error graph, focus/overview modes, node details, node deletion | `workspace/memory/graphs/*` · `console/main.js` |
-| ⏰ Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `nanobot/cron/service.py` · `nanobot/heartbeat/service.py` |
-| 📡 Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `nanobot/channels/manager.py` · `nanobot/cli/commands.py` |
-| 🛠️ Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `nanobot/providers/registry.py` · `nanobot/agent/loop.py` |
-| ✨ Custom Output Skills | Optional follow-up output boxes after attachment replies | `nanobot/agent/custom_output_skills.py` |
-| 🧾 Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `nanobot/session/manager.py` · `nanobot/agent/memory.py` |
+| ⏰ Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `mathclaw/cron/service.py` · `mathclaw/heartbeat/service.py` |
+| 📡 Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `mathclaw/channels/manager.py` · `mathclaw/cli/commands.py` |
+| 🛠️ Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `mathclaw/providers/registry.py` · `mathclaw/agent/loop.py` |
+| ✨ Custom Output Skills | Optional follow-up output boxes after attachment replies | `mathclaw/agent/custom_output_skills.py` |
+| 🧾 Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `mathclaw/session/manager.py` · `mathclaw/agent/memory.py` |
 
 ## ✨ Key Features
 
@@ -115,18 +115,18 @@ python -m pip install -e ".[wecom]"
 ### 3. Initialize config and workspace
 
 ```bash
-nanobot onboard --workspace ./workspace
+mathclaw onboard --workspace ./workspace
 ```
 
 This creates:
 
-- config: `~/.nanobot/config.json`
+- config: `~/.mathclaw/config.json`
 - workspace templates: `./workspace/AGENTS.md`, `USER.md`, `HEARTBEAT.md`, `cron/jobs.json`
 
 Interactive setup is also available:
 
 ```bash
-nanobot onboard --workspace ./workspace --wizard
+mathclaw onboard --workspace ./workspace --wizard
 ```
 
 ### 4. Minimal config example
@@ -160,7 +160,7 @@ nanobot onboard --workspace ./workspace --wizard
 ### 5. Start the gateway
 
 ```bash
-nanobot gateway --workspace ./workspace
+mathclaw gateway --workspace ./workspace
 ```
 
 Default gateway port: `18790`
@@ -188,7 +188,7 @@ NANOBOT_CONSOLE_WORKSPACE=../workspace NANOBOT_CONSOLE_PORT=6008 python serve.py
 ### 7. Talk to the agent from CLI
 
 ```bash
-nanobot agent --workspace ./workspace -m "Teach me monotonicity from derivatives"
+mathclaw agent --workspace ./workspace -m "Teach me monotonicity from derivatives"
 ```
 
 ## 📡 Channels and Integrations
@@ -217,7 +217,7 @@ It also supports external channel plugins via Python entry points. See [docs/CHA
 WeCom:
 
 ```bash
-nanobot gateway --workspace ./workspace \
+mathclaw gateway --workspace ./workspace \
   --wecom \
   --wecom-bot-id YOUR_WECOM_BOT_ID \
   --wecom-secret YOUR_WECOM_SECRET \
@@ -227,7 +227,7 @@ nanobot gateway --workspace ./workspace \
 QQ:
 
 ```bash
-nanobot gateway --workspace ./workspace \
+mathclaw gateway --workspace ./workspace \
   --qq \
   --qq-app-id YOUR_QQ_APP_ID \
   --qq-secret YOUR_QQ_SECRET \
@@ -237,7 +237,7 @@ nanobot gateway --workspace ./workspace \
 Feishu:
 
 ```bash
-nanobot gateway --workspace ./workspace \
+mathclaw gateway --workspace ./workspace \
   --feishu \
   --feishu-app-id YOUR_FEISHU_APP_ID \
   --feishu-app-secret YOUR_FEISHU_APP_SECRET \
@@ -247,13 +247,13 @@ nanobot gateway --workspace ./workspace \
 For channels that require interactive auth:
 
 ```bash
-nanobot channels login <channel_name>
+mathclaw channels login <channel_name>
 ```
 
 To inspect channel status:
 
 ```bash
-nanobot channels status
+mathclaw channels status
 ```
 
 ## 🛠️ Providers and Tools
@@ -356,7 +356,7 @@ In one sentence:
 
 ```text
 .
-├── nanobot/                 # Core runtime: agent, channels, providers, memory, cron, heartbeat
+├── mathclaw/                 # Core runtime: agent, channels, providers, memory, cron, heartbeat
 ├── console/                 # MathClaw console: static frontend shell + serve.py API layer
 ├── workspace/               # Repo-owned MathClaw persona, plans, and templates
 ├── bridge/                  # WhatsApp bridge (Node 20+)
@@ -421,7 +421,7 @@ In one sentence:
 <br />
 
 - Built-in channels include WeCom, QQ, Feishu, Telegram, Slack, Email, Discord, Matrix, Weixin, DingTalk, WhatsApp, and MoChat
-- `nanobot gateway` handles channel startup, inbound routing, streaming coalescing, and outbound retry
+- `mathclaw gateway` handles channel startup, inbound routing, streaming coalescing, and outbound retry
 - Runtime flags can override channel config directly for deployment and debugging
 - External channel plugins are supported via Python entry points
 
@@ -458,7 +458,7 @@ In one sentence:
 ```mermaid
 flowchart LR
     A["Student / Teacher / Operator"] --> B["Channels<br/>WeCom / QQ / Feishu / ..."]
-    B --> C["nanobot gateway"]
+    B --> C["mathclaw gateway"]
     C --> D["MathClaw AgentLoop"]
 
     D --> E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]
@@ -477,11 +477,11 @@ flowchart LR
 
 This README has been rewritten against the current codebase and is intentionally aligned with:
 
-- `nanobot gateway`
-- `nanobot agent`
+- `mathclaw gateway`
+- `mathclaw agent`
 - `console/serve.py`
 - `workspace/*`
-- `nanobot/agent/*`
+- `mathclaw/agent/*`
 
 It does not describe the old quickstart APIs, old startup scripts, or the previous frontend/backend stack.
 

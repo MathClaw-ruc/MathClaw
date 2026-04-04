@@ -1,6 +1,6 @@
 import json
 
-from nanobot.config.loader import load_config, save_config
+from mathclaw.config.loader import load_config, save_config
 
 
 def test_load_config_keeps_max_tokens_and_ignores_legacy_memory_window(tmp_path) -> None:
@@ -69,11 +69,11 @@ def test_onboard_does_not_crash_with_legacy_memory_window(tmp_path, monkeypatch)
         encoding="utf-8",
     )
 
-    monkeypatch.setattr("nanobot.config.loader.get_config_path", lambda: config_path)
-    monkeypatch.setattr("nanobot.cli.commands.get_workspace_path", lambda _workspace=None: workspace)
+    monkeypatch.setattr("mathclaw.config.loader.get_config_path", lambda: config_path)
+    monkeypatch.setattr("mathclaw.cli.commands.get_workspace_path", lambda _workspace=None: workspace)
 
     from typer.testing import CliRunner
-    from nanobot.cli.commands import app
+    from mathclaw.cli.commands import app
     runner = CliRunner()
     result = runner.invoke(app, ["onboard"], input="n\n")
 
@@ -101,10 +101,10 @@ def test_onboard_refresh_backfills_missing_channel_fields(tmp_path, monkeypatch)
         encoding="utf-8",
     )
 
-    monkeypatch.setattr("nanobot.config.loader.get_config_path", lambda: config_path)
-    monkeypatch.setattr("nanobot.cli.commands.get_workspace_path", lambda _workspace=None: workspace)
+    monkeypatch.setattr("mathclaw.config.loader.get_config_path", lambda: config_path)
+    monkeypatch.setattr("mathclaw.cli.commands.get_workspace_path", lambda _workspace=None: workspace)
     monkeypatch.setattr(
-        "nanobot.channels.registry.discover_all",
+        "mathclaw.channels.registry.discover_all",
         lambda: {
             "qq": SimpleNamespace(
                 default_config=lambda: {
@@ -119,7 +119,7 @@ def test_onboard_refresh_backfills_missing_channel_fields(tmp_path, monkeypatch)
     )
 
     from typer.testing import CliRunner
-    from nanobot.cli.commands import app
+    from mathclaw.cli.commands import app
     runner = CliRunner()
     result = runner.invoke(app, ["onboard"], input="n\n")
 

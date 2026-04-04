@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.weixin import (
+from mathclaw.bus.queue import MessageBus
+from mathclaw.channels.weixin import (
     ITEM_IMAGE,
     ITEM_TEXT,
     MESSAGE_TYPE_BOT,
@@ -23,7 +23,7 @@ def _make_channel() -> tuple[WeixinChannel, MessageBus]:
         WeixinConfig(
             enabled=True,
             allow_from=["*"],
-            state_dir=tempfile.mkdtemp(prefix="nanobot-weixin-test-"),
+            state_dir=tempfile.mkdtemp(prefix="mathclaw-weixin-test-"),
         ),
         bus,
     )

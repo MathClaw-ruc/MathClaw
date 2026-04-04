@@ -1,7 +1,7 @@
 import pytest
 
-from nanobot.utils.evaluator import evaluate_response
-from nanobot.providers.base import LLMProvider, LLMResponse, ToolCallRequest
+from mathclaw.utils.evaluator import evaluate_response
+from mathclaw.providers.base import LLMProvider, LLMResponse, ToolCallRequest
 
 
 class DummyProvider(LLMProvider):

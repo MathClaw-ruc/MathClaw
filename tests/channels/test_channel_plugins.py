@@ -8,11 +8,11 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.bus.queue import MessageBus
-from nanobot.channels.base import BaseChannel
-from nanobot.channels.manager import ChannelManager
-from nanobot.config.schema import ChannelsConfig
+from mathclaw.bus.events import OutboundMessage
+from mathclaw.bus.queue import MessageBus
+from mathclaw.channels.base import BaseChannel
+from mathclaw.channels.manager import ChannelManager
+from mathclaw.config.schema import ChannelsConfig
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +99,7 @@ _EP_TARGET = "importlib.metadata.entry_points"
 
 
 def test_discover_plugins_loads_entry_points():
-    from nanobot.channels.registry import discover_plugins
+    from mathclaw.channels.registry import discover_plugins
 
     ep = _make_entry_point("line", _FakePlugin)
     with patch(_EP_TARGET, return_value=[ep]):
@@ -110,7 +110,7 @@ def test_discover_plugins_loads_entry_points():
 
 
 def test_discover_plugins_handles_load_error():
-    from nanobot.channels.registry import discover_plugins
+    from mathclaw.channels.registry import discover_plugins
 
     def _boom():
         raise RuntimeError("broken")
@@ -127,7 +127,7 @@ def test_discover_plugins_handles_load_error():
 # ---------------------------------------------------------------------------
 
 def test_discover_all_includes_builtins():
-    from nanobot.channels.registry import discover_all, discover_channel_names
+    from mathclaw.channels.registry import discover_all, discover_channel_names
 
     with patch(_EP_TARGET, return_value=[]):
         result = discover_all()
@@ -140,7 +140,7 @@ def test_discover_all_includes_builtins():
 
 
 def test_discover_all_includes_external_plugin():
-    from nanobot.channels.registry import discover_all
+    from mathclaw.channels.registry import discover_all
 
     ep = _make_entry_point("line", _FakePlugin)
     with patch(_EP_TARGET, return_value=[ep]):
@@ -151,7 +151,7 @@ def test_discover_all_includes_external_plugin():
 
 
 def test_discover_all_builtin_shadows_plugin():
-    from nanobot.channels.registry import discover_all
+    from mathclaw.channels.registry import discover_all
 
     ep = _make_entry_point("telegram", _FakeTelegram)
     with patch(_EP_TARGET, return_value=[ep]):
@@ -168,7 +168,7 @@ def test_discover_all_builtin_shadows_plugin():
 @pytest.mark.asyncio
 async def test_manager_loads_plugin_from_dict_config():
     """ChannelManager should instantiate a plugin channel from a raw dict config."""
-    from nanobot.channels.manager import ChannelManager
+    from mathclaw.channels.manager import ChannelManager
 
     fake_config = SimpleNamespace(
         channels=ChannelsConfig.model_validate({
@@ -178,7 +178,7 @@ async def test_manager_loads_plugin_from_dict_config():
     )
 
     with patch(
-        "nanobot.channels.registry.discover_all",
+        "mathclaw.channels.registry.discover_all",
         return_value={"fakeplugin": _FakePlugin},
     ):
         mgr = ChannelManager.__new__(ChannelManager)
@@ -193,8 +193,8 @@ async def test_manager_loads_plugin_from_dict_config():
 
 
 def test_channels_login_uses_discovered_plugin_class(monkeypatch):
-    from nanobot.cli.commands import app
-    from nanobot.config.schema import Config
+    from mathclaw.cli.commands import app
+    from mathclaw.config.schema import Config
     from typer.testing import CliRunner
 
     runner = CliRunner()
@@ -208,9 +208,9 @@ def test_channels_login_uses_discovered_plugin_class(monkeypatch):
             seen["config"] = self.config
             return True
 
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda: Config())
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda: Config())
     monkeypatch.setattr(
-        "nanobot.channels.registry.discover_all",
+        "mathclaw.channels.registry.discover_all",
         lambda: {"fakeplugin": _LoginPlugin},
     )
 
@@ -230,7 +230,7 @@ async def test_manager_skips_disabled_plugin():
     )
 
     with patch(
-        "nanobot.channels.registry.discover_all",
+        "mathclaw.channels.registry.discover_all",
         return_value={"fakeplugin": _FakePlugin},
     ):
         mgr = ChannelManager.__new__(ChannelManager)
@@ -249,7 +249,7 @@ async def test_manager_skips_disabled_plugin():
 
 def test_builtin_channel_default_config():
     """Built-in channels expose default_config() returning a dict with 'enabled': False."""
-    from nanobot.channels.telegram import TelegramChannel
+    from mathclaw.channels.telegram import TelegramChannel
     cfg = TelegramChannel.default_config()
     assert isinstance(cfg, dict)
     assert cfg["enabled"] is False
@@ -258,7 +258,7 @@ def test_builtin_channel_default_config():
 
 def test_builtin_channel_init_from_dict():
     """Built-in channels accept a raw dict and convert to Pydantic internally."""
-    from nanobot.channels.telegram import TelegramChannel
+    from mathclaw.channels.telegram import TelegramChannel
     bus = MessageBus()
     ch = TelegramChannel({"enabled": False, "token": "test-tok", "allowFrom": ["*"]}, bus)
     assert ch.config.token == "test-tok"
@@ -371,7 +371,7 @@ async def test_send_with_retry_retries_on_failure():
     msg = OutboundMessage(channel="failing", chat_id="123", content="test")
 
     # Patch asyncio.sleep to avoid actual delays
-    with patch("nanobot.channels.manager.asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+    with patch("mathclaw.channels.manager.asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
         await mgr._send_with_retry(mgr.channels["failing"], msg)
 
     assert call_count == 3  # 3 total attempts (initial + 2 retries)
@@ -411,7 +411,7 @@ async def test_send_with_retry_no_retry_when_max_is_zero():
 
     msg = OutboundMessage(channel="failing", chat_id="123", content="test")
 
-    with patch("nanobot.channels.manager.asyncio.sleep", new_callable=AsyncMock):
+    with patch("mathclaw.channels.manager.asyncio.sleep", new_callable=AsyncMock):
         await mgr._send_with_retry(mgr.channels["failing"], msg)
 
     assert call_count == 1  # Called once but no retry (max(0, 1) = 1)
@@ -575,7 +575,7 @@ async def test_send_with_retry_propagates_cancelled_error_during_sleep():
     async def cancel_during_sleep(_):
         raise asyncio.CancelledError("cancelled during sleep")
 
-    with patch("nanobot.channels.manager.asyncio.sleep", side_effect=cancel_during_sleep):
+    with patch("mathclaw.channels.manager.asyncio.sleep", side_effect=cancel_during_sleep):
         with pytest.raises(asyncio.CancelledError):
             await mgr._send_with_retry(mgr.channels["failing"], msg)
 

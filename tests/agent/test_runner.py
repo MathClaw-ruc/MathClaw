@@ -6,20 +6,20 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from nanobot.providers.base import LLMResponse, ToolCallRequest
+from mathclaw.providers.base import LLMResponse, ToolCallRequest
 
 
 def _make_loop(tmp_path):
-    from nanobot.agent.loop import AgentLoop
-    from nanobot.bus.queue import MessageBus
+    from mathclaw.agent.loop import AgentLoop
+    from mathclaw.bus.queue import MessageBus
 
     bus = MessageBus()
     provider = MagicMock()
     provider.get_default_model.return_value = "test-model"
 
-    with patch("nanobot.agent.loop.ContextBuilder"), \
-         patch("nanobot.agent.loop.SessionManager"), \
-         patch("nanobot.agent.loop.SubagentManager") as MockSubMgr:
+    with patch("mathclaw.agent.loop.ContextBuilder"), \
+         patch("mathclaw.agent.loop.SessionManager"), \
+         patch("mathclaw.agent.loop.SubagentManager") as MockSubMgr:
         MockSubMgr.return_value.cancel_by_session = AsyncMock(return_value=0)
         loop = AgentLoop(bus=bus, provider=provider, workspace=tmp_path)
     return loop
@@ -27,7 +27,7 @@ def _make_loop(tmp_path):
 
 @pytest.mark.asyncio
 async def test_runner_preserves_reasoning_fields_and_tool_results():
-    from nanobot.agent.runner import AgentRunSpec, AgentRunner
+    from mathclaw.agent.runner import AgentRunSpec, AgentRunner
 
     provider = MagicMock()
     captured_second_call: list[dict] = []
@@ -83,8 +83,8 @@ async def test_runner_preserves_reasoning_fields_and_tool_results():
 
 @pytest.mark.asyncio
 async def test_runner_calls_hooks_in_order():
-    from nanobot.agent.hook import AgentHook, AgentHookContext
-    from nanobot.agent.runner import AgentRunSpec, AgentRunner
+    from mathclaw.agent.hook import AgentHook, AgentHookContext
+    from mathclaw.agent.runner import AgentRunSpec, AgentRunner
 
     provider = MagicMock()
     call_count = {"n": 0}
@@ -158,8 +158,8 @@ async def test_runner_calls_hooks_in_order():
 
 @pytest.mark.asyncio
 async def test_runner_streaming_hook_receives_deltas_and_end_signal():
-    from nanobot.agent.hook import AgentHook, AgentHookContext
-    from nanobot.agent.runner import AgentRunSpec, AgentRunner
+    from mathclaw.agent.hook import AgentHook, AgentHookContext
+    from mathclaw.agent.runner import AgentRunSpec, AgentRunner
 
     provider = MagicMock()
     streamed: list[str] = []
@@ -202,7 +202,7 @@ async def test_runner_streaming_hook_receives_deltas_and_end_signal():
 
 @pytest.mark.asyncio
 async def test_runner_returns_max_iterations_fallback():
-    from nanobot.agent.runner import AgentRunSpec, AgentRunner
+    from mathclaw.agent.runner import AgentRunSpec, AgentRunner
 
     provider = MagicMock()
     provider.chat_with_retry = AsyncMock(return_value=LLMResponse(
@@ -230,7 +230,7 @@ async def test_runner_returns_max_iterations_fallback():
 
 @pytest.mark.asyncio
 async def test_runner_returns_structured_tool_error():
-    from nanobot.agent.runner import AgentRunSpec, AgentRunner
+    from mathclaw.agent.runner import AgentRunSpec, AgentRunner
 
     provider = MagicMock()
     provider.chat_with_retry = AsyncMock(return_value=LLMResponse(
@@ -309,8 +309,8 @@ async def test_loop_stream_filter_handles_think_only_prefix_without_crashing(tmp
 
 @pytest.mark.asyncio
 async def test_subagent_max_iterations_announces_existing_fallback(tmp_path, monkeypatch):
-    from nanobot.agent.subagent import SubagentManager
-    from nanobot.bus.queue import MessageBus
+    from mathclaw.agent.subagent import SubagentManager
+    from mathclaw.bus.queue import MessageBus
 
     bus = MessageBus()
     provider = MagicMock()
@@ -325,7 +325,7 @@ async def test_subagent_max_iterations_announces_existing_fallback(tmp_path, mon
     async def fake_execute(self, name, arguments):
         return "tool result"
 
-    monkeypatch.setattr("nanobot.agent.tools.registry.ToolRegistry.execute", fake_execute)
+    monkeypatch.setattr("mathclaw.agent.tools.registry.ToolRegistry.execute", fake_execute)
 
     await mgr._run_subagent("sub-1", "do task", "label", {"channel": "test", "chat_id": "c1"})
 

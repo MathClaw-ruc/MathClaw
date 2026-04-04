@@ -6,11 +6,11 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from typer.testing import CliRunner
 
-from nanobot.bus.events import OutboundMessage
-from nanobot.cli.commands import _apply_wecom_runtime_overrides, _make_provider, app
-from nanobot.config.schema import Config
-from nanobot.providers.openai_codex_provider import _strip_model_prefix
-from nanobot.providers.registry import find_by_name
+from mathclaw.bus.events import OutboundMessage
+from mathclaw.cli.commands import _apply_wecom_runtime_overrides, _make_provider, app
+from mathclaw.config.schema import Config
+from mathclaw.providers.openai_codex_provider import _strip_model_prefix
+from mathclaw.providers.registry import find_by_name
 
 runner = CliRunner()
 
@@ -27,10 +27,10 @@ import pytest
 @pytest.fixture
 def mock_paths():
     """Mock config/workspace paths for test isolation."""
-    with patch("nanobot.config.loader.get_config_path") as mock_cp, \
-         patch("nanobot.config.loader.save_config") as mock_sc, \
-         patch("nanobot.config.loader.load_config") as mock_lc, \
-         patch("nanobot.cli.commands.get_workspace_path") as mock_ws:
+    with patch("mathclaw.config.loader.get_config_path") as mock_cp, \
+         patch("mathclaw.config.loader.save_config") as mock_sc, \
+         patch("mathclaw.config.loader.load_config") as mock_lc, \
+         patch("mathclaw.cli.commands.get_workspace_path") as mock_ws:
 
         base_dir = Path("./test_onboard_data")
         if base_dir.exists():
@@ -66,7 +66,7 @@ def test_onboard_fresh_install(mock_paths):
     assert result.exit_code == 0
     assert "Created config" in result.stdout
     assert "Created workspace" in result.stdout
-    assert "nanobot is ready" in result.stdout
+    assert "mathclaw is ready" in result.stdout
     assert config_file.exists()
     assert (workspace_dir / "AGENTS.md").exists()
     assert (workspace_dir / "memory" / "MEMORY.md").exists()
@@ -143,10 +143,10 @@ def test_onboard_help_shows_workspace_and_config_options():
 def test_onboard_interactive_discard_does_not_save_or_create_workspace(mock_paths, monkeypatch):
     config_file, workspace_dir, _ = mock_paths
 
-    from nanobot.cli.onboard import OnboardResult
+    from mathclaw.cli.onboard import OnboardResult
 
     monkeypatch.setattr(
-        "nanobot.cli.onboard.run_onboard",
+        "mathclaw.cli.onboard.run_onboard",
         lambda initial_config: OnboardResult(config=initial_config, should_save=False),
     )
 
@@ -162,7 +162,7 @@ def test_onboard_uses_explicit_config_and_workspace_paths(tmp_path, monkeypatch)
     config_path = tmp_path / "instance" / "config.json"
     workspace_path = tmp_path / "workspace"
 
-    monkeypatch.setattr("nanobot.channels.registry.discover_all", lambda: {})
+    monkeypatch.setattr("mathclaw.channels.registry.discover_all", lambda: {})
 
     result = runner.invoke(
         app,
@@ -184,13 +184,13 @@ def test_onboard_wizard_preserves_explicit_config_in_next_steps(tmp_path, monkey
     config_path = tmp_path / "instance" / "config.json"
     workspace_path = tmp_path / "workspace"
 
-    from nanobot.cli.onboard import OnboardResult
+    from mathclaw.cli.onboard import OnboardResult
 
     monkeypatch.setattr(
-        "nanobot.cli.onboard.run_onboard",
+        "mathclaw.cli.onboard.run_onboard",
         lambda initial_config: OnboardResult(config=initial_config, should_save=True),
     )
-    monkeypatch.setattr("nanobot.channels.registry.discover_all", lambda: {})
+    monkeypatch.setattr("mathclaw.channels.registry.discover_all", lambda: {})
 
     result = runner.invoke(
         app,
@@ -201,8 +201,8 @@ def test_onboard_wizard_preserves_explicit_config_in_next_steps(tmp_path, monkey
     stripped_output = _strip_ansi(result.stdout)
     compact_output = stripped_output.replace("\n", "")
     resolved_config = str(config_path.resolve())
-    assert f'nanobot agent -m "Hello!" --config {resolved_config}' in compact_output
-    assert f"nanobot gateway --config {resolved_config}" in compact_output
+    assert f'mathclaw agent -m "Hello!" --config {resolved_config}' in compact_output
+    assert f"mathclaw gateway --config {resolved_config}" in compact_output
 
 
 def test_config_matches_github_copilot_codex_with_hyphen_prefix():
@@ -315,9 +315,9 @@ def test_config_falls_back_to_vllm_when_ollama_not_configured():
 
 
 def test_openai_compat_provider_passes_model_through():
-    from nanobot.providers.openai_compat_provider import OpenAICompatProvider
+    from mathclaw.providers.openai_compat_provider import OpenAICompatProvider
 
-    with patch("nanobot.providers.openai_compat_provider.AsyncOpenAI"):
+    with patch("mathclaw.providers.openai_compat_provider.AsyncOpenAI"):
         provider = OpenAICompatProvider(default_model="github-copilot/gpt-5.3-codex")
 
     assert provider.get_default_model() == "github-copilot/gpt-5.3-codex"
@@ -345,7 +345,7 @@ def test_make_provider_passes_extra_headers_to_custom_provider():
         }
     )
 
-    with patch("nanobot.providers.openai_compat_provider.AsyncOpenAI") as mock_async_openai:
+    with patch("mathclaw.providers.openai_compat_provider.AsyncOpenAI") as mock_async_openai:
         _make_provider(config)
 
     kwargs = mock_async_openai.call_args.kwargs
@@ -361,13 +361,13 @@ def mock_agent_runtime(tmp_path):
     config = Config()
     config.agents.defaults.workspace = str(tmp_path / "default-workspace")
 
-    with patch("nanobot.config.loader.load_config", return_value=config) as mock_load_config, \
-         patch("nanobot.cli.commands.sync_workspace_templates") as mock_sync_templates, \
-         patch("nanobot.cli.commands._make_provider", return_value=object()), \
-         patch("nanobot.cli.commands._print_agent_response") as mock_print_response, \
-         patch("nanobot.bus.queue.MessageBus"), \
-         patch("nanobot.cron.service.CronService"), \
-         patch("nanobot.agent.loop.AgentLoop") as mock_agent_loop_cls:
+    with patch("mathclaw.config.loader.load_config", return_value=config) as mock_load_config, \
+         patch("mathclaw.cli.commands.sync_workspace_templates") as mock_sync_templates, \
+         patch("mathclaw.cli.commands._make_provider", return_value=object()), \
+         patch("mathclaw.cli.commands._print_agent_response") as mock_print_response, \
+         patch("mathclaw.bus.queue.MessageBus"), \
+         patch("mathclaw.cron.service.CronService"), \
+         patch("mathclaw.agent.loop.AgentLoop") as mock_agent_loop_cls:
 
         agent_loop = MagicMock()
         agent_loop.channels_config = None
@@ -434,14 +434,14 @@ def test_agent_config_sets_active_path(monkeypatch, tmp_path: Path) -> None:
     seen: dict[str, Path] = {}
 
     monkeypatch.setattr(
-        "nanobot.config.loader.set_config_path",
+        "mathclaw.config.loader.set_config_path",
         lambda path: seen.__setitem__("config_path", path),
     )
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
-    monkeypatch.setattr("nanobot.cron.service.CronService", lambda _store: object())
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.cron.service.CronService", lambda _store: object())
 
     class _FakeAgentLoop:
         def __init__(self, *args, **kwargs) -> None:
@@ -453,8 +453,8 @@ def test_agent_config_sets_active_path(monkeypatch, tmp_path: Path) -> None:
         async def close_mcp(self) -> None:
             return None
 
-    monkeypatch.setattr("nanobot.agent.loop.AgentLoop", _FakeAgentLoop)
-    monkeypatch.setattr("nanobot.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("mathclaw.agent.loop.AgentLoop", _FakeAgentLoop)
+    monkeypatch.setattr("mathclaw.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
 
     result = runner.invoke(app, ["agent", "-m", "hello", "-c", str(config_file)])
 
@@ -471,11 +471,11 @@ def test_agent_uses_workspace_directory_for_cron_store(monkeypatch, tmp_path: Pa
     config.agents.defaults.workspace = str(tmp_path / "agent-workspace")
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
 
     class _FakeCron:
         def __init__(self, store_path: Path) -> None:
@@ -491,9 +491,9 @@ def test_agent_uses_workspace_directory_for_cron_store(monkeypatch, tmp_path: Pa
         async def close_mcp(self) -> None:
             return None
 
-    monkeypatch.setattr("nanobot.cron.service.CronService", _FakeCron)
-    monkeypatch.setattr("nanobot.agent.loop.AgentLoop", _FakeAgentLoop)
-    monkeypatch.setattr("nanobot.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("mathclaw.cron.service.CronService", _FakeCron)
+    monkeypatch.setattr("mathclaw.agent.loop.AgentLoop", _FakeAgentLoop)
+    monkeypatch.setattr("mathclaw.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
 
     result = runner.invoke(app, ["agent", "-m", "hello", "-c", str(config_file)])
 
@@ -517,12 +517,12 @@ def test_agent_workspace_override_does_not_migrate_legacy_cron(
     config = Config()
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
-    monkeypatch.setattr("nanobot.config.paths.get_cron_dir", lambda: legacy_dir)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.config.paths.get_cron_dir", lambda: legacy_dir)
 
     class _FakeCron:
         def __init__(self, store_path: Path) -> None:
@@ -538,9 +538,9 @@ def test_agent_workspace_override_does_not_migrate_legacy_cron(
         async def close_mcp(self) -> None:
             return None
 
-    monkeypatch.setattr("nanobot.cron.service.CronService", _FakeCron)
-    monkeypatch.setattr("nanobot.agent.loop.AgentLoop", _FakeAgentLoop)
-    monkeypatch.setattr("nanobot.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("mathclaw.cron.service.CronService", _FakeCron)
+    monkeypatch.setattr("mathclaw.agent.loop.AgentLoop", _FakeAgentLoop)
+    monkeypatch.setattr("mathclaw.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
 
     result = runner.invoke(
         app,
@@ -570,12 +570,12 @@ def test_agent_custom_config_workspace_does_not_migrate_legacy_cron(
     config.agents.defaults.workspace = str(custom_workspace)
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
-    monkeypatch.setattr("nanobot.config.paths.get_cron_dir", lambda: legacy_dir)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.config.paths.get_cron_dir", lambda: legacy_dir)
 
     class _FakeCron:
         def __init__(self, store_path: Path) -> None:
@@ -591,9 +591,9 @@ def test_agent_custom_config_workspace_does_not_migrate_legacy_cron(
         async def close_mcp(self) -> None:
             return None
 
-    monkeypatch.setattr("nanobot.cron.service.CronService", _FakeCron)
-    monkeypatch.setattr("nanobot.agent.loop.AgentLoop", _FakeAgentLoop)
-    monkeypatch.setattr("nanobot.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("mathclaw.cron.service.CronService", _FakeCron)
+    monkeypatch.setattr("mathclaw.agent.loop.AgentLoop", _FakeAgentLoop)
+    monkeypatch.setattr("mathclaw.cli.commands._print_agent_response", lambda *_args, **_kwargs: None)
 
     result = runner.invoke(app, ["agent", "-m", "hello", "-c", str(config_file)])
 
@@ -658,16 +658,16 @@ def test_gateway_uses_workspace_from_config_by_default(monkeypatch, tmp_path: Pa
     seen: dict[str, Path] = {}
 
     monkeypatch.setattr(
-        "nanobot.config.loader.set_config_path",
+        "mathclaw.config.loader.set_config_path",
         lambda path: seen.__setitem__("config_path", path),
     )
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
     monkeypatch.setattr(
-        "nanobot.cli.commands.sync_workspace_templates",
+        "mathclaw.cli.commands.sync_workspace_templates",
         lambda path: seen.__setitem__("workspace", path),
     )
     monkeypatch.setattr(
-        "nanobot.cli.commands._make_provider",
+        "mathclaw.cli.commands._make_provider",
         lambda _config: (_ for _ in ()).throw(_StopGatewayError("stop")),
     )
 
@@ -688,14 +688,14 @@ def test_gateway_workspace_option_overrides_config(monkeypatch, tmp_path: Path) 
     override = tmp_path / "override-workspace"
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
     monkeypatch.setattr(
-        "nanobot.cli.commands.sync_workspace_templates",
+        "mathclaw.cli.commands.sync_workspace_templates",
         lambda path: seen.__setitem__("workspace", path),
     )
     monkeypatch.setattr(
-        "nanobot.cli.commands._make_provider",
+        "mathclaw.cli.commands._make_provider",
         lambda _config: (_ for _ in ()).throw(_StopGatewayError("stop")),
     )
 
@@ -718,19 +718,19 @@ def test_gateway_uses_workspace_directory_for_cron_store(monkeypatch, tmp_path: 
     config.agents.defaults.workspace = str(tmp_path / "config-workspace")
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
-    monkeypatch.setattr("nanobot.session.manager.SessionManager", lambda _workspace: object())
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.session.manager.SessionManager", lambda _workspace: object())
 
     class _StopCron:
         def __init__(self, store_path: Path) -> None:
             seen["cron_store"] = store_path
             raise _StopGatewayError("stop")
 
-    monkeypatch.setattr("nanobot.cron.service.CronService", _StopCron)
+    monkeypatch.setattr("mathclaw.cron.service.CronService", _StopCron)
 
     result = runner.invoke(app, ["gateway", "--config", str(config_file)])
 
@@ -754,20 +754,20 @@ def test_gateway_workspace_override_does_not_migrate_legacy_cron(
     config = Config()
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
-    monkeypatch.setattr("nanobot.session.manager.SessionManager", lambda _workspace: object())
-    monkeypatch.setattr("nanobot.config.paths.get_cron_dir", lambda: legacy_dir)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.session.manager.SessionManager", lambda _workspace: object())
+    monkeypatch.setattr("mathclaw.config.paths.get_cron_dir", lambda: legacy_dir)
 
     class _StopCron:
         def __init__(self, store_path: Path) -> None:
             seen["cron_store"] = store_path
             raise _StopGatewayError("stop")
 
-    monkeypatch.setattr("nanobot.cron.service.CronService", _StopCron)
+    monkeypatch.setattr("mathclaw.cron.service.CronService", _StopCron)
 
     result = runner.invoke(
         app,
@@ -797,20 +797,20 @@ def test_gateway_custom_config_workspace_does_not_migrate_legacy_cron(
     config.agents.defaults.workspace = str(custom_workspace)
     seen: dict[str, Path] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", lambda _config: object())
-    monkeypatch.setattr("nanobot.bus.queue.MessageBus", lambda: object())
-    monkeypatch.setattr("nanobot.session.manager.SessionManager", lambda _workspace: object())
-    monkeypatch.setattr("nanobot.config.paths.get_cron_dir", lambda: legacy_dir)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", lambda _config: object())
+    monkeypatch.setattr("mathclaw.bus.queue.MessageBus", lambda: object())
+    monkeypatch.setattr("mathclaw.session.manager.SessionManager", lambda _workspace: object())
+    monkeypatch.setattr("mathclaw.config.paths.get_cron_dir", lambda: legacy_dir)
 
     class _StopCron:
         def __init__(self, store_path: Path) -> None:
             seen["cron_store"] = store_path
             raise _StopGatewayError("stop")
 
-    monkeypatch.setattr("nanobot.cron.service.CronService", _StopCron)
+    monkeypatch.setattr("mathclaw.cron.service.CronService", _StopCron)
 
     result = runner.invoke(app, ["gateway", "--config", str(config_file)])
 
@@ -822,7 +822,7 @@ def test_gateway_custom_config_workspace_does_not_migrate_legacy_cron(
 
 def test_migrate_cron_store_moves_legacy_file(tmp_path: Path) -> None:
     """Legacy global jobs.json is moved into the workspace on first run."""
-    from nanobot.cli.commands import _migrate_cron_store
+    from mathclaw.cli.commands import _migrate_cron_store
 
     legacy_dir = tmp_path / "global" / "cron"
     legacy_dir.mkdir(parents=True)
@@ -833,7 +833,7 @@ def test_migrate_cron_store_moves_legacy_file(tmp_path: Path) -> None:
     config.agents.defaults.workspace = str(tmp_path / "workspace")
     workspace_cron = config.workspace_path / "cron" / "jobs.json"
 
-    with patch("nanobot.config.paths.get_cron_dir", return_value=legacy_dir):
+    with patch("mathclaw.config.paths.get_cron_dir", return_value=legacy_dir):
         _migrate_cron_store(config)
 
     assert workspace_cron.exists()
@@ -843,7 +843,7 @@ def test_migrate_cron_store_moves_legacy_file(tmp_path: Path) -> None:
 
 def test_migrate_cron_store_skips_when_workspace_file_exists(tmp_path: Path) -> None:
     """Migration does not overwrite an existing workspace cron store."""
-    from nanobot.cli.commands import _migrate_cron_store
+    from mathclaw.cli.commands import _migrate_cron_store
 
     legacy_dir = tmp_path / "global" / "cron"
     legacy_dir.mkdir(parents=True)
@@ -855,7 +855,7 @@ def test_migrate_cron_store_skips_when_workspace_file_exists(tmp_path: Path) -> 
     workspace_cron.parent.mkdir(parents=True)
     workspace_cron.write_text('{"new": true}')
 
-    with patch("nanobot.config.paths.get_cron_dir", return_value=legacy_dir):
+    with patch("mathclaw.config.paths.get_cron_dir", return_value=legacy_dir):
         _migrate_cron_store(config)
 
     assert workspace_cron.read_text() == '{"new": true}'
@@ -869,11 +869,11 @@ def test_gateway_uses_configured_port_when_cli_flag_is_missing(monkeypatch, tmp_
     config = Config()
     config.gateway.port = 18791
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
     monkeypatch.setattr(
-        "nanobot.cli.commands._make_provider",
+        "mathclaw.cli.commands._make_provider",
         lambda _config: (_ for _ in ()).throw(_StopGatewayError("stop")),
     )
 
@@ -891,11 +891,11 @@ def test_gateway_cli_port_overrides_configured_port(monkeypatch, tmp_path: Path)
     config = Config()
     config.gateway.port = 18791
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
     monkeypatch.setattr(
-        "nanobot.cli.commands._make_provider",
+        "mathclaw.cli.commands._make_provider",
         lambda _config: (_ for _ in ()).throw(_StopGatewayError("stop")),
     )
 
@@ -932,15 +932,15 @@ def test_gateway_wecom_cli_overrides_are_runtime_only(monkeypatch, tmp_path: Pat
     config = Config()
     seen: dict[str, object] = {}
 
-    monkeypatch.setattr("nanobot.config.loader.set_config_path", lambda _path: None)
-    monkeypatch.setattr("nanobot.config.loader.load_config", lambda _path=None: config)
-    monkeypatch.setattr("nanobot.cli.commands.sync_workspace_templates", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.set_config_path", lambda _path: None)
+    monkeypatch.setattr("mathclaw.config.loader.load_config", lambda _path=None: config)
+    monkeypatch.setattr("mathclaw.cli.commands.sync_workspace_templates", lambda _path: None)
 
     def _stop_with_config(runtime_config: Config):
         seen["wecom"] = runtime_config.channels.wecom
         raise _StopGatewayError("stop")
 
-    monkeypatch.setattr("nanobot.cli.commands._make_provider", _stop_with_config)
+    monkeypatch.setattr("mathclaw.cli.commands._make_provider", _stop_with_config)
 
     result = runner.invoke(
         app,

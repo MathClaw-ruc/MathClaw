@@ -1,8 +1,8 @@
 from typing import Any
 
-from nanobot.agent.tools.base import Tool
-from nanobot.agent.tools.registry import ToolRegistry
-from nanobot.agent.tools.shell import ExecTool
+from mathclaw.agent.tools.base import Tool
+from mathclaw.agent.tools.registry import ToolRegistry
+from mathclaw.agent.tools.shell import ExecTool
 
 
 class SampleTool(Tool):
@@ -109,28 +109,28 @@ def test_exec_extract_absolute_paths_captures_posix_absolute_paths() -> None:
 
 
 def test_exec_extract_absolute_paths_captures_home_paths() -> None:
-    cmd = "cat ~/.nanobot/config.json > ~/out.txt"
+    cmd = "cat ~/.mathclaw/config.json > ~/out.txt"
     paths = ExecTool._extract_absolute_paths(cmd)
-    assert "~/.nanobot/config.json" in paths
+    assert "~/.mathclaw/config.json" in paths
     assert "~/out.txt" in paths
 
 
 def test_exec_extract_absolute_paths_captures_quoted_paths() -> None:
-    cmd = 'cat "/tmp/data.txt" "~/.nanobot/config.json"'
+    cmd = 'cat "/tmp/data.txt" "~/.mathclaw/config.json"'
     paths = ExecTool._extract_absolute_paths(cmd)
     assert "/tmp/data.txt" in paths
-    assert "~/.nanobot/config.json" in paths
+    assert "~/.mathclaw/config.json" in paths
 
 
 def test_exec_guard_blocks_home_path_outside_workspace(tmp_path) -> None:
     tool = ExecTool(restrict_to_workspace=True)
-    error = tool._guard_command("cat ~/.nanobot/config.json", str(tmp_path))
+    error = tool._guard_command("cat ~/.mathclaw/config.json", str(tmp_path))
     assert error == "Error: Command blocked by safety guard (path outside working dir)"
 
 
 def test_exec_guard_blocks_quoted_home_path_outside_workspace(tmp_path) -> None:
     tool = ExecTool(restrict_to_workspace=True)
-    error = tool._guard_command('cat "~/.nanobot/config.json"', str(tmp_path))
+    error = tool._guard_command('cat "~/.mathclaw/config.json"', str(tmp_path))
     assert error == "Error: Command blocked by safety guard (path outside working dir)"
 
 
