@@ -16,18 +16,43 @@ from typing import Any
 from urllib.parse import urlparse
 
 
-HOST = os.environ.get("NANOBOT_CONSOLE_HOST", "127.0.0.1")
-PORT = int(os.environ.get("NANOBOT_CONSOLE_PORT", "6006"))
+def _env(*names: str, default: str | None = None) -> str | None:
+    for name in names:
+        value = os.environ.get(name)
+        if value not in (None, ""):
+            return value
+    return default
+
+
+def _console_path(value: str | None) -> Path | None:
+    if not value:
+        return None
+    path = Path(value).expanduser()
+    if not path.is_absolute():
+        path = (Path.cwd() / path).resolve()
+    return path
+
+
+def _default_fallback_config_path() -> Path:
+    preferred = Path.home() / ".mathclaw" / "config.json"
+    legacy = Path.home() / ".nanobot" / "config.json"
+    if preferred.exists() or not legacy.exists():
+        return preferred
+    return legacy
+
+
+HOST = _env("MATHCLAW_CONSOLE_HOST", "NANOBOT_CONSOLE_HOST", default="127.0.0.1")
+PORT = int(_env("MATHCLAW_CONSOLE_PORT", "NANOBOT_CONSOLE_PORT", default="6006"))
 ROOT = Path(__file__).resolve().parent
 REPO_ROOT = ROOT.parent
-SESSION_KEY = os.environ.get("NANOBOT_CONSOLE_SESSION_KEY", "web:mathclaw-console")
-CHAT_CHANNEL = os.environ.get("NANOBOT_CONSOLE_CHANNEL", "web")
-CHAT_ID = os.environ.get("NANOBOT_CONSOLE_CHAT_ID", "mathclaw-console")
-FALLBACK_CONFIG_PATH = Path(
-    os.environ.get(
-        "NANOBOT_CONSOLE_FALLBACK_CONFIG",
-        "/root/autodl-tmp/MathClaw/.mathclaw/config.json",
+SESSION_KEY = _env("MATHCLAW_CONSOLE_SESSION_KEY", "NANOBOT_CONSOLE_SESSION_KEY", default="web:mathclaw-console")
+CHAT_CHANNEL = _env("MATHCLAW_CONSOLE_CHANNEL", "NANOBOT_CONSOLE_CHANNEL", default="web")
+CHAT_ID = _env("MATHCLAW_CONSOLE_CHAT_ID", "NANOBOT_CONSOLE_CHAT_ID", default="mathclaw-console")
+FALLBACK_CONFIG_PATH = (
+    _console_path(
+        _env("MATHCLAW_CONSOLE_FALLBACK_CONFIG", "NANOBOT_CONSOLE_FALLBACK_CONFIG")
     )
+    or _default_fallback_config_path()
 )
 UPLOAD_DIR = ROOT / ".uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -43,31 +68,51 @@ from mathclaw.utils.helpers import sync_workspace_templates
 
 
 def build_runtime_config():
-    workspace = os.environ.get("NANOBOT_CONSOLE_WORKSPACE")
-    config = _load_runtime_config(None, workspace)
+    workspace = _console_path(
+        _env("MATHCLAW_CONSOLE_WORKSPACE", "NANOBOT_CONSOLE_WORKSPACE")
+    )
+    config = _load_runtime_config(None, str(workspace) if workspace else None)
 
     fallback: dict[str, Any] = {}
-    if FALLBACK_CONFIG_PATH.exists():
-        fallback = json.loads(FALLBACK_CONFIG_PATH.read_text(encoding="utf-8"))
+    try:
+        if FALLBACK_CONFIG_PATH.exists():
+            fallback = json.loads(FALLBACK_CONFIG_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        fallback = {}
 
     model = (
-        os.environ.get("NANOBOT_CONSOLE_MODEL")
-        or os.environ.get("NANOBOT_AGENTS__DEFAULTS__MODEL")
+        _env("MATHCLAW_CONSOLE_MODEL", "NANOBOT_CONSOLE_MODEL")
+        or _env("MATHCLAW_AGENTS__DEFAULTS__MODEL", "NANOBOT_AGENTS__DEFAULTS__MODEL")
         or fallback.get("model_name")
     )
     api_key = (
-        os.environ.get("NANOBOT_CONSOLE_DASHSCOPE_API_KEY")
-        or os.environ.get("NANOBOT_PROVIDERS__DASHSCOPE__API_KEY")
+        _env(
+            "MATHCLAW_CONSOLE_DASHSCOPE_API_KEY",
+            "NANOBOT_CONSOLE_DASHSCOPE_API_KEY",
+        )
+        or _env(
+            "MATHCLAW_PROVIDERS__DASHSCOPE__API_KEY",
+            "NANOBOT_PROVIDERS__DASHSCOPE__API_KEY",
+        )
         or fallback.get("api_key")
     )
     api_base = (
-        os.environ.get("NANOBOT_CONSOLE_DASHSCOPE_API_BASE")
-        or os.environ.get("NANOBOT_PROVIDERS__DASHSCOPE__API_BASE")
+        _env(
+            "MATHCLAW_CONSOLE_DASHSCOPE_API_BASE",
+            "NANOBOT_CONSOLE_DASHSCOPE_API_BASE",
+        )
+        or _env(
+            "MATHCLAW_PROVIDERS__DASHSCOPE__API_BASE",
+            "NANOBOT_PROVIDERS__DASHSCOPE__API_BASE",
+        )
         or fallback.get("base_url")
     )
     timezone = (
-        os.environ.get("NANOBOT_CONSOLE_TIMEZONE")
-        or os.environ.get("NANOBOT_AGENTS__DEFAULTS__TIMEZONE")
+        _env("MATHCLAW_CONSOLE_TIMEZONE", "NANOBOT_CONSOLE_TIMEZONE")
+        or _env(
+            "MATHCLAW_AGENTS__DEFAULTS__TIMEZONE",
+            "NANOBOT_AGENTS__DEFAULTS__TIMEZONE",
+        )
         or "Asia/Shanghai"
     )
 

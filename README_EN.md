@@ -169,8 +169,12 @@ Default gateway port: `18790`
 
 ```bash
 cd console
-NANOBOT_CONSOLE_WORKSPACE=../workspace python serve.py
+MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
 ```
+
+Here `../workspace` points to the repository-level `workspace/` directory, because the command runs inside `console/`.
+
+The console reads `~/.mathclaw/config.json` by default; if you still keep the legacy layout, it automatically falls back to `~/.nanobot/config.json`. The old `NANOBOT_CONSOLE_*` environment variables remain supported as well.
 
 Default console address:
 
@@ -182,9 +186,8 @@ If you want to use port `6008` instead:
 
 ```bash
 cd console
-NANOBOT_CONSOLE_WORKSPACE=../workspace NANOBOT_CONSOLE_PORT=6008 python serve.py
+MATHCLAW_CONSOLE_WORKSPACE=../workspace MATHCLAW_CONSOLE_PORT=6008 python serve.py
 ```
-
 ### 7. Talk to the agent from CLI
 
 ```bash
