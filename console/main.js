@@ -2480,6 +2480,21 @@ function renderSkillChannelChips() {
     .join("");
 }
 
+function renderSkillOrderChips(skills) {
+  const labels = ["正常输出", ...skills.map((_, index) => `自定义框 ${index + 1}`)];
+  if (labels.length === 1) {
+    labels.push("等待新增");
+  }
+  return labels
+    .map(
+      (label, index) => `
+        <span class="skills-order-chip${index === 0 ? " skills-order-chip--base" : ""}${label === "等待新增" ? " skills-order-chip--pending" : ""}">${escapeHtml(label)}</span>
+        ${index < labels.length - 1 ? '<span class="skills-order-sep" aria-hidden="true">→</span>' : ""}
+      `,
+    )
+    .join("");
+}
+
 function renderCustomOutputSkillCard(skill, index) {
   const enabledLabel = skill.enabled ? "已启用" : "已停用";
   return `
@@ -2542,24 +2557,29 @@ function renderSkillsPage(root) {
         <p>管理附件回复后的附加输出风格，让企业微信、QQ、飞书在正常回答后再追加最多 2 个自定义输出框。</p>
       </div>
     </section>
-    <section class="skills-overview">
-      <article class="panel skills-overview__card skills-overview__card--primary">
-        <span class="page-kicker">附加输出工作台</span>
-        <h3>让三通道的附件回复更像你想要的老师风格</h3>
-        <p>左侧负责生成新的输出框，右侧负责管理已保存 Skill。只有带附件时，才会按启用顺序追加到正常回答后面。</p>
-      </article>
-      <article class="panel skills-overview__card">
-        <span>已启用</span>
-        <strong>${enabledCount}/${skillsState.limit}</strong>
-      </article>
-      <article class="panel skills-overview__card">
-        <span>生效通道</span>
-        <strong>企业微信 / QQ / 飞书</strong>
-      </article>
-      <article class="panel skills-overview__card">
-        <span>当前顺序</span>
-        <strong>${escapeHtml(slotsLabel)}</strong>
-      </article>
+    <section class="panel skills-overview">
+      <div class="skills-overview__lead">
+        <span class="page-kicker">自定义输出 Skill</span>
+        <strong>只在附件回复后追加，不影响正常回答。</strong>
+        <p>左侧负责创建新的风格输出框，右侧负责管理已保存 Skill，最多保留 2 个附加位。</p>
+      </div>
+      <div class="skills-overview__meta">
+        <article class="skills-overview__stat">
+          <span>已启用</span>
+          <strong>${enabledCount}/${skillsState.limit}</strong>
+          <small>${enabledCount ? "当前有生效中的附加风格" : "还没有启用中的附加风格"}</small>
+        </article>
+        <article class="skills-overview__stat">
+          <span>生效通道</span>
+          <div class="skills-overview__chips">${renderSkillChannelChips()}</div>
+          <small>企业微信、QQ、飞书共用</small>
+        </article>
+        <article class="skills-overview__stat skills-overview__stat--order">
+          <span>当前顺序</span>
+          <div class="skills-overview__order">${renderSkillOrderChips(skillsState.skills)}</div>
+          <small>仅在附件回复后依次追加</small>
+        </article>
+      </div>
     </section>
     <section class="skills-shell">
       <section class="panel skills-pane">
