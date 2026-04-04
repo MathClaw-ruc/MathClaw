@@ -2916,9 +2916,9 @@ function graphLegendItems(graphKey) {
 function graphTheme(graphKey) {
   if (graphKey === "error") {
     return {
-      kicker: "错题诊断图",
-      title: "把高频错误模式拆成可执行的纠错路径",
-      summary: "优先沿着重复出现和纠正建议两条线看，先定位错误模式，再回到对应知识点补漏洞。",
+      kicker: "",
+      title: "错题图谱",
+      summary: "先看重复出现和纠正建议，先定位错误模式，再回到对应知识点补漏洞。",
       emptyTitle: "从一类错误开始查看",
       emptyText: "点击左侧节点后，右侧会展示严重度、重复次数、代表样本和建议修正动作。",
       overlayHint: "拖动画布定位高频错误，优先查看重复出现和纠正建议链路。",
@@ -2930,9 +2930,9 @@ function graphTheme(graphKey) {
   }
 
   return {
-    kicker: "知识导航图",
-    title: "把薄弱知识点整理成有先后关系的学习地图",
-    summary: "优先看前置依赖和相似知识点，先补基础，再回到当前节点做专项复盘。",
+    kicker: "",
+    title: "知识点图谱",
+    summary: "优先看前置依赖和相似知识点，先补基础，再回到当前节点复盘。",
     emptyTitle: "从一个知识点开始查看",
     emptyText: "点击左侧节点后，右侧会显示风险、掌握度、前置关系和近期样本，方便判断先补哪里。",
     overlayHint: "焦点视图只保留最近更新和核心关联，适合快速确认当前学习主线。",
@@ -3796,7 +3796,7 @@ function renderMemoryPage(root) {
       ? "正在同步知识图谱..."
       : `${updatedLabel} · ${state.memoryView === "focus" ? "只看最近更新和核心关联" : "查看全部活跃节点"}`;
   const summaryText = selectedNode
-    ? `${selectedNode.label} 当前处于${selectedNode.isFocus ? "焦点" : selectedNode.status === "candidate" ? "候选" : "活跃"}层，建议先看右侧详情，再沿着相连节点继续扩展。`
+    ? `当前焦点：${selectedNode.label}。先看右侧详情，再沿相连节点继续扩展。`
     : theme.summary;
   const emptyState = !graph.nodes.length
       ? `
@@ -3817,7 +3817,7 @@ function renderMemoryPage(root) {
       <section class="panel graph-workspace graph-workspace--${fullGraph.accent}">
         <div class="graph-summary">
           <div class="graph-summary__main">
-            <span class="page-kicker">${theme.kicker}</span>
+            ${theme.kicker ? `<span class="page-kicker">${theme.kicker}</span>` : ""}
             <h3>${theme.title}</h3>
             <p>${escapeHtml(summaryText)}</p>
           </div>
