@@ -3382,6 +3382,8 @@ button {
   display: flex;
   flex-direction: column;
   gap: var(--rail-gap);
+  overflow: auto;
+  padding-right: 6px;
 }
 
 .skills-overview {
