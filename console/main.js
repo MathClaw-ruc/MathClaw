@@ -361,6 +361,7 @@ const dashboardState = {
   loading: false,
   loaded: false,
   error: "",
+  syncedAt: "",
 };
 
 let disposeChatPage = null;
@@ -428,6 +429,239 @@ function formatDateTimeLabel(value) {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function countEnabled(items) {
+  if (!Array.isArray(items)) {
+    return 0;
+  }
+  return items.filter((item) => item && item.enabled).length;
+}
+
+function formatSearchProviderLabel(value) {
+  const normalized = cleanDisplayText(value || "");
+  if (!normalized) {
+    return "未启用";
+  }
+  if (normalized.toLowerCase() === "tavily") {
+    return "Tavily";
+  }
+  return normalized;
+}
+
+function renderStatusPill(label, tone = "neutral") {
+  return `<span class="status-pill status-pill--${tone}">${escapeHtml(label)}</span>`;
+}
+
+function firstMeaningfulText(...values) {
+  for (const value of values) {
+    const text = cleanDisplayText(value);
+    if (text) {
+      return text;
+    }
+  }
+  return "";
+}
+
+function splitPlanText(value) {
+  const text = cleanDisplayText(value);
+  if (!text) {
+    return { title: "", body: "" };
+  }
+  const matched = text.match(/^([^：:]+)[：:]\s*(.+)$/);
+  if (matched) {
+    return {
+      title: matched[1].trim(),
+      body: matched[2].trim(),
+    };
+  }
+  return { title: "", body: text };
+}
+
+function renderPlanSignalCards(signals) {
+  return signals
+    .map((item) => `
+      <article class="plan-signal-card plan-signal-card--${item.tone || "brand"}">
+        <span>${escapeHtml(item.label)}</span>
+        <strong>${escapeHtml(item.value)}</strong>
+        <p>${escapeHtml(item.hint || "")}</p>
+      </article>
+    `)
+    .join("");
+}
+
+function renderPlanGoalRail(goals) {
+  const rows = (Array.isArray(goals) ? goals : [])
+    .map((item) => cleanDisplayText(item))
+    .filter(Boolean)
+    .slice(0, 3);
+
+  if (!rows.length) {
+    return `
+      <article class="plan-goal-card plan-goal-card--empty">
+        <span class="plan-goal-card__index">00</span>
+        <div>
+          <strong>等待本周计划生成</strong>
+          <p>下一次周总结同步后，这里会自动整理出本周推进重点。</p>
+        </div>
+      </article>
+    `;
+  }
+
+  return rows
+    .map((item, index) => {
+      const parts = splitPlanText(item);
+      const title = parts.title || `本周重点 ${index + 1}`;
+      const body = parts.body || item;
+      return `
+        <article class="plan-goal-card">
+          <span class="plan-goal-card__index">0${index + 1}</span>
+          <div>
+            <strong>${escapeHtml(title)}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderPlanChecklist(items, emptyText, tone = "brand") {
+  const rows = (Array.isArray(items) ? items : [])
+    .map((item) => cleanDisplayText(item))
+    .filter(Boolean);
+
+  if (!rows.length) {
+    return `
+      <article class="plan-check-item plan-check-item--empty">
+        <span class="plan-check-item__index">00</span>
+        <div>
+          <strong>${escapeHtml(emptyText)}</strong>
+        </div>
+      </article>
+    `;
+  }
+
+  return rows
+    .map((item, index) => {
+      const parts = splitPlanText(item);
+      return `
+        <article class="plan-check-item plan-check-item--${tone}">
+          <span class="plan-check-item__index">0${index + 1}</span>
+          <div>
+            ${parts.title ? `<strong>${escapeHtml(parts.title)}</strong>` : ""}
+            <p>${escapeHtml(parts.body || item)}</p>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderPlanPriorityCards(items, options = {}) {
+  const rows = (Array.isArray(items) ? items : []).slice(0, 3);
+  const tone = options.tone || "brand";
+  const badgePrefix = options.badgePrefix || "优先";
+  const emptyTitle = options.emptyTitle || "等待新的诊断结果";
+  const emptyText = options.emptyText || "这里会根据最新学习轨迹自动出现下一步重点。";
+
+  if (!rows.length) {
+    return `
+      <article class="plan-priority-card plan-priority-card--empty">
+        <span class="plan-priority-card__rank">00</span>
+        <div class="plan-priority-card__body">
+          <strong>${escapeHtml(emptyTitle)}</strong>
+          <p>${escapeHtml(emptyText)}</p>
+        </div>
+      </article>
+    `;
+  }
+
+  return rows
+    .map((item, index) => {
+      const label = firstMeaningfulText(item?.label, `重点 ${index + 1}`);
+      const summary = firstMeaningfulText(item?.summary, "继续沿着这条线补齐薄弱点。");
+      return `
+        <article class="plan-priority-card plan-priority-card--${tone}">
+          <span class="plan-priority-card__rank">0${index + 1}</span>
+          <div class="plan-priority-card__body">
+            <div class="plan-priority-card__meta">
+              <span class="plan-priority-card__badge">${escapeHtml(`${badgePrefix} ${index + 1}`)}</span>
+              <strong>${escapeHtml(label)}</strong>
+            </div>
+            <p>${escapeHtml(truncateText(summary, 92))}</p>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderPlanTimeline(items) {
+  const rows = (Array.isArray(items) ? items : [])
+    .map((item) => cleanDisplayText(item))
+    .filter(Boolean);
+
+  if (!rows.length) {
+    return `
+      <article class="plan-timeline-card plan-timeline-card--empty">
+        <span class="plan-timeline-card__day">待定</span>
+        <div>
+          <strong>本周主题待生成</strong>
+          <p>周总结同步后，这里会按照每天的学习重心排出一条连续节奏。</p>
+        </div>
+      </article>
+    `;
+  }
+
+  return rows
+    .map((item, index) => {
+      const parts = splitPlanText(item);
+      const label = parts.title || `第 ${index + 1} 天`;
+      const body = parts.body || item;
+      return `
+        <article class="plan-timeline-card">
+          <span class="plan-timeline-card__day">${escapeHtml(label)}</span>
+          <div>
+            <strong>${escapeHtml(truncateText(body, 48))}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderPlanDoseItems(items, tone = "brand", emptyText = "先以高质量完成 1 到 2 道题为主。") {
+  const rows = (Array.isArray(items) ? items : [])
+    .map((item) => cleanDisplayText(item))
+    .filter(Boolean);
+
+  if (!rows.length) {
+    return `
+      <article class="plan-dose-item plan-dose-item--empty">
+        <span class="plan-dose-item__bar"></span>
+        <div>
+          <strong>${escapeHtml(emptyText)}</strong>
+        </div>
+      </article>
+    `;
+  }
+
+  return rows
+    .map((item) => {
+      const parts = splitPlanText(item);
+      return `
+        <article class="plan-dose-item plan-dose-item--${tone}">
+          <span class="plan-dose-item__bar"></span>
+          <div>
+            ${parts.title ? `<strong>${escapeHtml(parts.title)}</strong>` : ""}
+            <p>${escapeHtml(parts.body || item)}</p>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
 }
 
 function renderPlanPage() {
@@ -510,58 +744,361 @@ function renderPlanPage() {
   `;
 }
 
+function renderPlanPageV2() {
+  const student = dashboardState.data?.student || {};
+  const daily = student.daily || {};
+  const weekly = student.weekly || {};
+  const focus = Array.isArray(student.highlights?.focus) ? student.highlights.focus : [];
+  const mistakes = Array.isArray(student.highlights?.mistakes) ? student.highlights.mistakes : [];
+  const tomorrowSuggestions = Array.isArray(daily.tomorrow_study_suggestions) ? daily.tomorrow_study_suggestions : [];
+  const weeklyGoals = Array.isArray(weekly.goals) ? weekly.goals : [];
+  const dailyTopics = Array.isArray(weekly.daily_topics) ? weekly.daily_topics : [];
+  const exerciseLoad = Array.isArray(weekly.exercise_load) ? weekly.exercise_load : [];
+  const difficultyAdjustment = Array.isArray(weekly.difficulty_adjustment) ? weekly.difficulty_adjustment : [];
+  const topFocus = focus[0] || {};
+  const topMistake = mistakes[0] || {};
+  const learningSummary = firstMeaningfulText(
+    daily.learning_status_summary,
+    "今天还没有新的学习总结，先从一道核心题开始，把步骤写完整。"
+  );
+  const practiceSummary = firstMeaningfulText(
+    exerciseLoad[0],
+    difficultyAdjustment[0],
+    "先以高质量完成 1 到 2 道题为主。"
+  );
+  const signalCards = [
+    {
+      label: "今日主攻",
+      value: firstMeaningfulText(topFocus.label, "先做基础攻坚"),
+      hint: firstMeaningfulText(topFocus.summary, "先沿着最核心的知识点往回补。"),
+      tone: "brand",
+    },
+    {
+      label: "纠错焦点",
+      value: firstMeaningfulText(topMistake.label, "保持步骤完整"),
+      hint: firstMeaningfulText(topMistake.summary, "先把最容易反复出现的失分点压住。"),
+      tone: "danger",
+    },
+    {
+      label: "训练节奏",
+      value: firstMeaningfulText(truncateText(practiceSummary, 20), "稳住质量"),
+      hint: firstMeaningfulText(practiceSummary, "先稳住质量，再逐步加量。"),
+      tone: "amber",
+    },
+  ];
+
+  return `
+    <section class="page-head">
+      <div>
+        <h2>学习计划</h2>
+        <p>把今天最值得花时间的内容排清楚，先做重点，再决定练多少。</p>
+      </div>
+    </section>
+    <section class="dashboard-stack plan-shell">
+      <section class="dashboard-grid plan-grid--hero">
+        <article class="panel plan-hero">
+          <div class="card-head plan-hero__head">
+            <span class="card-icon">✦</span>
+            <div>
+              <span class="page-kicker">今日状态</span>
+              <h3>${escapeHtml(daily.date || "暂无今日总结")}</h3>
+            </div>
+          </div>
+          <p class="plan-hero__summary">${escapeHtml(learningSummary)}</p>
+          <div class="plan-signal-grid">${renderPlanSignalCards(signalCards)}</div>
+        </article>
+        <article class="panel plan-weekly">
+          <div class="card-head plan-weekly__head">
+            <span class="card-icon">◎</span>
+            <div>
+              <span class="page-kicker">本周计划</span>
+              <strong>${escapeHtml(weekly.title || "本周节奏待生成")}</strong>
+            </div>
+          </div>
+          <div class="plan-weekly__rail">${renderPlanGoalRail(weeklyGoals)}</div>
+        </article>
+      </section>
+      <section class="dashboard-grid plan-grid--focus">
+        <article class="panel plan-card plan-card--checklist">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">☼</span>
+            <h3>明日建议</h3>
+          </div>
+          <div class="plan-checklist">${renderPlanChecklist(tomorrowSuggestions, "今天先完成当前题目练习。", "brand")}</div>
+        </article>
+        <article class="panel plan-card plan-card--priority">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">◌</span>
+            <h3>优先复习知识点</h3>
+          </div>
+          <div class="plan-priority-stack">
+            ${renderPlanPriorityCards(focus, {
+              tone: "brand",
+              badgePrefix: "复习",
+              emptyTitle: "图谱还没有焦点知识点",
+              emptyText: "等新的学习轨迹生成后，这里会自动列出最值得先补的知识点。",
+            })}
+          </div>
+        </article>
+        <article class="panel plan-card plan-card--priority plan-card--danger">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">!</span>
+            <h3>重点纠错方向</h3>
+          </div>
+          <div class="plan-priority-stack">
+            ${renderPlanPriorityCards(mistakes, {
+              tone: "danger",
+              badgePrefix: "纠错",
+              emptyTitle: "错题图还没有新的提醒",
+              emptyText: "等新的错题轨迹同步后，这里会自动出现当前最该压住的失分模式。",
+            })}
+          </div>
+        </article>
+      </section>
+      <section class="dashboard-grid plan-grid--bottom">
+        <article class="panel plan-card plan-card--timeline">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">→</span>
+            <h3>每天建议主题</h3>
+          </div>
+          <div class="plan-timeline">${renderPlanTimeline(dailyTopics)}</div>
+        </article>
+        <article class="panel plan-card plan-card--load">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">▣</span>
+            <h3>练习量与难度</h3>
+          </div>
+          <section class="plan-dose-block">
+            <div class="plan-dose-block__head">
+              <span class="page-kicker">训练剂量</span>
+              <strong>先稳住质量，再决定加量</strong>
+            </div>
+            <div class="plan-dose-list">${renderPlanDoseItems(exerciseLoad, "brand", "先以高质量完成 1 到 2 道题为主。")}</div>
+          </section>
+          <section class="plan-dose-block">
+            <div class="plan-dose-block__head">
+              <span class="page-kicker">难度节奏</span>
+              <strong>难度只在稳定之后上调</strong>
+            </div>
+            <div class="plan-dose-list">${renderPlanDoseItems(difficultyAdjustment, "danger", "先把基础题做稳，再逐步提升题目强度。")}</div>
+          </section>
+        </article>
+      </section>
+    </section>
+  `;
+}
+
 function renderStatusPage() {
   const admin = dashboardState.data?.admin || {};
   const runtime = admin.runtime || {};
+  const settings = admin.settings || {};
   const gateway = runtime.gateway || {};
   const consoleRuntime = runtime.console || {};
+  const channels = Array.isArray(admin.channels) ? admin.channels : [];
+  const schedules = Array.isArray(admin.schedules) ? admin.schedules : [];
+  const tools = Array.isArray(settings.tools) ? settings.tools : [];
+  const replyChannels = Array.isArray(settings.reply_channels) ? settings.reply_channels : [];
+  const enabledChannels = countEnabled(channels);
+  const enabledSchedules = countEnabled(schedules);
+  const onlineServices = [gateway.online, consoleRuntime.online].filter(Boolean).length;
+  const searchProvider = formatSearchProviderLabel(settings.search_provider);
+  const refreshLabel = formatDateTimeLabel(dashboardState.syncedAt);
+  const systemHealthy = Boolean(gateway.online && consoleRuntime.online);
+  const healthTone = systemHealthy ? (enabledChannels > 0 ? "success" : "warning") : "danger";
+  const healthBadge = healthTone === "danger" ? "Needs attention" : healthTone === "warning" ? "Partial" : "Stable";
+  const healthTitle = healthTone === "danger" ? "系统需要排查" : healthTone === "warning" ? "核心服务在线" : "系统稳定运行";
+  const healthSummary = healthTone === "danger"
+    ? "网关或控制台存在离线情况，建议优先检查对应进程和日志。"
+    : `网关与控制台均在线，当前模型链路为 ${cleanDisplayText(runtime.provider || "默认链路")}，已启用 ${enabledChannels}/${channels.length || 0} 个通道。`;
+  const replyLabels = replyChannels.map((id) => {
+    const matched = channels.find((channel) => channel.id === id);
+    return matched?.label || id;
+  });
+  const activeChannelChips = channels
+    .filter((channel) => channel.enabled)
+    .map((channel) => `<span class="status-tag status-tag--success">${escapeHtml(channel.label || channel.id)}</span>`)
+    .join("");
+  const replyChannelChips = replyLabels.length
+    ? replyLabels.map((label) => `<span class="status-tag status-tag--brand">${escapeHtml(label)}</span>`).join("")
+    : '<span class="status-tag">暂无</span>';
+  const toolChips = tools.length
+    ? tools.map((tool) => `<span class="status-tag">${escapeHtml(tool.label || tool.id || "工具")}</span>`).join("")
+    : '<span class="status-tag">暂无工具摘要</span>';
+  const runtimeSteps = [
+    ["文档理解", runtime.doc_model || "qwen-doc-turbo"],
+    ["图片解析", runtime.image_pipeline || "原图 + Markdown 转写 + qwen3.5"],
+    ["搜索增强", searchProvider],
+    ["记忆上下文", "每日总结 + 周计划 + 双图谱"],
+  ];
 
   return `
     <section class="page-head">
       <div>
         <h2>运行状态</h2>
-        <p>这里给管理员看系统是否稳定，学生侧不会直接看到这些底层状态。</p>
+        <p>把系统健康度、模型链路和通道活跃情况压到一个面板里，便于快速判断是否需要排查。</p>
       </div>
     </section>
-    <section class="dashboard-grid dashboard-grid--4">
-      <article class="panel dashboard-metric-card">
-        <span>网关</span>
-        <strong>${gateway.online ? "运行中" : "未连接"}</strong>
-        <small>PID ${escapeHtml(String(gateway.pid || "-"))}</small>
+    <section class="status-stack">
+      <article class="panel status-hero" data-tone="${healthTone}">
+        <div class="status-hero__content">
+          <span class="page-kicker">系统健康状态</span>
+          <h3>${healthTitle}</h3>
+          <p>${escapeHtml(healthSummary)}</p>
+          <div class="status-chip-row">
+            <div class="status-chip">
+              <span>已启用通道</span>
+              <strong>${escapeHtml(String(enabledChannels))} / ${escapeHtml(String(channels.length || 0))}</strong>
+            </div>
+            <div class="status-chip">
+              <span>定时任务</span>
+              <strong>${escapeHtml(String(enabledSchedules))} / ${escapeHtml(String(schedules.length || 0))}</strong>
+            </div>
+            <div class="status-chip">
+              <span>搜索增强</span>
+              <strong>${escapeHtml(searchProvider)}</strong>
+            </div>
+            <div class="status-chip">
+              <span>MCP 连接</span>
+              <strong>${escapeHtml(String(settings.mcp_server_count || 0))}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="status-hero__side">
+          ${renderStatusPill(healthBadge, healthTone)}
+          <div class="status-hero__model">
+            <span>当前主模型</span>
+            <strong>${escapeHtml(runtime.model || "-")}</strong>
+            <small>${escapeHtml(runtime.provider || "默认模型链路")}</small>
+          </div>
+          <div class="status-hero__stamp">
+            <span>最近刷新</span>
+            <strong>${escapeHtml(refreshLabel)}</strong>
+          </div>
+        </div>
       </article>
-      <article class="panel dashboard-metric-card">
-        <span>前端控制台</span>
-        <strong>${consoleRuntime.online ? "运行中" : "未连接"}</strong>
-        <small>PID ${escapeHtml(String(consoleRuntime.pid || "-"))}</small>
-      </article>
-      <article class="panel dashboard-metric-card">
-        <span>当前主模型</span>
-        <strong>${escapeHtml(runtime.model || "-")}</strong>
-        <small>${escapeHtml(runtime.provider || "")}</small>
-      </article>
-      <article class="panel dashboard-metric-card">
-        <span>自定义输出 Skill</span>
-        <strong>${escapeHtml(String(runtime.custom_skill_count || 0))}</strong>
-        <small>仅在附件回复后追加</small>
-      </article>
-    </section>
-    <section class="dashboard-grid dashboard-grid--2">
-      <article class="panel info-card">
-        <h3>附件处理链路</h3>
-        <ul class="info-list">
-          <li>文档：${escapeHtml(runtime.doc_model || "qwen-doc-turbo")}</li>
-          <li>图片：${escapeHtml(runtime.image_pipeline || "原图 + Markdown 转写 + qwen3.5")}</li>
-          <li>时区：${escapeHtml(runtime.timezone || "Asia/Shanghai")}</li>
-        </ul>
-      </article>
-      <article class="panel info-card">
-        <h3>管理提示</h3>
-        <ul class="info-list">
-          <li>学生端只显示学习相关内容，不暴露这些底层状态。</li>
-          <li>如果某个通道异常，先看频道页，再看心跳与定时任务。</li>
-          <li>模型和环境变量只在管理后台做只读展示。</li>
-        </ul>
-      </article>
+      <section class="dashboard-grid dashboard-grid--4">
+        <article class="panel status-service-card" data-tone="${gateway.online ? "success" : "danger"}">
+          <div class="status-service-card__top">
+            <span class="status-service-card__icon">◎</span>
+            ${renderStatusPill(gateway.online ? "在线" : "离线", gateway.online ? "success" : "danger")}
+          </div>
+          <span class="status-service-card__label">网关</span>
+          <strong>${gateway.online ? "运行中" : "未连接"}</strong>
+          <p>负责多通道接入、分发消息与回写状态。</p>
+          <div class="status-service-card__meta"><span>PID</span><span>${escapeHtml(String(gateway.pid || "-"))}</span></div>
+        </article>
+        <article class="panel status-service-card" data-tone="${consoleRuntime.online ? "success" : "danger"}">
+          <div class="status-service-card__top">
+            <span class="status-service-card__icon">▣</span>
+            ${renderStatusPill(consoleRuntime.online ? "在线" : "离线", consoleRuntime.online ? "success" : "danger")}
+          </div>
+          <span class="status-service-card__label">前端控制台</span>
+          <strong>${consoleRuntime.online ? "运行中" : "未连接"}</strong>
+          <p>负责管理后台展示、聊天工作台与图谱面板。</p>
+          <div class="status-service-card__meta"><span>PID</span><span>${escapeHtml(String(consoleRuntime.pid || "-"))}</span></div>
+        </article>
+        <article class="panel status-service-card" data-tone="brand">
+          <div class="status-service-card__top">
+            <span class="status-service-card__icon">◉</span>
+            ${renderStatusPill(`${enabledChannels}/${channels.length || 0} 已启用`, enabledChannels ? "brand" : "neutral")}
+          </div>
+          <span class="status-service-card__label">接入通道</span>
+          <strong>${escapeHtml(String(enabledChannels))}</strong>
+          <p>${escapeHtml(channels.map((channel) => channel.label || channel.id).join(" · ") || "暂无通道")}</p>
+          <div class="status-service-card__meta"><span>回复通道</span><span>${escapeHtml(replyLabels.join(" / ") || "暂无")}</span></div>
+        </article>
+        <article class="panel status-service-card" data-tone="violet">
+          <div class="status-service-card__top">
+            <span class="status-service-card__icon">✣</span>
+            ${renderStatusPill(`${String(runtime.custom_skill_count || 0)} 个`, "violet")}
+          </div>
+          <span class="status-service-card__label">自定义输出 Skill</span>
+          <strong>${escapeHtml(String(runtime.custom_skill_count || 0))}</strong>
+          <p>仅在附件回复场景追加，用来控制输出格式与风格。</p>
+          <div class="status-service-card__meta"><span>时区</span><span>${escapeHtml(runtime.timezone || "Asia/Shanghai")}</span></div>
+        </article>
+      </section>
+      <section class="dashboard-grid dashboard-grid--status-bottom">
+        <article class="panel status-wide-card">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">⌘</span>
+            <h3>系统总览</h3>
+          </div>
+          <div class="status-summary-grid">
+            <div class="status-summary-tile">
+              <span>在线服务</span>
+              <strong>${escapeHtml(String(onlineServices))} / 2</strong>
+            </div>
+            <div class="status-summary-tile">
+              <span>工具能力</span>
+              <strong>${escapeHtml(String(tools.length || 0))}</strong>
+            </div>
+            <div class="status-summary-tile">
+              <span>搜索提供商</span>
+              <strong>${escapeHtml(searchProvider)}</strong>
+            </div>
+            <div class="status-summary-tile">
+              <span>工作区限制</span>
+              <strong>${settings.restrict_to_workspace ? "已限制" : "未限制"}</strong>
+            </div>
+          </div>
+          <div class="status-section">
+            <span class="status-section__label">已启用通道</span>
+            <div class="status-tag-list">
+              ${activeChannelChips || '<span class="status-tag">暂无</span>'}
+            </div>
+          </div>
+          <div class="status-section">
+            <span class="status-section__label">当前回复通道</span>
+            <div class="status-tag-list">
+              ${replyChannelChips}
+            </div>
+          </div>
+          <div class="status-section">
+            <span class="status-section__label">工具能力</span>
+            <div class="status-tag-list">
+              ${toolChips}
+            </div>
+          </div>
+        </article>
+        <article class="panel status-chain-card">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">→</span>
+            <h3>附件处理链路</h3>
+          </div>
+          <div class="status-steps">
+            ${runtimeSteps.map((step, index) => `
+              <div class="status-step">
+                <span class="status-step__index">0${index + 1}</span>
+                <div class="status-step__body">
+                  <strong>${escapeHtml(step[0])}</strong>
+                  <p>${escapeHtml(step[1])}</p>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </article>
+        <article class="panel status-note-card">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">!</span>
+            <h3>管理提示</h3>
+          </div>
+          <div class="status-note-list">
+            <div class="status-note">
+              <span class="status-note__tag status-note__tag--neutral">边界</span>
+              <p>学生端只显示学习相关内容，模型参数、环境变量和日志都保持后台只读。</p>
+            </div>
+            <div class="status-note">
+              <span class="status-note__tag status-note__tag--brand">排查</span>
+              <p>如果某个通道异常，先看频道页，再看心跳与定时任务，最后回到网关日志定位问题。</p>
+            </div>
+            <div class="status-note">
+              <span class="status-note__tag status-note__tag--warning">注意</span>
+              <p>当网关和控制台都在线时，优先排查搜索提供商、工具链路或模型配置，而不是前端壳层。</p>
+            </div>
+          </div>
+        </article>
+      </section>
     </section>
   `;
 }
@@ -594,8 +1131,82 @@ function renderChannelsPage() {
   `;
 }
 
+function heartbeatKindLabel(name) {
+  const value = cleanDisplayText(name || "").toLowerCase();
+  if (value.includes("daily")) {
+    return "日总结心跳";
+  }
+  if (value.includes("weekly")) {
+    return "周总结心跳";
+  }
+  return "定时任务";
+}
+
+function heartbeatStatusInfo(item) {
+  const enabled = Boolean(item?.enabled);
+  const status = cleanDisplayText(item?.last_status || "").toLowerCase();
+  if (!enabled) {
+    return {
+      tone: "neutral",
+      label: "已停用",
+      summary: "当前没有参与自动发送，可以按需再启用。",
+    };
+  }
+  if (["ok", "success", "healthy"].includes(status)) {
+    return {
+      tone: "success",
+      label: "稳定",
+      summary: "最近一次执行正常，当前节律看起来是稳定的。",
+    };
+  }
+  if (["error", "failed", "fail", "timeout"].includes(status)) {
+    return {
+      tone: "danger",
+      label: "异常",
+      summary: "最近一次执行失败，建议先看对应日志和频道状态。",
+    };
+  }
+  if (!cleanDisplayText(item?.last_run)) {
+    return {
+      tone: "warning",
+      label: "待首次执行",
+      summary: "任务已经启用，但还在等待第一次心跳落地。",
+    };
+  }
+  return {
+    tone: "warning",
+    label: "待观察",
+    summary: "最近暂无明确结果，建议继续观察下一次执行。",
+  };
+}
+
+function earliestHeartbeatLabel(schedules) {
+  const values = (Array.isArray(schedules) ? schedules : [])
+    .map((item) => {
+      const value = item?.next_run ? new Date(item.next_run).getTime() : NaN;
+      return Number.isFinite(value) ? value : null;
+    })
+    .filter((value) => value != null)
+    .sort((left, right) => left - right);
+  if (!values.length) {
+    return "暂无";
+  }
+  return formatDateTimeLabel(values[0]);
+}
+
 function renderHeartbeatPage() {
   const schedules = Array.isArray(dashboardState.data?.admin?.schedules) ? dashboardState.data.admin.schedules : [];
+  const activeCount = schedules.filter((item) => item?.enabled).length;
+  const healthyCount = schedules.filter((item) => heartbeatStatusInfo(item).tone === "success").length;
+  const warningCount = schedules.filter((item) => heartbeatStatusInfo(item).tone === "warning").length;
+  const refreshLabel = formatDateTimeLabel(dashboardState.syncedAt);
+  const overviewTone = activeCount === 0 ? "warning" : healthyCount === activeCount ? "success" : warningCount > 0 ? "warning" : "danger";
+  const overviewTitle = "自动发送状态概览";
+  const overviewText = activeCount === 0
+    ? "现在这页主要用于确认自动发送节律。等任务重新启用后，这里会显示下一次心跳和执行结果。"
+    : healthyCount === activeCount
+      ? "日总结、周总结和相关定时任务目前都在正常节律里，可以把注意力放在内容质量而不是执行本身。"
+      : "至少有一条心跳没有形成稳定结果，建议优先比对上次执行时间、最近结果和对应日志。";
   return `
     <section class="page-head">
       <div>
@@ -603,24 +1214,127 @@ function renderHeartbeatPage() {
         <p>自动发送的日总结、周总结和定时任务是否正常执行，都从这里看。</p>
       </div>
     </section>
-    <section class="schedule-stack">
-      ${schedules.map((item) => `
-        <article class="panel schedule-card">
-          <div class="schedule-card__head">
-            <strong>${escapeHtml(item.name || "未命名任务")}</strong>
-            <span class="status-pill${item.enabled ? " status-pill--online" : ""}">${item.enabled ? "启用中" : "已停用"}</span>
+    <section class="schedule-stack heartbeat-shell">
+      <section class="panel heartbeat-hero heartbeat-hero--${overviewTone}">
+        <div class="heartbeat-hero__main">
+          <div class="heartbeat-hero__badge">
+            <span class="heartbeat-hero__pulse"></span>
+            <span class="page-kicker">自动发送</span>
           </div>
-          <div class="schedule-meta">
-            <span>表达式：${escapeHtml(item.expr || "-")}</span>
-            <span>时区：${escapeHtml(item.timezone || "Asia/Shanghai")}</span>
+          <h3>${escapeHtml(overviewTitle)}</h3>
+          <p>${escapeHtml(overviewText)}</p>
+        </div>
+        <div class="heartbeat-hero__stats">
+          <article class="heartbeat-stat-tile">
+            <span>启用任务</span>
+            <strong>${escapeHtml(String(activeCount))}</strong>
+            <small>当前参与自动发送</small>
+          </article>
+          <article class="heartbeat-stat-tile">
+            <span>稳定执行</span>
+            <strong>${escapeHtml(String(healthyCount))}</strong>
+            <small>最近结果正常</small>
+          </article>
+          <article class="heartbeat-stat-tile">
+            <span>最近下一次</span>
+            <strong>${escapeHtml(earliestHeartbeatLabel(schedules))}</strong>
+            <small>页面刷新于 ${escapeHtml(refreshLabel)}</small>
+          </article>
+        </div>
+      </section>
+      <section class="heartbeat-grid">
+        ${schedules.map((item) => {
+          const status = heartbeatStatusInfo(item);
+          const resultLabel = cleanDisplayText(item.last_status || "") || status.label;
+          return `
+            <article class="panel heartbeat-card heartbeat-card--${status.tone}">
+              <div class="heartbeat-card__head">
+                <div>
+                  <span class="page-kicker">${escapeHtml(heartbeatKindLabel(item.name))}</span>
+                  <strong>${escapeHtml(item.name || "未命名任务")}</strong>
+                </div>
+                ${renderStatusPill(status.label, status.tone === "neutral" ? "warning" : status.tone)}
+              </div>
+              <div class="heartbeat-card__timing">
+                <span>下次执行</span>
+                <strong>${escapeHtml(formatDateTimeLabel(item.next_run))}</strong>
+                <p>${escapeHtml(status.summary)}</p>
+              </div>
+              <div class="heartbeat-card__metrics">
+                <article class="heartbeat-mini-stat">
+                  <span>上次执行</span>
+                  <strong>${escapeHtml(formatDateTimeLabel(item.last_run))}</strong>
+                </article>
+                <article class="heartbeat-mini-stat">
+                  <span>最近结果</span>
+                  <strong>${escapeHtml(resultLabel)}</strong>
+                </article>
+              </div>
+              <div class="heartbeat-chip-row">
+                <span class="heartbeat-chip">表达式 ${escapeHtml(item.expr || "-")}</span>
+                <span class="heartbeat-chip">时区 ${escapeHtml(item.timezone || "Asia/Shanghai")}</span>
+              </div>
+            </article>
+          `;
+        }).join("") || `
+          <article class="panel heartbeat-card heartbeat-card--empty">
+            <div class="heartbeat-card__head">
+              <div>
+                <span class="page-kicker">当前没有心跳</span>
+                <strong>等待新的定时任务接入</strong>
+              </div>
+              ${renderStatusPill("空闲", "warning")}
+            </div>
+            <div class="heartbeat-card__timing">
+              <span>下一次执行</span>
+              <strong>暂无</strong>
+              <p>等日报、周报或其它定时任务重新启用后，这里会自动出现真实节律信息。</p>
+            </div>
+          </article>
+        `}
+      </section>
+      <section class="heartbeat-note-grid">
+        <article class="panel heartbeat-note-card">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">◎</span>
+            <h3>排查顺序</h3>
           </div>
-          <div class="schedule-meta">
-            <span>下次执行：${escapeHtml(formatDateTimeLabel(item.next_run))}</span>
-            <span>上次执行：${escapeHtml(formatDateTimeLabel(item.last_run))}</span>
-            <span>结果：${escapeHtml(item.last_status || "暂无")}</span>
+          <div class="heartbeat-checklist">
+            <article class="heartbeat-check-item">
+              <span>01</span>
+              <p>先看最近结果，再对比上次执行时间，判断是偶发波动还是已经断档。</p>
+            </article>
+            <article class="heartbeat-check-item">
+              <span>02</span>
+              <p>如果任务启用但长时间没有落地，优先检查对应通道与日志输出。</p>
+            </article>
+            <article class="heartbeat-check-item">
+              <span>03</span>
+              <p>表达式和时区都正常时，再回头看内容链路本身，而不是盲目重启全部任务。</p>
+            </article>
           </div>
         </article>
-      `).join("")}
+        <article class="panel heartbeat-note-card heartbeat-note-card--legend">
+          <div class="card-head card-head--compact">
+            <span class="card-icon">+</span>
+            <h3>状态说明</h3>
+          </div>
+          <div class="heartbeat-legend">
+            <div class="heartbeat-legend__row">
+              ${renderStatusPill("稳定", "success")}
+              <p>最近一次执行成功，当前节律可以认为是可靠的。</p>
+            </div>
+            <div class="heartbeat-legend__row">
+              ${renderStatusPill("待观察", "warning")}
+              <p>任务还在等待首次执行，或者最近结果还不足以判断是否稳定。</p>
+            </div>
+            <div class="heartbeat-legend__row">
+              ${renderStatusPill("异常", "danger")}
+              <p>最近执行失败或断档，优先检查日志、通道状态和最近一次改动。</p>
+            </div>
+          </div>
+        </article>
+      </section>
     </section>
   `;
 }
@@ -730,7 +1444,7 @@ function renderDashboardPage(pageId) {
     `;
   }
   if (pageId === "cron-jobs") {
-    return renderPlanPage();
+    return renderPlanPageV2();
   }
   if (pageId === "status") {
     return renderStatusPage();
@@ -1416,6 +2130,7 @@ async function loadDashboard(onDone, options = {}) {
     dashboardState.data = await requestJson(DASHBOARD_API_PATH, { method: "GET" });
     dashboardState.loaded = true;
     dashboardState.error = "";
+    dashboardState.syncedAt = new Date().toISOString();
   } catch (error) {
     dashboardState.error = error.message || "加载页面数据失败";
   } finally {
@@ -2031,25 +2746,35 @@ function renderApp() {
 
   const pageId = currentPage();
   const app = document.getElementById("app");
+  let shell = app.querySelector(".shell");
 
-  app.innerHTML = `
-    <div class="shell">
-      <aside class="sidebar">
-        <div class="brand">
-          <div class="brand-mark">
-            <img class="brand-mark-img" src="./logo.png" alt="MathClaw 标志" />
+  if (!shell) {
+    app.innerHTML = `
+      <div class="shell">
+        <aside class="sidebar">
+          <div class="brand">
+            <div class="brand-mark">
+              <img class="brand-mark-img" src="./logo.png" alt="MathClaw 标志" />
+            </div>
+            <div class="brand-copy">
+              <h1>MathClaw</h1>
+            </div>
           </div>
-          <div class="brand-copy">
-            <h1>MathClaw</h1>
-          </div>
-        </div>
-        <div class="nav-scroll">${renderNav(pageId)}</div>
-      </aside>
-      <main class="main">
-        <div class="frame">${renderPageBody(pageId)}</div>
-      </main>
-    </div>
-  `;
+          <div class="nav-scroll"></div>
+        </aside>
+        <main class="main">
+          <div class="frame"></div>
+        </main>
+      </div>
+    `;
+    shell = app.querySelector(".shell");
+  }
+
+  const navRoot = shell.querySelector(".nav-scroll");
+  const frame = shell.querySelector(".frame");
+
+  navRoot.innerHTML = renderNav(pageId);
+  frame.innerHTML = renderPageBody(pageId);
 
   app.querySelectorAll("[data-page]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -2115,21 +2840,107 @@ function graphRelationLabel(graphKey, relation) {
     similar: "相似",
     contains: "包含",
     related: "关联",
+    extension: "扩展",
   };
   const errorMap = {
     corresponds_to: "对应知识点",
     similar_error: "相似错误",
+    correction_suggestion: "纠正建议",
+    correction: "纠正建议",
+    repeated: "重复出现",
+    repeat: "重复出现",
   };
   const lookup = graphKey === "error" ? errorMap : knowledgeMap;
   return lookup[relation] || relation || "关联";
 }
 
 function graphRelationPriority(graphKey, relation) {
-  const knowledgeOrder = ["prerequisite", "contains", "related", "similar"];
-  const errorOrder = ["corresponds_to", "similar_error"];
+  const knowledgeOrder = ["prerequisite", "contains", "related", "similar", "extension"];
+  const errorOrder = ["corresponds_to", "correction_suggestion", "repeated", "similar_error"];
   const order = graphKey === "error" ? errorOrder : knowledgeOrder;
   const index = order.indexOf(relation);
   return index === -1 ? order.length : index;
+}
+
+function graphRelationTone(graphKey, relation) {
+  const value = String(relation || "").trim().toLowerCase();
+  if (graphKey === "error") {
+    if (["corresponds_to", "对应知识点"].includes(value) || relation === "对应知识点") {
+      return "corresponds";
+    }
+    if (["similar_error", "相似错误"].includes(value) || relation === "相似错误") {
+      return "similar";
+    }
+    if (["correction_suggestion", "correction", "纠正建议"].includes(value) || relation === "纠正建议") {
+      return "correction";
+    }
+    if (["repeated", "repeat", "重复出现"].includes(value) || relation === "重复出现") {
+      return "repeat";
+    }
+    return "correction";
+  }
+
+  if (["prerequisite", "前置", "前置知识点"].includes(value) || relation === "前置知识点") {
+    return "prerequisite";
+  }
+  if (["similar", "相似", "相似知识点"].includes(value) || relation === "相似知识点") {
+    return "similar";
+  }
+  if (["contains", "包含", "包含关系"].includes(value) || relation === "包含关系") {
+    return "contains";
+  }
+  if (["extension", "扩展"].includes(value) || relation === "扩展") {
+    return "extension";
+  }
+  return "related";
+}
+
+function graphLegendItems(graphKey) {
+  if (graphKey === "error") {
+    return [
+      { label: "对应知识点", tone: "corresponds" },
+      { label: "相似错误", tone: "similar" },
+      { label: "纠正建议", tone: "correction" },
+      { label: "重复出现", tone: "repeat" },
+    ];
+  }
+
+  return [
+    { label: "前置知识点", tone: "prerequisite" },
+    { label: "相似知识点", tone: "similar" },
+    { label: "包含关系", tone: "contains" },
+    { label: "相关联知识点", tone: "related" },
+  ];
+}
+
+function graphTheme(graphKey) {
+  if (graphKey === "error") {
+    return {
+      kicker: "错题诊断图",
+      title: "把高频错误模式拆成可执行的纠错路径",
+      summary: "优先沿着重复出现和纠正建议两条线看，先定位错误模式，再回到对应知识点补漏洞。",
+      emptyTitle: "从一类错误开始查看",
+      emptyText: "点击左侧节点后，右侧会展示严重度、重复次数、代表样本和建议修正动作。",
+      overlayHint: "拖动画布定位高频错误，优先查看重复出现和纠正建议链路。",
+      relationTitle: "关联错误与策略",
+      actionsTitle: "优先动作",
+      sampleTitle: "近 15 天代表样本",
+      classicTitle: "经典例题",
+    };
+  }
+
+  return {
+    kicker: "知识导航图",
+    title: "把薄弱知识点整理成有先后关系的学习地图",
+    summary: "优先看前置依赖和相似知识点，先补基础，再回到当前节点做专项复盘。",
+    emptyTitle: "从一个知识点开始查看",
+    emptyText: "点击左侧节点后，右侧会显示风险、掌握度、前置关系和近期样本，方便判断先补哪里。",
+    overlayHint: "焦点视图只保留最近更新和核心关联，适合快速确认当前学习主线。",
+    relationTitle: "关联知识点",
+    actionsTitle: "建议动作",
+    sampleTitle: "近 15 天代表样本",
+    classicTitle: "代表例题",
+  };
 }
 
 function mergedRelationLabel(graphKey, relations) {
@@ -2248,7 +3059,7 @@ function nodeSignalScore(graphKey, node) {
 
 function clampNodeSize(graphKey, node) {
   const score = nodeSignalScore(graphKey, node);
-  return Math.round(56 + score * 86);
+  return Math.round(30 + score * 24);
 }
 
 function radialPosition(index, graphKey, size) {
@@ -2266,11 +3077,54 @@ function radialPosition(index, graphKey, size) {
     capacity = 6 + ring * 4;
   }
   const angle = (remaining / capacity) * Math.PI * 2 - Math.PI / 2;
-  const radius = 220 + ring * 148 + (graphKey === "error" ? 22 : 0);
+  const radius = 132 + ring * 94 + (graphKey === "error" ? 10 : 0);
   return {
     x: clamp(centerX + Math.cos(angle) * radius, size / 2 + 24, GRAPH_STAGE.width - size / 2 - 24),
     y: clamp(centerY + Math.sin(angle) * radius, size / 2 + 24, GRAPH_STAGE.height - size / 2 - 24),
   };
+}
+
+function visualNodeSize(node) {
+  const raw = Number(node?.size || 0);
+  const normalized = raw > 56 ? raw * 0.34 : raw;
+  return clamp(Math.round(normalized || 32), 24, 46);
+}
+
+function graphNodeAnchor(node) {
+  if (node.x > GRAPH_STAGE.width - 220) {
+    return "left";
+  }
+  if (node.x < 220) {
+    return "right";
+  }
+  if (node.y < 120) {
+    return "bottom";
+  }
+  if (node.y > GRAPH_STAGE.height - 120) {
+    return "top";
+  }
+  const centerX = GRAPH_STAGE.width / 2;
+  const centerY = GRAPH_STAGE.height / 2;
+  const dx = node.x - centerX;
+  const dy = node.y - centerY;
+  if (Math.abs(dx) > Math.abs(dy) + 48) {
+    return dx > 0 ? "left" : "right";
+  }
+  return dy > 0 ? "top" : "bottom";
+}
+
+function stableEdgeCurve(sourceId, targetId, relation) {
+  const seed = `${sourceId}|${targetId}|${relation || ""}`;
+  let hash = 0;
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = (hash * 33 + seed.charCodeAt(index)) % 9973;
+  }
+  const bucket = (hash % 7) - 3;
+  const curve = bucket * 0.055;
+  if (Math.abs(curve) < 0.03) {
+    return relation === "contains" || relation === "corresponds_to" ? 0.04 : -0.04;
+  }
+  return curve;
 }
 
 function normalizeGraphPayload(graphKey, payload, previousGraph) {
@@ -2307,6 +3161,12 @@ function normalizeGraphPayload(graphKey, payload, previousGraph) {
       strength: nodeSignalScore(graphKey, node),
       lastSeen: node.last_seen || null,
       isFocus: focusIds.includes(node.id),
+      risk: Number(node.risk || 0),
+      mastery: Number(node.mastery || 0),
+      importance: Number(node.importance || 0),
+      severity: Number(node.severity || 0),
+      errorCount: Number(node.error_count || 0),
+      repeated: Boolean(node.repeated),
     };
   });
 
@@ -2324,7 +3184,7 @@ function normalizeGraphPayload(graphKey, payload, previousGraph) {
         target: pair[1],
         relations: [relation],
         label: mergedRelationLabel(graphKey, [relation]),
-        curve: 0,
+        curve: stableEdgeCurve(pair[0], pair[1], relation),
         strength: Number(edge.strength || 0.35),
         status: edge.status || "active",
       };
@@ -2537,9 +3397,9 @@ function clamp(value, min, max) {
 }
 
 function resetView(graphKey = state.memoryGraph) {
-  state.views[graphKey] = { x: -110, y: -10, scale: 0.9 };
+  state.views[graphKey] = { x: -170, y: -70, scale: 1.16 };
   if (graphKey === "error") {
-    state.views[graphKey] = { x: -120, y: -10, scale: 0.9 };
+    state.views[graphKey] = { x: -178, y: -62, scale: 1.14 };
   }
 }
 
@@ -2568,18 +3428,26 @@ function edgeGeometry(source, target, curve = 0) {
   const dx = target.x - source.x;
   const dy = target.y - source.y;
   const distance = Math.max(Math.hypot(dx, dy), 1);
+  const unitX = dx / distance;
+  const unitY = dy / distance;
+  const sourceRadius = visualNodeSize(source) / 2 + 2;
+  const targetRadius = visualNodeSize(target) / 2 + 2;
+  const startX = source.x + unitX * sourceRadius;
+  const startY = source.y + unitY * sourceRadius;
+  const endX = target.x - unitX * targetRadius;
+  const endY = target.y - unitY * targetRadius;
 
   const normalX = -dy / distance;
   const normalY = dx / distance;
-  const offset = clamp(distance * 0.18, 40, 120) * curve;
-  const controlX = (source.x + target.x) / 2 + normalX * offset;
-  const controlY = (source.y + target.y) / 2 + normalY * offset;
+  const offset = clamp(distance * 0.14, 18, 64) * curve;
+  const controlX = (startX + endX) / 2 + normalX * offset;
+  const controlY = (startY + endY) / 2 + normalY * offset;
 
-  const labelX = 0.25 * source.x + 0.5 * controlX + 0.25 * target.x;
-  const labelY = 0.25 * source.y + 0.5 * controlY + 0.25 * target.y;
+  const labelX = 0.25 * startX + 0.5 * controlX + 0.25 * endX;
+  const labelY = 0.25 * startY + 0.5 * controlY + 0.25 * endY;
 
   return {
-    path: `M ${source.x} ${source.y} Q ${controlX} ${controlY} ${target.x} ${target.y}`,
+    path: `M ${startX} ${startY} Q ${controlX} ${controlY} ${endX} ${endY}`,
     labelX,
     labelY,
   };
@@ -2588,6 +3456,7 @@ function edgeGeometry(source, target, curve = 0) {
 function renderGraphEdges(graph, highlightNode) {
   const edgeIds = highlightNode ? connectedEdgeIds(graph, highlightNode.id) : new Set();
   const activeNodeIds = highlightNode ? connectedNodeIds(graph, highlightNode.id) : null;
+  const graphKey = graph.accent === "error" ? "error" : "knowledge";
 
   return graph.edges
     .map((edge) => {
@@ -2597,23 +3466,34 @@ function renderGraphEdges(graph, highlightNode) {
         return "";
       }
 
-      const geometry = edgeGeometry(source, target, edge.curve);
-      const isActive = edgeIds.has(edge.id);
-      const isMuted = activeNodeIds && !isActive;
-      const strokeWidth = (edge.strength || 0.35) > 0.75 ? 3.4 : (edge.strength || 0.35) > 0.55 ? 2.6 : 1.9;
+        const geometry = edgeGeometry(source, target, edge.curve);
+        const isActive = edgeIds.has(edge.id);
+        const isMuted = activeNodeIds && !isActive;
+        const strokeWidth = (edge.strength || 0.35) > 0.75 ? 3.4 : (edge.strength || 0.35) > 0.55 ? 2.6 : 1.9;
+        const tone = graphRelationTone(graphKey, edge.relations?.[0] || edge.label);
 
-      return `
-        <path
-          class="graph-edge${isActive ? " is-active" : ""}${isMuted ? " is-muted" : ""}${edge.status === "candidate" ? " is-candidate" : ""}"
-          d="${geometry.path}"
-          style="stroke-width:${strokeWidth}px"
-        ></path>
-        <text
-          class="graph-edge-label${isActive ? " is-active" : ""}${isMuted ? " is-muted" : ""}${edge.status === "candidate" ? " is-candidate" : ""}"
-          x="${geometry.labelX}"
-          y="${geometry.labelY}"
-        >${edge.label}</text>
-      `;
+        const labelMarkup = isActive
+          ? `
+          <path
+            class="graph-edge graph-edge--${graph.accent} graph-edge--${tone}${isActive ? " is-active" : ""}${isMuted ? " is-muted" : ""}${edge.status === "candidate" ? " is-candidate" : ""}"
+            d="${geometry.path}"
+            style="stroke-width:${strokeWidth}px"
+          ></path>
+          <text
+            class="graph-edge-label graph-edge-label--${graph.accent} graph-edge-label--${tone}${isActive ? " is-active" : ""}${isMuted ? " is-muted" : ""}${edge.status === "candidate" ? " is-candidate" : ""}"
+            x="${geometry.labelX}"
+            y="${geometry.labelY}"
+          >${edge.label}</text>
+        `
+          : `
+          <path
+            class="graph-edge graph-edge--${graph.accent} graph-edge--${tone}${isActive ? " is-active" : ""}${isMuted ? " is-muted" : ""}${edge.status === "candidate" ? " is-candidate" : ""}"
+            d="${geometry.path}"
+            style="stroke-width:${strokeWidth}px"
+          ></path>
+        `;
+
+        return labelMarkup;
     })
     .join("");
 }
@@ -2626,14 +3506,18 @@ function renderGraphNodes(graph, highlightNode, selectedNode) {
       const isActive = highlightNode?.id === node.id;
       const isSelected = selectedNode?.id === node.id;
       const isMuted = activeNodeIds && !activeNodeIds.has(node.id);
+      const isLinked = activeNodeIds && !isActive && !isMuted;
+      const coreSize = visualNodeSize(node);
+      const anchor = graphNodeAnchor(node);
 
       return `
-        <button
-          class="graph-node graph-node--${graph.accent}${isActive ? " is-active" : ""}${isSelected ? " is-selected" : ""}${isMuted ? " is-muted" : ""}${node.status === "candidate" ? " is-candidate" : ""}${node.isFocus ? " is-focus" : ""}"
-          type="button"
-          data-node-id="${node.id}"
-          style="left:${node.x}px; top:${node.y}px; width:${node.size}px; height:${node.size}px;"
+          <button
+            class="graph-node graph-node--${graph.accent} graph-node--anchor-${anchor}${isActive ? " is-active" : ""}${isSelected ? " is-selected" : ""}${isLinked ? " is-linked" : ""}${isMuted ? " is-muted" : ""}${node.status === "candidate" ? " is-candidate" : ""}${node.isFocus ? " is-focus" : ""}"
+            type="button"
+            data-node-id="${node.id}"
+            style="left:${node.x}px; top:${node.y}px; width:${coreSize}px; height:${coreSize}px;"
         >
+          <span class="graph-node__core" aria-hidden="true"></span>
           <span class="graph-node__title">${node.label}</span>
           <span class="graph-node__badge">${node.badge}</span>
         </button>
@@ -2643,19 +3527,21 @@ function renderGraphNodes(graph, highlightNode, selectedNode) {
 }
 
 function renderRelationList(graph, nodeId) {
+  const graphKey = graph.accent === "error" ? "error" : "knowledge";
   return graph.edges
     .filter((edge) => edge.source === nodeId || edge.target === nodeId)
     .map((edge) => {
       const peerId = edge.source === nodeId ? edge.target : edge.source;
       const peer = graph.nodes.find((item) => item.id === peerId);
+      const tone = graphRelationTone(graphKey, edge.relations?.[0] || edge.label);
       return `
-        <li class="detail-list__item">
-          <span class="detail-list__label">${edge.label}</span>
-          <strong>${peer ? peer.label : "未命名节点"}</strong>
-        </li>
-      `;
-    })
-    .join("");
+          <li class="detail-list__item detail-list__item--relation">
+            <span class="detail-list__label detail-list__label--${tone}">${edge.label}</span>
+            <strong>${peer ? peer.label : "未命名节点"}</strong>
+          </li>
+        `;
+      })
+      .join("");
 }
 
 function renderMetrics(metrics) {
@@ -2670,58 +3556,127 @@ function renderMetrics(metrics) {
 }
 
 function renderTextList(items) {
-  return items.map((item) => `<li>${item}</li>`).join("");
+  return items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+}
+
+function detailActionTips(graphKey, node) {
+  if (graphKey === "error") {
+    const items = [];
+    if (node.repeated || node.errorCount >= 3) {
+      items.push("先按纠正建议完整重写一遍，避免只看不改。");
+    }
+    items.push("把近 15 天代表样本放在一起看，确认是不是同一种错因。");
+    items.push("修正后回到知识点图，检查上游定义或方法是否也需要补。");
+    return items;
+  }
+
+  const items = [];
+  if (node.mastery < 0.5) {
+    items.push("先沿着前置关系回补基础节点，再回到当前知识点。");
+  }
+  items.push("把当前节点与相似知识点并排复盘，避免模板混用。");
+  items.push("结合近 15 天代表样本做一次专项练习或重写。");
+  return items;
+}
+
+function renderEmptyDetailPanel(graph) {
+  const graphKey = graph.accent === "error" ? "error" : "knowledge";
+  const theme = graphTheme(graphKey);
+  return `
+    <div class="detail-empty detail-empty--rich detail-empty--${graph.accent}">
+      <span class="detail-empty__icon">${graphKey === "error" ? "!" : "◎"}</span>
+      <strong>${theme.emptyTitle}</strong>
+      <p>${theme.emptyText}</p>
+      <div class="detail-empty__guide">
+        <div class="detail-empty__guide-item">
+          <span>浏览</span>
+          <strong>拖动画布或滚轮缩放</strong>
+        </div>
+        <div class="detail-empty__guide-item">
+          <span>查看</span>
+          <strong>点击节点看详情与关系</strong>
+        </div>
+        <div class="detail-empty__guide-item">
+          <span>判断</span>
+          <strong>${graphKey === "error" ? "优先处理重复出现的错误" : "优先补前置与高风险知识点"}</strong>
+        </div>
+      </div>
+      <div class="detail-empty__legend">
+        ${renderLegend(graph)}
+      </div>
+    </div>
+  `;
 }
 
 function renderDetailPanel(graph, node) {
   if (!node) {
-    return `
-      <div class="detail-empty">
-        <strong>点击节点查看详情</strong>
-        <p>支持拖动节点、拖动画布和滚轮缩放。</p>
-      </div>
-    `;
+    return renderEmptyDetailPanel(graph);
   }
 
+  const graphKey = graph.accent === "error" ? "error" : "knowledge";
+  const theme = graphTheme(graphKey);
   const relations = renderRelationList(graph, node.id);
+  const actions = detailActionTips(graphKey, node)
+    .map((item, index) => `
+      <div class="detail-action">
+        <span class="detail-action__index">0${index + 1}</span>
+        <p>${escapeHtml(item)}</p>
+      </div>
+    `)
+    .join("");
 
   return `
-    <div class="detail-header">
-      <div>
-        <h3>${node.label}</h3>
-        <p>${node.summary}</p>
+    <div class="detail-hero detail-hero--${graph.accent}">
+      <div class="detail-header">
+        <div>
+          <span class="detail-kicker">${theme.kicker}</span>
+          <h3>${node.label}</h3>
+          <p>${node.summary}</p>
+        </div>
+        <div class="detail-header__actions">
+          <button
+            class="detail-delete"
+            type="button"
+            data-memory-action="delete-node"
+            ${state.memoryDeleting ? "disabled" : ""}
+          >${state.memoryDeleting ? "删除中..." : "删除"}</button>
+          <button class="detail-close" type="button" data-memory-action="clear-selection">×</button>
+        </div>
       </div>
-      <div class="detail-header__actions">
-        <button
-          class="detail-delete"
-          type="button"
-          data-memory-action="delete-node"
-          ${state.memoryDeleting ? "disabled" : ""}
-        >${state.memoryDeleting ? "删除中..." : "删除"}</button>
-        <button class="detail-close" type="button" data-memory-action="clear-selection">×</button>
+      <div class="detail-tags">
+        <span class="detail-tag detail-tag--signal">${node.badge}</span>
+        <span class="detail-tag">${node.isFocus ? "焦点节点" : node.status === "candidate" ? "候选节点" : "活跃节点"}</span>
+        <span class="detail-tag">${node.lastSeen ? `最近更新 ${formatGraphDate(node.lastSeen)}` : "最近更新 --"}</span>
       </div>
-    </div>
-    <div class="detail-tags">
-      <span class="detail-tag">${node.status === "candidate" ? "候选节点" : "活跃节点"}</span>
-      <span class="detail-tag">${node.lastSeen ? `最近更新 ${formatGraphDate(node.lastSeen)}` : "最近更新 --"}</span>
     </div>
     <section class="metric-grid">${renderMetrics(node.metrics)}</section>
+    <section class="detail-section">
+      <h4>核心判断</h4>
+      <div class="detail-summary-card">
+        <strong>${graphKey === "error" ? "优先处理这个错误模式" : "建议优先围绕这个知识点展开复盘"}</strong>
+        <p>${escapeHtml(node.summary)}</p>
+      </div>
+    </section>
+    <section class="detail-section">
+      <h4>${theme.actionsTitle}</h4>
+      <div class="detail-action-list">${actions}</div>
+    </section>
     <section class="detail-section">
       <h4>关键观察</h4>
       <ul class="detail-list">${renderTextList(node.highlights)}</ul>
     </section>
     ${graph.accent === "error" ? `
       <section class="detail-section">
-        <h4>经典例题</h4>
+        <h4>${theme.classicTitle}</h4>
         <div class="detail-example-card">${escapeHtml(node.classicExample || "暂无经典例题")}</div>
       </section>
     ` : ""}
     <section class="detail-section">
-      <h4>连接关系</h4>
+      <h4>${theme.relationTitle}</h4>
       <ul class="detail-list">${relations || '<li>当前没有连接边。</li>'}</ul>
     </section>
     <section class="detail-section">
-      <h4>近 15 天代表样本</h4>
+      <h4>${theme.sampleTitle}</h4>
       <ul class="detail-list">${renderTextList(node.examples)}</ul>
     </section>
   `;
@@ -2769,13 +3724,21 @@ async function deleteSelectedMemoryNode(root) {
 }
 
 function renderLegend(graph) {
-  return graph.legend.map((label) => `<span class="legend-chip">${label}</span>`).join("");
+  const graphKey = graph.accent === "error" ? "error" : "knowledge";
+  return graphLegendItems(graphKey)
+    .map((item) => `
+      <span class="legend-chip legend-chip--${graph.accent} legend-chip--${item.tone}">
+        <span class="legend-chip__dot"></span>
+        <span>${item.label}</span>
+      </span>
+    `)
+    .join("");
 }
 
 function renderGraphStats(graph) {
   const stats = graph.stats || { active: 0, candidate: 0, archived: 0 };
   return `
-    <div class="graph-stats">
+    <div class="graph-stats graph-stats--compact">
       <span class="graph-stat"><strong>${stats.active || 0}</strong><span>活跃</span></span>
       <span class="graph-stat"><strong>${stats.candidate || 0}</strong><span>候选</span></span>
       <span class="graph-stat"><strong>${stats.archived || 0}</strong><span>归档</span></span>
@@ -2786,14 +3749,18 @@ function renderGraphStats(graph) {
 function renderMemoryPage(root) {
   const fullGraph = getGraph();
   const graph = getDisplayGraph();
+  const graphKey = state.memoryGraph;
+  const theme = graphTheme(graphKey);
   const view = getView();
   const selectedNode = getSelectedNode();
   const highlightNode = getHighlightNode();
+  const focusCount = Array.isArray(fullGraph.focusIds) ? fullGraph.focusIds.length : 0;
   const isPanning = state.interaction?.type === "pan";
+  const updatedDisplay = fullGraph.updatedAt
+    ? new Date(fullGraph.updatedAt).toLocaleString("zh-CN", { hour12: false })
+    : "等待同步";
   const updatedLabel = fullGraph.updatedAt
-    ? `已连接真实图谱 · 更新于 ${new Date(fullGraph.updatedAt).toLocaleString("zh-CN", {
-        hour12: false,
-      })}`
+    ? `已连接真实图谱 · 更新于 ${updatedDisplay}`
     : state.memoryLoaded
       ? "已连接真实图谱"
       : "正在加载真实图谱...";
@@ -2802,45 +3769,74 @@ function renderMemoryPage(root) {
     : state.memoryLoading && !state.memoryLoaded
       ? "正在同步知识图谱..."
       : `${updatedLabel} · ${state.memoryView === "focus" ? "只看最近更新和核心关联" : "查看全部活跃节点"}`;
+  const summaryText = selectedNode
+    ? `${selectedNode.label} 当前处于${selectedNode.isFocus ? "焦点" : selectedNode.status === "candidate" ? "候选" : "活跃"}层，建议先看右侧详情，再沿着相连节点继续扩展。`
+    : theme.summary;
   const emptyState = !graph.nodes.length
-    ? `
-      <div class="detail-empty">
-        <strong>${state.memoryLoading ? "正在同步图谱" : "还没有图谱数据"}</strong>
-        <p>${state.memoryLoading ? "正在读取最新知识点图和错题图。" : "等用户产生学习记录后，这里会自动出现真实图谱节点。"}</p>
+      ? `
+        <div class="detail-empty">
+          <strong>${state.memoryLoading ? "正在同步图谱" : "还没有图谱数据"}</strong>
+          <p>${state.memoryLoading ? "正在读取最新知识点图和错题图。" : "等用户产生学习记录后，这里会自动出现真实图谱节点。"}</p>
       </div>
     `
     : "";
 
   root.innerHTML = `
-    <section class="page-head page-head--memory">
-      <div>
-        <h2>${PAGE_META.memory.title}</h2>
-        ${PAGE_META.memory.description ? `<p>${PAGE_META.memory.description}</p>` : ""}
-      </div>
-    </section>
-    <section class="panel graph-workspace">
-      <div class="graph-toolbar">
-        <div class="toolbar-left">
-          <div class="segmented">
-            <button class="segment${state.memoryGraph === "knowledge" ? " active" : ""}" type="button" data-graph-key="knowledge">知识点图</button>
-            <button class="segment${state.memoryGraph === "error" ? " active" : ""}" type="button" data-graph-key="error">错题图</button>
-          </div>
-          <div class="segmented">
-            <button class="segment${state.memoryView === "focus" ? " active" : ""}" type="button" data-view-key="focus">焦点</button>
-            <button class="segment${state.memoryView === "total" ? " active" : ""}" type="button" data-view-key="total">总览</button>
-          </div>
-          <div class="graph-hint">${toolbarHint}</div>
+      <section class="page-head page-head--memory">
+        <div>
+          <h2>${PAGE_META.memory.title}</h2>
+          ${PAGE_META.memory.description ? `<p>${PAGE_META.memory.description}</p>` : ""}
         </div>
-        <div class="toolbar-actions">
-          ${renderGraphStats(fullGraph)}
-          <button class="icon-button" type="button" data-memory-action="zoom-out">－</button>
-          <button class="icon-button" type="button" data-memory-action="zoom-in">＋</button>
-          <button class="ghost-button" type="button" data-memory-action="reset-view">重置视图</button>
+      </section>
+      <section class="panel graph-workspace graph-workspace--${fullGraph.accent}">
+        <div class="graph-summary">
+          <div class="graph-summary__main">
+            <span class="page-kicker">${theme.kicker}</span>
+            <h3>${theme.title}</h3>
+            <p>${escapeHtml(summaryText)}</p>
+          </div>
+          <div class="graph-summary__stats">
+            <div class="graph-summary__tile">
+              <span>当前视图</span>
+              <strong>${escapeHtml(graph.title)} · ${escapeHtml(graphViewLabel(state.memoryView))}</strong>
+            </div>
+            <div class="graph-summary__tile">
+              <span>最近同步</span>
+              <strong>${escapeHtml(updatedDisplay)}</strong>
+            </div>
+            <div class="graph-summary__tile">
+              <span>焦点节点</span>
+              <strong>${escapeHtml(String(focusCount))}</strong>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="graph-board">
-        <div class="graph-stage">
-          <div class="graph-viewport${isPanning ? " is-panning" : ""}" data-viewport>
+        <div class="graph-toolbar">
+          <div class="toolbar-left toolbar-left--memory">
+            <div class="segmented">
+              <button class="segment${state.memoryGraph === "knowledge" ? " active" : ""}" type="button" data-graph-key="knowledge">知识点图</button>
+              <button class="segment${state.memoryGraph === "error" ? " active" : ""}" type="button" data-graph-key="error">错题图</button>
+            </div>
+            <div class="segmented">
+              <button class="segment${state.memoryView === "focus" ? " active" : ""}" type="button" data-view-key="focus">焦点</button>
+              <button class="segment${state.memoryView === "total" ? " active" : ""}" type="button" data-view-key="total">总览</button>
+            </div>
+            <div class="graph-hint-card">
+              <span class="graph-hint-card__label">图谱提示</span>
+              <p>${toolbarHint}</p>
+            </div>
+          </div>
+          <div class="toolbar-actions toolbar-actions--memory">
+            ${renderGraphStats(fullGraph)}
+            <div class="graph-control-stack">
+              <button class="icon-button" type="button" data-memory-action="zoom-out">－</button>
+              <button class="icon-button" type="button" data-memory-action="zoom-in">＋</button>
+              <button class="ghost-button" type="button" data-memory-action="reset-view">重置视图</button>
+            </div>
+          </div>
+        </div>
+        <div class="graph-board">
+          <div class="graph-stage">
+            <div class="graph-viewport${isPanning ? " is-panning" : ""}" data-viewport>
             <div class="graph-world" style="transform: translate(${view.x}px, ${view.y}px) scale(${view.scale});">
               <svg class="graph-svg" viewBox="0 0 ${GRAPH_STAGE.width} ${GRAPH_STAGE.height}" aria-hidden="true">
                 ${renderGraphEdges(graph, highlightNode)}
@@ -2848,19 +3844,22 @@ function renderMemoryPage(root) {
               <div class="graph-node-layer">
                 ${renderGraphNodes(graph, highlightNode, selectedNode)}
               </div>
-            </div>
-            ${emptyState}
-            <div class="graph-overlay">
-              <div class="graph-overlay__label">${graph.title} · ${graphViewLabel(state.memoryView)}视图</div>
-              <div class="graph-overlay__legend">${renderLegend(graph)}</div>
+              </div>
+              ${emptyState}
+              <div class="graph-overlay">
+                <div class="graph-overlay__header">
+                  <span class="graph-overlay__mode">${graph.title}</span>
+                  <span class="graph-overlay__sub">${selectedNode ? `当前选中 ${selectedNode.label}` : theme.overlayHint}</span>
+                </div>
+                <div class="graph-overlay__legend">${renderLegend(graph)}</div>
+              </div>
             </div>
           </div>
+          <aside class="panel detail-panel detail-panel--${fullGraph.accent}">
+            ${renderDetailPanel(graph, selectedNode)}
+          </aside>
         </div>
-        <aside class="panel detail-panel">
-          ${renderDetailPanel(graph, selectedNode)}
-        </aside>
-      </div>
-    </section>
+      </section>
   `;
 }
 
