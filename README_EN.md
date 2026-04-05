@@ -331,3 +331,11 @@ flowchart LR
 ## 📄 License
 
 This project is released under the [MIT License](LICENSE).
+
+
+## 🙏 Acknowledgements
+
+MathClaw draws inspiration from the following open-source projects, with thanks to their authors and communities:
+
+- [HKUDS/nanobot](https://github.com/HKUDS/nanobot)
+- [ymx10086/ResearchClaw](https://github.com/ymx10086/ResearchClaw)
