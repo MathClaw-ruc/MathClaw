@@ -171,7 +171,7 @@ MATHCLAW_CONSOLE_WORKSPACE=../workspace MATHCLAW_CONSOLE_PORT=6008 python serve.
 
 ---
 
-## ?? Feature Preview
+## 📸 Feature Preview
 
 <table>
   <tr>

@@ -173,20 +173,20 @@ MATHCLAW_CONSOLE_WORKSPACE=../workspace MATHCLAW_CONSOLE_PORT=6008 python serve.
 
 ---
 
-## ?? ????
+## 📸 功能预览
 
 <table>
   <tr>
-    <td align="center" width="50%"><b>?????</b><br /><img src="docs/screenshots/workspace.png" alt="?????" width="100%" /></td>
-    <td align="center" width="50%"><b>????</b><br /><img src="docs/screenshots/study_plan.png" alt="????" width="100%" /></td>
+    <td align="center" width="50%"><b>解题工作台</b><br /><img src="docs/screenshots/workspace.png" alt="解题工作台" width="100%" /></td>
+    <td align="center" width="50%"><b>学习计划</b><br /><img src="docs/screenshots/study_plan.png" alt="学习计划" width="100%" /></td>
   </tr>
   <tr>
-    <td align="center" width="50%"><b>????</b><br /><img src="docs/screenshots/runtime_status.png" alt="????" width="100%" /></td>
-    <td align="center" width="50%"><b>???????</b><br /><img src="docs/screenshots/heartbeat.png" alt="???????" width="100%" /></td>
+    <td align="center" width="50%"><b>运行状态</b><br /><img src="docs/screenshots/runtime_status.png" alt="运行状态" width="100%" /></td>
+    <td align="center" width="50%"><b>心跳与自动任务</b><br /><img src="docs/screenshots/heartbeat.png" alt="心跳与自动任务" width="100%" /></td>
   </tr>
   <tr>
-    <td align="center" width="50%"><b>????</b><br /><img src="docs/screenshots/knowledge_graph.png" alt="????" width="100%" /></td>
-    <td align="center" width="50%"><b>????</b><br /><img src="docs/screenshots/error_graph.png" alt="????" width="100%" /></td>
+    <td align="center" width="50%"><b>知识图谱</b><br /><img src="docs/screenshots/knowledge_graph.png" alt="知识图谱" width="100%" /></td>
+    <td align="center" width="50%"><b>错题图谱</b><br /><img src="docs/screenshots/error_graph.png" alt="错题图谱" width="100%" /></td>
   </tr>
   <tr>
     <td align="center" colspan="2"><b>Skills</b><br /><img src="docs/screenshots/skills.png" alt="Skills" width="86%" /></td>
