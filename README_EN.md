@@ -171,21 +171,25 @@ MATHCLAW_CONSOLE_WORKSPACE=../workspace MATHCLAW_CONSOLE_PORT=6008 python serve.
 
 ---
 
-## 📸 Feature Preview
+## ?? Feature Preview
 
-<!-- Replace with actual screenshots -->
-
-| Chat Workspace | Study Plan |
-| :---: | :---: |
-| ![Chat Workspace](docs/screenshots/workspace.png) | ![Study Plan](docs/screenshots/study_plan.png) |
-
-| Knowledge Graph | Error Graph |
-| :---: | :---: |
-| ![Knowledge Graph](docs/screenshots/knowledge_graph.png) | ![Error Graph](docs/screenshots/error_graph.png) |
-
-| Runtime Status | Heartbeat |
-| :---: | :---: |
-| ![Runtime Status](docs/screenshots/runtime_status.png) | ![Heartbeat](docs/screenshots/heartbeat.png) |
+<table>
+  <tr>
+    <td align="center" width="50%"><b>Chat Workspace</b><br /><img src="docs/screenshots/workspace.png" alt="Chat Workspace" width="100%" /></td>
+    <td align="center" width="50%"><b>Study Plan</b><br /><img src="docs/screenshots/study_plan.png" alt="Study Plan" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><b>Runtime Status</b><br /><img src="docs/screenshots/runtime_status.png" alt="Runtime Status" width="100%" /></td>
+    <td align="center" width="50%"><b>Heartbeat & Auto Tasks</b><br /><img src="docs/screenshots/heartbeat.png" alt="Heartbeat & Auto Tasks" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><b>Knowledge Graph</b><br /><img src="docs/screenshots/knowledge_graph.png" alt="Knowledge Graph" width="100%" /></td>
+    <td align="center" width="50%"><b>Error Graph</b><br /><img src="docs/screenshots/error_graph.png" alt="Error Graph" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><b>Skills</b><br /><img src="docs/screenshots/skills.png" alt="Skills" width="86%" /></td>
+  </tr>
+</table>
 
 ---
 
