@@ -1,33 +1,36 @@
-<div align="center">
+<p align="center">
+  <br>
+  <img src="logo.png" alt="MathClaw Logo" width="180">
+  <br>
+</p>
 
-<img src="logo.png" alt="MathClaw Logo" width="148" />
+<h1 align="center">MathClaw</h1>
 
-# MathClaw
+<p align="center">
+  A multi-channel AI learning assistant for junior and senior high school mathematics
+</p>
 
-**A multi-channel AI learning assistant for junior and senior high school mathematics**
+<p align="center">
+  <a href="README.md">中文</a> &nbsp;｜&nbsp; <a href="README_EN.md">English</a> &nbsp;｜&nbsp; <a href="COMMUNICATION.md">💬 Communication</a>
+</p>
 
-MathClaw combines a tutoring workspace, study planning, memory graphs, scheduled summaries, and channel integrations in one workflow.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square">
+  <img src="https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square">
+  <img src="https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square">
+  <img src="https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square">
+</p>
 
-[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
-[![Console](https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square)](#console-modules)
-[![Channels](https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square)](#channels-and-integrations)
-[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#core-capabilities)
-[![Heartbeat](https://img.shields.io/badge/Heartbeat-Summaries%20%26%20Cron-FF8A3D?style=flat-square)](#learning-memory-and-automation)
-[![MCP](https://img.shields.io/badge/MCP-Tools%20%26%20Providers-7A5AF8?style=flat-square)](#providers-and-tools)
-[![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
+> ⭐ If you like this project, please click the "Star" button in the upper right corner to support us!
 
-[**中文**](README.md) · [**English**](README_EN.md) · [**🚀 Quick Start**](#quick-start) · [**🧩 Core Modules**](#core-modules) · [**🖥️ Console Modules**](#console-modules) · [**📡 Channels**](#channels-and-integrations) · [**🛠️ Providers & Tools**](#providers-and-tools) · [**💬 Communication**](COMMUNICATION.md)
+## 📝 Introduction
 
-**🧠 Math Tutoring Workspace • 🗓️ Study Planning & Summaries • 🕸️ Knowledge / Error Graphs**  
-**📡 Multi-Channel Gateway • ⏰ Heartbeat + Cron • 🛠️ MCP / Tools / Skills**
+MathClaw is a multi-channel AI learning system for junior and senior high school mathematics, built around the following core pipeline:
 
-</div>
-
----
-
-## ?? Project Overview
-
-MathClaw is a multi-channel AI learning system for junior and senior high school mathematics.
+```
+Multi-channel intake → Tutoring workspace → Weakness diagnosis → Memory consolidation → Graphs / Plans / Summaries
+```
 
 Core components include:
 
@@ -36,65 +39,51 @@ Core components include:
 - a learning workflow centered on **study plans, knowledge graphs, error graphs, and scheduled summaries**
 - a **multi-channel gateway** for WeCom, QQ, Feishu, Telegram, Slack, WhatsApp, Email, Matrix, Discord, and more
 
-## ?? Core Capabilities
-
-| Module | Current capability | Main code |
-| --- | --- | --- |
-| 🧠 Chat Workspace | Single-thread tutoring workspace with text, image, and PDF upload; Markdown/table rendering | `console/main.js` · `console/serve.py` |
-| 🗓️ Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `mathclaw/agent/memory.py` · `workspace/cron/jobs.json` |
-| 🕸️ Memory Graphs | Knowledge graph + error graph, focus/overview modes, node details, node deletion | `workspace/memory/graphs/*` · `console/main.js` |
-| ⏰ Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `mathclaw/cron/service.py` · `mathclaw/heartbeat/service.py` |
-| 📡 Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `mathclaw/channels/manager.py` · `mathclaw/cli/commands.py` |
-| 🛠️ Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `mathclaw/providers/registry.py` · `mathclaw/agent/loop.py` |
-| ✨ Custom Output Skills | Optional follow-up output boxes after attachment replies | `mathclaw/agent/custom_output_skills.py` |
-| 🧾 Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `mathclaw/session/manager.py` · `mathclaw/agent/memory.py` |
-
 ## ✨ Key Features
 
-<table>
-  <tr>
-    <td width="25%">
-      <strong>Math-first tutoring workflow</strong><br/>
-      Built for secondary-school mathematics, with guided explanations, weakness analysis, and correction-oriented feedback.
-    </td>
-    <td width="25%">
-      <strong>Student + operator console</strong><br/>
-      One console includes both the student workspace and the management surfaces for runtime, channels, models, and heartbeat.
-    </td>
-    <td width="25%">
-      <strong>Unified channel gateway</strong><br/>
-      Connect the same MathClaw agent to multiple messaging platforms and route everything through one backend.
-    </td>
-    <td width="25%">
-      <strong>Extensible toolchain</strong><br/>
-      Filesystem, web, shell, cron, MCP, and channel plugins are all part of the current runtime.
-    </td>
-  </tr>
-</table>
+- **📐 Math-first tutoring workflow**: Built for secondary-school mathematics, with guided explanations, weakness analysis, and correction-oriented feedback.
+- **🖼️ Multi-modal input**: Supports text, image, screenshot, and PDF input for real-world problem-solving scenarios.
+- **🕸️ Structured learning memory**: Automatically builds knowledge graphs and error graphs for continuous learning state tracking.
+- **🗓️ Study plans & auto-summaries**: Daily memory, weekly reports, and tomorrow suggestions driven by heartbeat + cron.
+- **📡 Unified multi-channel gateway**: Connect the same agent to WeCom, QQ, Feishu, and more, with unified message routing.
+- **🖥️ Student + operator console**: Student workspace and operations management in one console.
+- **🔌 Extensible toolchain**: Filesystem, web, shell, cron, MCP services, and channel plugins are all extensible.
 
-## 🖥️ Console Modules
+## 🏗️ Architecture
 
-| Page | Audience | Primary role |
-| --- | --- | --- |
-| 🧠 Chat Workspace | Student | Single-thread tutoring workspace with attachment upload and rich Markdown answers |
-| 🗓️ Study Plan | Student | Daily status, weekly plan, tomorrow suggestions, focus topics, practice load |
-| 🕸️ Memory | Student / Teacher | Knowledge graph, error graph, node details, relation browsing |
-| 📊 Runtime Status | Operator | Health summary, model chain, tool abilities, active channels, attachment pipeline |
-| 📡 Channels | Operator | Per-channel enablement, daily message count, active sessions, last activity |
-| ❤️ Heartbeat | Operator | Scheduled summaries, heartbeat rhythm, latest result, troubleshooting order |
-| ✨ Skills | Operator | Manage custom output skills used after attachment replies |
-| 🛠️ MCP / Agent Config / Models | Operator | View current tools, agent boundaries, and model chain |
+```mermaid
+flowchart LR
+    A["Student / Teacher / Operator"] --> B["Channels<br/>WeCom / QQ / Feishu / ..."]
+    B --> C["mathclaw gateway"]
+    C --> D["MathClaw AgentLoop"]
+
+    D --> E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]
+    D --> F["Tools<br/>Web · Filesystem · Shell · Cron · MCP"]
+    D --> G["Sessions<br/>JSONL conversation history"]
+    D --> H["Memory Runtime<br/>Daily / Weekly / Graphs"]
+    D --> I["Heartbeat / Cron"]
+
+    H --> J["Study Plan page"]
+    H --> K["Memory Graph page"]
+    I --> L["Heartbeat page"]
+    C --> M["MathClaw Console"]
+```
+
+## 📁 Repository Structure
+
+```text
+.
+├── mathclaw/                 # Core runtime: agent, channels, providers, memory, cron, heartbeat
+├── console/                 # MathClaw console: static frontend shell + serve.py API layer
+├── workspace/               # Repo-owned MathClaw persona, plans, and templates
+├── bridge/                  # WhatsApp bridge (Node 20+)
+├── docs/                    # Docs such as the channel plugin guide
+└── tests/                   # Runtime, tool, security, and channel tests
+```
 
 ## 🚀 Quick Start
 
-### 1. Requirements
-
-- Python `3.11+`
-- Linux / macOS / WSL recommended for deployment
-- a usable model API key
-- optional: Node.js `20+` only if you need the WhatsApp bridge
-
-### 2. Install
+### 1. Install
 
 ```bash
 git clone https://github.com/MathClaw-ruc/MathClaw.git
@@ -112,7 +101,7 @@ To enable WeCom support:
 python -m pip install -e ".[wecom]"
 ```
 
-### 3. Initialize config and workspace
+### 2. Initialize config and workspace
 
 ```bash
 mathclaw onboard --workspace ./workspace
@@ -129,7 +118,7 @@ Interactive setup:
 mathclaw onboard --workspace ./workspace --wizard
 ```
 
-### 4. Minimal config example
+### 3. Minimal config example
 
 ```json
 {
@@ -157,67 +146,86 @@ mathclaw onboard --workspace ./workspace --wizard
 }
 ```
 
-### 5. Start the gateway
+### 4. Launch
 
 ```bash
+# Start the gateway (default port 18790)
 mathclaw gateway --workspace ./workspace
-```
 
-Default gateway port: `18790`
-
-### 6. Start the console
-
-```bash
+# Start the console (default address http://127.0.0.1:6006)
 cd console
 MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
+
+# Or talk to the agent from CLI
+mathclaw agent --workspace ./workspace -m "Teach me monotonicity from derivatives"
 ```
 
-When this command runs inside `console/`, `../workspace` points to the repository-level `workspace/` directory.
-
-The console reads `~/.mathclaw/config.json` by default and remains compatible with legacy directory layouts and legacy environment variable naming.
-
-Default console address:
-
-```text
-http://127.0.0.1:6006
-```
-
-To use port `6008`:
+To use a different port:
 
 ```bash
 cd console
 MATHCLAW_CONSOLE_WORKSPACE=../workspace MATHCLAW_CONSOLE_PORT=6008 python serve.py
 ```
-### 7. Talk to the agent from CLI
 
-```bash
-mathclaw agent --workspace ./workspace -m "Teach me monotonicity from derivatives"
-```
+> **Requirements**: Python `3.11+`; Linux / macOS / WSL recommended for deployment; optional Node.js `20+` (only for WhatsApp bridge).
+
+---
+
+## 📸 Feature Preview
+
+<!-- Replace with actual screenshots -->
+
+| Chat Workspace | Study Plan |
+| :---: | :---: |
+| ![Chat Workspace](docs/screenshots/workspace.png) | ![Study Plan](docs/screenshots/study_plan.png) |
+
+| Knowledge Graph | Error Graph |
+| :---: | :---: |
+| ![Knowledge Graph](docs/screenshots/knowledge_graph.png) | ![Error Graph](docs/screenshots/error_graph.png) |
+
+| Runtime Status | Heartbeat |
+| :---: | :---: |
+| ![Runtime Status](docs/screenshots/runtime_status.png) | ![Heartbeat](docs/screenshots/heartbeat.png) |
+
+---
+
+## 🧩 Core Capabilities
+
+| Module | Current capability | Main code |
+| --- | --- | --- |
+| 🧠 Chat Workspace | Single-thread tutoring workspace with text, image, and PDF upload; Markdown/table rendering | `console/main.js` · `console/serve.py` |
+| 🗓️ Study Plan | Daily status, weekly plan, tomorrow suggestions, focus topics, and correction directions | `mathclaw/agent/memory.py` · `workspace/cron/jobs.json` |
+| 🕸️ Memory Graphs | Knowledge graph + error graph, focus/overview modes, node details, node deletion | `workspace/memory/graphs/*` · `console/main.js` |
+| ⏰ Heartbeat & Summaries | Daily summary, weekly summary, scheduled jobs, `HEARTBEAT.md` wake-up execution | `mathclaw/cron/service.py` · `mathclaw/heartbeat/service.py` |
+| 📡 Multi-channel Gateway | Channel intake, routing, streaming coalescing, outbound retry | `mathclaw/channels/manager.py` · `mathclaw/cli/commands.py` |
+| 🛠️ Models & Tools | Multi-provider routing, Web Search/Web Fetch, filesystem tools, shell, cron, message send-back, MCP, subagents | `mathclaw/providers/registry.py` · `mathclaw/agent/loop.py` |
+| ✨ Custom Output Skills | Optional follow-up output boxes after attachment replies | `mathclaw/agent/custom_output_skills.py` |
+| 🧾 Sessions & Memory | JSONL session persistence, daily memory, weekly summaries, graph snapshots | `mathclaw/session/manager.py` · `mathclaw/agent/memory.py` |
+
+## 🖥️ Console Modules
+
+| Page | Audience | Primary role |
+| --- | --- | --- |
+| 🧠 Chat Workspace | Student | Single-thread tutoring workspace with attachment upload and rich Markdown answers |
+| 🗓️ Study Plan | Student | Daily status, weekly plan, tomorrow suggestions, focus topics, practice load |
+| 🕸️ Memory | Student / Teacher | Knowledge graph, error graph, node details, relation browsing |
+| 📊 Runtime Status | Operator | Health summary, model chain, tool abilities, active channels, attachment pipeline |
+| 📡 Channels | Operator | Per-channel enablement, daily message count, active sessions, last activity |
+| ❤️ Heartbeat | Operator | Scheduled summaries, heartbeat rhythm, latest result, troubleshooting order |
+| ✨ Skills | Operator | Manage custom output skills used after attachment replies |
+| 🛠️ MCP / Agent Config / Models | Operator | View current tools, agent boundaries, and model chain |
 
 ## 📡 Channels and Integrations
 
-### 📮 Built-in channels
+### Built-in channels
 
-Built-in channels include:
+WeCom, QQ, Feishu, Telegram, Slack, Email, Discord, Matrix, Weixin, DingTalk, WhatsApp, MoChat
 
-- WeCom
-- QQ
-- Feishu
-- Telegram
-- Slack
-- Email
-- Discord
-- Matrix
-- Weixin
-- DingTalk
-- WhatsApp
-- MoChat
+External channel plugins are supported via Python entry points. See [docs/CHANNEL_PLUGIN_GUIDE.md](docs/CHANNEL_PLUGIN_GUIDE.md).
 
-It also supports external channel plugins via Python entry points. See [docs/CHANNEL_PLUGIN_GUIDE.md](docs/CHANNEL_PLUGIN_GUIDE.md).
+### Runtime override examples
 
-### 🧪 Runtime override examples
-
-WeCom:
+<details><summary><b>WeCom</b></summary>
 
 ```bash
 mathclaw gateway --workspace ./workspace \
@@ -227,7 +235,9 @@ mathclaw gateway --workspace ./workspace \
   --wecom-allow-from "*"
 ```
 
-QQ:
+</details>
+
+<details><summary><b>QQ</b></summary>
 
 ```bash
 mathclaw gateway --workspace ./workspace \
@@ -237,7 +247,9 @@ mathclaw gateway --workspace ./workspace \
   --qq-allow-from "*"
 ```
 
-Feishu:
+</details>
+
+<details><summary><b>Feishu</b></summary>
 
 ```bash
 mathclaw gateway --workspace ./workspace \
@@ -247,45 +259,22 @@ mathclaw gateway --workspace ./workspace \
   --feishu-allow-from "*"
 ```
 
-For channels that require interactive auth:
+</details>
+
+Interactive auth and status:
 
 ```bash
 mathclaw channels login <channel_name>
-```
-
-To inspect channel status:
-
-```bash
 mathclaw channels status
 ```
 
 ## 🛠️ Providers and Tools
 
-### 🤖 Supported providers
+### Supported providers
 
-The current provider registry already includes:
+DashScope, OpenAI, Anthropic, DeepSeek, Gemini, OpenRouter, Azure OpenAI, Zhipu AI, Moonshot, MiniMax, Mistral, Step Fun, Groq, Ollama, vLLM, OpenVINO Model Server, OpenAI Codex, GitHub Copilot, custom OpenAI-compatible endpoints
 
-- DashScope
-- OpenAI
-- Anthropic
-- DeepSeek
-- Gemini
-- OpenRouter
-- Azure OpenAI
-- Zhipu AI
-- Moonshot
-- MiniMax
-- Mistral
-- Step Fun
-- Groq
-- Ollama
-- vLLM
-- OpenVINO Model Server
-- OpenAI Codex
-- GitHub Copilot
-- custom OpenAI-compatible endpoints
-
-### 🧰 Default agent tools
+### Default agent tools
 
 `AgentLoop` currently registers:
 
@@ -309,18 +298,6 @@ What makes this repository distinctive is not just chat. It continuously turns t
 - heartbeat tasks
 - persisted cron schedules
 
-Relevant workspace files:
-
-- `workspace/sessions/*.jsonl`
-- `workspace/memory/daily_conversations/*/events.jsonl`
-- `workspace/memory/daily_memory/*/*`
-- `workspace/memory/weekly_memory/*/*`
-- `workspace/HEARTBEAT.md`
-- `workspace/cron/jobs.json`
-- `workspace/custom_output_skills.json`
-- `workspace/memory/graphs/knowledge_graph.json`
-- `workspace/memory/graphs/error_graph.json`
-
 ### 🗂️ What each history path is for
 
 | Path | Purpose |
@@ -333,7 +310,7 @@ Relevant workspace files:
 | `workspace/cron/jobs.json` | Scheduled job definitions plus runtime state such as last/next execution and run history |
 | `workspace/HEARTBEAT.md` | Persistent task instructions checked by the heartbeat service |
 
-### 🔄 How the data flows
+### 🔄 Data flow
 
 ```mermaid
 flowchart LR
@@ -346,147 +323,6 @@ flowchart LR
     H["HEARTBEAT.md"] --> I["cron/jobs.json<br/>scheduled task state"]
     I --> J["Heartbeat page<br/>automatic sends / rhythm / troubleshooting"]
 ```
-
-In one sentence:
-
-- `sessions` keeps raw chat history
-- `daily_conversations` keeps normalized day-level event input
-- `daily_memory / weekly_memory` keep distilled learning memory
-- `graphs` keeps graph structure
-- `jobs.json` keeps scheduled-task state
-
-## 📁 Repository Structure
-
-```text
-.
-├── mathclaw/                 # Core runtime: agent, channels, providers, memory, cron, heartbeat
-├── console/                 # MathClaw console: static frontend shell + serve.py API layer
-├── workspace/               # Repo-owned MathClaw persona, plans, and templates
-├── bridge/                  # WhatsApp bridge (Node 20+)
-├── docs/                    # Docs such as the channel plugin guide
-└── tests/                   # Runtime, tool, security, and channel tests
-```
-
-<a id="core-modules"></a>
-
-## 🔗 Core Modules
-
-<details>
-<summary><b>🧠 Chat Workspace</b></summary>
-<br />
-- A single-thread math tutoring workspace for students
-- Supports text, image, screenshot, and PDF input
-- Answer area renders Markdown, lists, code blocks, and tables
-- Follow-up conversation no longer depends on the old multi-session history UI
-- Attachment replies can be extended with custom output skills such as a “competition coach” box
-</details>
-
-<hr />
-
-<details>
-<summary><b>🗓️ Study Plan</b></summary>
-<br />
-- Automatically summarizes daily status, weekly plan, and tomorrow suggestions
-- Pulls revision priorities and correction directions from structured learning memory
-- Presents daily themes and practice dosage in a student-facing layout
-- Designed as a study cockpit rather than an admin report
-</details>
-
-<hr />
-
-<details>
-<summary><b>🕸️ Knowledge Graphs and Error Graphs</b></summary>
-<br />
-- Maintains both a knowledge graph and an error graph
-- Supports focus/overview modes, node highlighting, relation legends, and detail panels
-- Knowledge graphs emphasize prerequisites, similarity, containment, and relation links
-- Error graphs emphasize mistake patterns, recurrence, correction suggestions, and risk
-- Node details support deletion for curation by teachers or operators
-</details>
-
-<hr />
-
-<details>
-<summary><b>⏰ Scheduled Summaries and Heartbeat</b></summary>
-<br />
-
-- The workspace ships with `MathClaw Daily Summary` and `MathClaw Weekly Summary`
-- `HEARTBEAT.md` is checked periodically for persistent tasks, not one-off reminders
-- `cron/jobs.json` stores schedules, next/last execution times, and recent results
-- The console includes a dedicated heartbeat page for rhythm, status, and troubleshooting
-
-</details>
-
-<hr />
-
-<details>
-<summary><b>📡 Multi-Channel Gateway</b></summary>
-<br />
-
-- Built-in channels include WeCom, QQ, Feishu, Telegram, Slack, Email, Discord, Matrix, Weixin, DingTalk, WhatsApp, and MoChat
-- `mathclaw gateway` handles channel startup, inbound routing, streaming coalescing, and outbound retry
-- Runtime flags can override channel config directly for deployment and debugging
-- External channel plugins are supported via Python entry points
-
-</details>
-
-<hr />
-
-<details>
-<summary><b>🛠️ Models, Tools, and MCP</b></summary>
-<br />
-
-- The provider registry already includes DashScope, OpenAI, Anthropic, DeepSeek, Gemini, OpenRouter, Ollama, and more
-- Default tools include filesystem, shell, web search, web fetch, cron, message send-back, subagents, and MCP
-- The console exposes the current model chain, context window, tool summary, and workspace boundaries
-- This makes it practical to manage tutoring and operations inside one system
-
-</details>
-
-<hr />
-
-<details>
-<summary><b>✨ Custom Output Skills</b></summary>
-<br />
-
-- Adds an optional second response box after attachment-based replies
-- Skills are stored in `workspace/custom_output_skills.json`
-- Supports create / enable / disable / delete flows from the console
-- Useful for styles such as “competition coach hints”, “exam rubric reminders”, or “final-check prompts”
-
-</details>
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart LR
-    A["Student / Teacher / Operator"] --> B["Channels<br/>WeCom / QQ / Feishu / ..."]
-    B --> C["mathclaw gateway"]
-    C --> D["MathClaw AgentLoop"]
-
-    D --> E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]
-    D --> F["Tools<br/>Web · Filesystem · Shell · Cron · MCP"]
-    D --> G["Sessions<br/>JSONL conversation history"]
-    D --> H["Memory Runtime<br/>Daily / Weekly / Graphs"]
-    D --> I["Heartbeat / Cron"]
-
-    H --> J["Study Plan page"]
-    H --> K["Memory Graph page"]
-    I --> L["Heartbeat page"]
-    C --> M["MathClaw Console"]
-```
-
-## ℹ️ README Scope
-
-This README has been rewritten against the current codebase and is intentionally aligned with:
-
-- `mathclaw gateway`
-- `mathclaw agent`
-- `console/serve.py`
-- `workspace/*`
-- `mathclaw/agent/*`
-
-It does not describe the old quickstart APIs, old startup scripts, or the previous frontend/backend stack.
 
 ## 📄 License
 
