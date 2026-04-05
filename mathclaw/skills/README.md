@@ -1,6 +1,6 @@
-# nanobot Skills
+# MathClaw Skills
 
-This directory contains built-in skills that extend nanobot's capabilities.
+This directory contains built-in skills that extend MathClaw's capabilities.
 
 ## Skill Format
 

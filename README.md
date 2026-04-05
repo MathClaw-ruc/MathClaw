@@ -181,7 +181,7 @@ MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
 
 这里的 `../workspace` 指向仓库根目录下的 `workspace/`，因为命令是在 `console/` 目录里执行的。
 
-控制台默认会读取 `~/.mathclaw/config.json`；如果你还在沿用旧配置，也会自动回退到 `~/.nanobot/config.json`。旧环境变量前缀 `NANOBOT_CONSOLE_*` 也仍然兼容。
+控制台默认会读取 `~/.mathclaw/config.json`；如果你还在沿用旧版目录结构或旧环境变量命名，控制台也会自动兼容。
 
 默认控制台地址：
 

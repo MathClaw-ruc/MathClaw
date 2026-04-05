@@ -23,4 +23,4 @@ This file is a generated compatibility snapshot for prompt context.
 - Prefer the JSON files and graph files for program logic.
 - Prefer the Markdown files for user-facing review.
 - `HISTORY.md` is an audit log, not the primary memory store.
-- nanobot may regenerate this file after every memory consolidation.
+- MathClaw may regenerate this file after every memory consolidation.

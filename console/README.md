@@ -1,4 +1,4 @@
-# nanobot console shell
+# MathClaw console shell
 
 Minimal static frontend shell copied in spirit from the MathClaw console layout.
 

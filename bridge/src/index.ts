@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * nanobot WhatsApp Bridge
+ * MathClaw WhatsApp Bridge
  * 
- * This bridge connects WhatsApp Web to nanobot's Python backend
+ * This bridge connects WhatsApp Web to MathClaw's Python backend
  * via WebSocket. It handles authentication, message forwarding,
  * and reconnection logic.
  * 
@@ -10,7 +10,7 @@
  *   npm run build && npm start
  *   
  * Or with custom settings:
- *   BRIDGE_PORT=3001 AUTH_DIR=~/.nanobot/whatsapp npm start
+ *   BRIDGE_PORT=3001 AUTH_DIR=~/.mathclaw/whatsapp-auth npm start
  */
 
 // Polyfill crypto for Baileys in ESM
@@ -20,14 +20,20 @@ if (!globalThis.crypto) {
 }
 
 import { BridgeServer } from './server.js';
+import { existsSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
 const PORT = parseInt(process.env.BRIDGE_PORT || '3001', 10);
-const AUTH_DIR = process.env.AUTH_DIR || join(homedir(), '.nanobot', 'whatsapp-auth');
+const DEFAULT_AUTH_DIR = (() => {
+  const preferred = join(homedir(), '.mathclaw', 'whatsapp-auth');
+  const legacy = join(homedir(), '.nanobot', 'whatsapp-auth');
+  return existsSync(preferred) || !existsSync(legacy) ? preferred : legacy;
+})();
+const AUTH_DIR = process.env.AUTH_DIR || DEFAULT_AUTH_DIR;
 const TOKEN = process.env.BRIDGE_TOKEN || undefined;
 
-console.log('🐈 nanobot WhatsApp Bridge');
+console.log('?? MathClaw WhatsApp Bridge');
 console.log('========================\n');
 
 const server = new BridgeServer(PORT, AUTH_DIR, TOKEN);

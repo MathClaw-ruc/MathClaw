@@ -174,7 +174,7 @@ MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
 
 Here `../workspace` points to the repository-level `workspace/` directory, because the command runs inside `console/`.
 
-The console reads `~/.mathclaw/config.json` by default; if you still keep the legacy layout, it automatically falls back to `~/.nanobot/config.json`. The old `NANOBOT_CONSOLE_*` environment variables remain supported as well.
+The console reads `~/.mathclaw/config.json` by default; if you still keep the legacy directory layout or legacy environment variable naming, the console remains backward compatible.
 
 Default console address:
 
