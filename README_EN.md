@@ -11,7 +11,7 @@ MathClaw combines a tutoring workspace, study planning, memory graphs, scheduled
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![Console](https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square)](#console-modules)
 [![Channels](https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square)](#channels-and-integrations)
-[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#what-ships-today)
+[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#core-capabilities)
 [![Heartbeat](https://img.shields.io/badge/Heartbeat-Summaries%20%26%20Cron-FF8A3D?style=flat-square)](#learning-memory-and-automation)
 [![MCP](https://img.shields.io/badge/MCP-Tools%20%26%20Providers-7A5AF8?style=flat-square)](#providers-and-tools)
 [![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
@@ -25,18 +25,18 @@ MathClaw combines a tutoring workspace, study planning, memory graphs, scheduled
 
 ---
 
-## 🎯 What This Repository Is
+## ?? Project Overview
 
-This repository is the current, runnable MathClaw version. It no longer matches the older README that mentioned `start.sh`, quickstart config APIs, or the old React/FastAPI stack.
+MathClaw is a multi-channel AI learning system for junior and senior high school mathematics.
 
-Today, MathClaw is:
+Core components include:
 
 - a **math tutoring agent** built on top of the `mathclaw` runtime
 - a customized **MathClaw console** with both student-facing and operator-facing pages
-- a learning workflow centered on **study plans, heartbeat tasks, structured memory, knowledge graphs, and error graphs**
-- a **multi-channel gateway** that can connect to WeCom, QQ, Feishu, Telegram, Slack, WhatsApp, and more
+- a learning workflow centered on **study plans, knowledge graphs, error graphs, and scheduled summaries**
+- a **multi-channel gateway** for WeCom, QQ, Feishu, Telegram, Slack, WhatsApp, Email, Matrix, Discord, and more
 
-## 🧩 What Ships Today
+## ?? Core Capabilities
 
 | Module | Current capability | Main code |
 | --- | --- | --- |
@@ -74,7 +74,7 @@ Today, MathClaw is:
 
 ## 🖥️ Console Modules
 
-| Page | Audience | Current purpose |
+| Page | Audience | Primary role |
 | --- | --- | --- |
 | 🧠 Chat Workspace | Student | Single-thread tutoring workspace with attachment upload and rich Markdown answers |
 | 🗓️ Study Plan | Student | Daily status, weekly plan, tomorrow suggestions, focus topics, practice load |
@@ -106,7 +106,7 @@ python -m pip install -U pip
 python -m pip install -e .
 ```
 
-If you need WeCom support:
+To enable WeCom support:
 
 ```bash
 python -m pip install -e ".[wecom]"
@@ -123,7 +123,7 @@ This creates:
 - config: `~/.mathclaw/config.json`
 - workspace templates: `./workspace/AGENTS.md`, `USER.md`, `HEARTBEAT.md`, `cron/jobs.json`
 
-Interactive setup is also available:
+Interactive setup:
 
 ```bash
 mathclaw onboard --workspace ./workspace --wizard
@@ -172,9 +172,9 @@ cd console
 MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
 ```
 
-Here `../workspace` points to the repository-level `workspace/` directory, because the command runs inside `console/`.
+When this command runs inside `console/`, `../workspace` points to the repository-level `workspace/` directory.
 
-The console reads `~/.mathclaw/config.json` by default; if you still keep the legacy directory layout or legacy environment variable naming, the console remains backward compatible.
+The console reads `~/.mathclaw/config.json` by default and remains compatible with legacy directory layouts and legacy environment variable naming.
 
 Default console address:
 
@@ -182,7 +182,7 @@ Default console address:
 http://127.0.0.1:6006
 ```
 
-If you want to use port `6008` instead:
+To use port `6008`:
 
 ```bash
 cd console
@@ -198,7 +198,7 @@ mathclaw agent --workspace ./workspace -m "Teach me monotonicity from derivative
 
 ### 📮 Built-in channels
 
-The current repository includes built-in modules for:
+Built-in channels include:
 
 - WeCom
 - QQ
@@ -451,7 +451,7 @@ In one sentence:
 
 - Adds an optional second response box after attachment-based replies
 - Skills are stored in `workspace/custom_output_skills.json`
-- The current repository supports create / enable / disable / delete flows from the console
+- Supports create / enable / disable / delete flows from the console
 - Useful for styles such as “competition coach hints”, “exam rubric reminders”, or “final-check prompts”
 
 </details>

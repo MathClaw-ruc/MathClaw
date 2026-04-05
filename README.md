@@ -11,7 +11,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![Console](https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square)](#控制台模块)
 [![Channels](https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square)](#通道与接入方式)
-[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#当前能力一览)
+[![Memory](https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square)](#??????)
 [![Heartbeat](https://img.shields.io/badge/Heartbeat-Summaries%20%26%20Cron-FF8A3D?style=flat-square)](#学习记忆与自动化)
 [![MCP](https://img.shields.io/badge/MCP-Tools%20%26%20Providers-7A5AF8?style=flat-square)](#模型与工具能力)
 [![License](https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square)](LICENSE)
@@ -25,19 +25,19 @@
 
 ---
 
-## 🎯 项目定位
+## 🎯 项目概览
 
-MathClaw 是当前这套仓库里真正运行中的版本，不再沿用旧版 README 里提到的 `start.sh`、`/api/config/quickstart` 或 React/FastAPI 那套路径。  
-现在的产品形态是：
+MathClaw 是一套面向初高中数学学习场景的多通道 AI 学习系统，整合了解题工作台、学习规划、结构化记忆与多平台消息接入。  
 
-- 以 `mathclaw` 运行时为底座的 **数学学习 Agent**
-- 一套定制过的 **MathClaw 控制台**，同时覆盖学生工作区和管理工作区
-- 一套面向学习场景的 **记忆、计划、心跳、错题图谱** 工作流
-- 一套可直接接入 **企业微信 / QQ / 飞书 / Telegram / Slack / WhatsApp / Email / Matrix / Discord / 微信 / 钉钉 / MoChat** 的多通道网关
+核心组成包括：
+- 以 `mathclaw` 运行时为基础的 **数学学习 Agent**
+- 同时覆盖学生工作区与管理工作区的 **MathClaw 控制台**
+- 围绕 **学习计划、知识图谱、错题图谱与自动总结** 构建的学习记忆工作流
+- 可接入 **企业微信 / QQ / 飞书 / Telegram / Slack / WhatsApp / Email / Matrix / Discord / 微信 / 钉钉 / MoChat** 的多通道网关
 
-如果你要理解这仓库“现在到底能做什么”，看下面这张表最直接。
+核心能力概览如下。
 
-## 🧩 当前能力一览
+## 🧩 核心能力一览
 
 | 模块 | 当前能力 | 对应代码 |
 | --- | --- | --- |
@@ -75,9 +75,9 @@ MathClaw 是当前这套仓库里真正运行中的版本，不再沿用旧版 R
 
 ## 🖥️ 控制台模块
 
-当前前端不是“一个简单聊天页”，而是围绕学习和运营拆出来的一组页面：
+控制台包含以下学生端与管理端页面：
 
-| 页面 | 面向角色 | 当前用途 |
+| 页面 | 面向角色 | 主要作用 |
 | --- | --- | --- |
 | 🧠 解题工作台 | 学生 | 单对话学习工作台，支持附件上传、追问、Markdown 表格回答 |
 | 🗓️ 学习计划 | 学生 | 展示今日状态、本周计划、明日建议、复习优先级与练习量 |
@@ -109,7 +109,7 @@ python -m pip install -U pip
 python -m pip install -e .
 ```
 
-如果你需要企业微信 SDK：
+如需启用企业微信 SDK：
 
 ```bash
 python -m pip install -e ".[wecom]"
@@ -126,7 +126,7 @@ mathclaw onboard --workspace ./workspace
 - 配置文件：`~/.mathclaw/config.json`
 - 工作区模板：`./workspace/AGENTS.md`、`USER.md`、`HEARTBEAT.md`、`cron/jobs.json`
 
-你也可以使用交互式初始化：
+支持交互式初始化：
 
 ```bash
 mathclaw onboard --workspace ./workspace --wizard
@@ -134,7 +134,7 @@ mathclaw onboard --workspace ./workspace --wizard
 
 ### 4. 写入最小配置
 
-下面是一个和当前 MathClaw 工作流匹配的最小示例：
+最小配置示例如下：
 
 ```json
 {
@@ -162,7 +162,7 @@ mathclaw onboard --workspace ./workspace --wizard
 }
 ```
 
-> 当前代码里默认的控制台演示链路也是围绕 DashScope / Qwen 与 Tavily 这类搜索增强来组织的。
+> 默认演示链路使用 DashScope / Qwen 与 Tavily 作为模型与搜索增强组合。
 
 ### 5. 启动网关
 
@@ -179,9 +179,9 @@ cd console
 MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
 ```
 
-这里的 `../workspace` 指向仓库根目录下的 `workspace/`，因为命令是在 `console/` 目录里执行的。
+在 `console/` 目录下执行该命令时，`../workspace` 对应仓库根目录下的 `workspace/`。
 
-控制台默认会读取 `~/.mathclaw/config.json`；如果你还在沿用旧版目录结构或旧环境变量命名，控制台也会自动兼容。
+控制台默认读取 `~/.mathclaw/config.json`，并兼容旧版目录结构与旧环境变量命名。
 
 默认控制台地址：
 
@@ -189,13 +189,15 @@ MATHCLAW_CONSOLE_WORKSPACE=../workspace python serve.py
 http://127.0.0.1:6006
 ```
 
-如果你想沿用当前线上部署常见的 `6008` 端口：
+如需使用线上部署常见的 `6008` 端口：
 
 ```bash
 cd console
 MATHCLAW_CONSOLE_WORKSPACE=../workspace MATHCLAW_CONSOLE_PORT=6008 python serve.py
 ```
+
 ### 7. 直接用 CLI 对话
+
 
 ```bash
 mathclaw agent --workspace ./workspace -m "帮我讲一下导数单调性判断"
@@ -205,7 +207,7 @@ mathclaw agent --workspace ./workspace -m "帮我讲一下导数单调性判断"
 
 ### 📮 内置通道
 
-当前仓库内置的 channel 模块包括：
+内置通道包括：
 
 - WeCom
 - QQ
@@ -432,7 +434,7 @@ flowchart LR
 <summary><b>📡 多通道接入</b></summary>
 <br />
 
-- 当前内置 WeCom、QQ、Feishu、Telegram、Slack、Email、Discord、Matrix、Weixin、DingTalk、WhatsApp、MoChat
+- 内置 WeCom、QQ、Feishu、Telegram、Slack、Email、Discord、Matrix、Weixin、DingTalk、WhatsApp、MoChat
 - `mathclaw gateway` 统一负责通道启动、消息接入、流式输出聚合和失败重试
 - 支持运行时参数直接覆盖通道配置，适合部署与调试
 - 同时支持 Python entry points 方式扩展 channel plugin
@@ -460,7 +462,7 @@ flowchart LR
 
 - 支持在附件类回复结束后追加第二个风格化回复框
 - Skill 存储在 `workspace/custom_output_skills.json`
-- 当前仓库已支持启用、停用、删除与控制台查看
+- 支持在控制台中创建、启用、停用、删除与查看
 - 适合扩展“竞赛教练点拨”“压轴题提醒”“考试规范检查”等附加输出风格
 
 </details>
