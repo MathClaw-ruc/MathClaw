@@ -1,17 +1,14 @@
-<p align="center">
-  <br>
-  <img src="logo.png" alt="MathClaw Logo" width="180">
-  <br>
-</p>
-
-<h1 align="center">MathClaw</h1>
+<h1 align="center">
+  <img src="logo.png" alt="MathClaw Logo" width="52" />
+  MathClaw
+</h1>
 
 <p align="center">
   A multi-channel AI learning assistant for junior and senior high school mathematics
 </p>
 
 <p align="center">
-  <a href="README.md">中文</a> &nbsp;｜&nbsp; <a href="README_EN.md">English</a> &nbsp;｜&nbsp; <a href="COMMUNICATION.md">💬 Communication</a>
+  <a href="README.md">中文</a> &nbsp;｜&nbsp; <a href="README_EN.md">English</a>
 </p>
 
 <p align="center">
