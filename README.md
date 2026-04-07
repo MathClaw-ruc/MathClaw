@@ -1,7 +1,10 @@
-<h1 align="center">
-  <img src="logo.png" alt="MathClaw Logo" width="52" />
-  MathClaw
-</h1>
+<p align="center">
+  <br>
+  <img src="logo.png" alt="MathClaw Logo" width="180">
+  <br>
+</p>
+
+<h1 align="center">MathClaw</h1>
 
 <p align="center">
   面向初高中数学学习场景的多通道 AI 学习助手
