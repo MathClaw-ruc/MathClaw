@@ -60,33 +60,21 @@ flowchart LR
     classDef store fill:#7209B7,stroke:#6008a0,color:#fff,stroke-width:2px
     classDef output fill:#2EA44F,stroke:#278a42,color:#fff,stroke-width:2px
 
-    subgraph Users["👤 用户"]
-        A(["学生 / 老师 / 管理员"]):::user
-    end
+    A(["学生 / 老师 / 管理员"]):::user
+    B["多通道入口<br/>WeCom / QQ / Feishu / ..."]:::gateway
+    C["MathClaw Gateway"]:::gateway
+    D(["MathClaw AgentLoop"]):::core
 
-    subgraph Channel["📡 通道层"]
-        B["多通道入口<br/>WeCom / QQ / Feishu / ..."]:::gateway
-        C["MathClaw Gateway"]:::gateway
-        M["MathClaw Console"]:::gateway
-    end
+    E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]:::core
+    F["Tools<br/>Web · Filesystem · Shell · Cron · MCP"]:::tool
+    G[("Sessions<br/>JSONL 会话历史")]:::store
+    H["Memory Runtime<br/>日报 · 周报 · 双图谱"]:::store
+    I["Heartbeat / Cron"]:::store
 
-    subgraph Core["⚙️ 核心引擎"]
-        D(["MathClaw AgentLoop"]):::core
-        E["LLM Providers<br/>DashScope / OpenAI / Anthropic / ..."]:::core
-        F["Tools<br/>Web · Filesystem · Shell · Cron · MCP"]:::tool
-    end
-
-    subgraph Memory["💾 记忆与调度"]
-        G[("Sessions<br/>JSONL 会话历史")]:::store
-        H["Memory Runtime<br/>日报 · 周报 · 双图谱"]:::store
-        I["Heartbeat / Cron"]:::store
-    end
-
-    subgraph Output["📊 前端呈现"]
-        J["学习计划页"]:::output
-        K["知识图谱页"]:::output
-        L["心跳与自动发送页"]:::output
-    end
+    J["学习计划页"]:::output
+    K["知识图谱页"]:::output
+    L["心跳与自动发送页"]:::output
+    M["MathClaw Console"]:::gateway
 
     A --> B --> C --> D
     C --> M
@@ -98,12 +86,6 @@ flowchart LR
     H --> J
     H --> K
     I --> L
-
-    style Users fill:#6c63ff16,stroke:#6C63FF,stroke-width:2px,color:#333
-    style Channel fill:#00bfa616,stroke:#00BFA6,stroke-width:2px,color:#333
-    style Core fill:#3776ab16,stroke:#3776AB,stroke-width:2px,color:#333
-    style Memory fill:#7209b716,stroke:#7209B7,stroke-width:2px,color:#333
-    style Output fill:#2ea44f16,stroke:#2EA44F,stroke-width:2px,color:#333
 ```
 
 ## 📁 仓库结构
