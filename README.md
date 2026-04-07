@@ -343,14 +343,28 @@ MathClaw 当前这套仓库最有辨识度的能力，不是"会聊天"，而是
 
 ```mermaid
 flowchart LR
-    A["workspace/sessions/*.jsonl<br/>原始会话"] --> B["daily_conversations/*/events.jsonl<br/>按天事件流"]
-    B --> C["daily_memory/*<br/>每日学习记忆"]
-    C --> D["weekly_memory/*<br/>每周总结与计划"]
-    C --> E["graphs/*.json<br/>知识点 / 错题图谱"]
-    D --> F["学习计划页<br/>今日状态 / 本周计划 / 明日建议"]
-    E --> G["记忆页<br/>知识图谱 / 错题图谱"]
-    H["HEARTBEAT.md"] --> I["cron/jobs.json<br/>定时任务状态"]
-    I --> J["心跳页<br/>自动发送 / 节律 / 排查"]
+    classDef source fill:#4361ee,stroke:#3651d4,color:#fff,stroke-width:1.5px
+    classDef process fill:#457b9d,stroke:#376482,color:#fff,stroke-width:1.5px
+    classDef store fill:#6c5ce7,stroke:#5a4bc6,color:#fff,stroke-width:1.5px
+    classDef page fill:#a8dadc,stroke:#7fb8ba,color:#1d3557,stroke-width:1.5px
+
+    A["workspace/sessions/*.jsonl<br/>原始会话"]:::source
+    B["daily_conversations/*/events.jsonl<br/>按天事件流"]:::process
+    C["daily_memory/*<br/>每日学习记忆"]:::store
+    D["weekly_memory/*<br/>每周总结与计划"]:::store
+    E["graphs/*.json<br/>知识点 / 错题图谱"]:::store
+    F["学习计划页<br/>今日状态 / 本周计划 / 明日建议"]:::page
+    G["记忆页<br/>知识图谱 / 错题图谱"]:::page
+    H["HEARTBEAT.md"]:::source
+    I["cron/jobs.json<br/>定时任务状态"]:::process
+    J["心跳页<br/>自动发送 / 节律 / 排查"]:::page
+
+    A ==> B ==> C
+    C ==> D ==> F
+    C ==> E ==> G
+    H ==> I ==> J
+
+    linkStyle default stroke:#457b9d,stroke-width:2.5px
 ```
 
 ## 📄 License
