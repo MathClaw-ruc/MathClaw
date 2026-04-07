@@ -15,11 +15,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF?style=flat-square">
-  <img src="https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6?style=flat-square">
-  <img src="https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7?style=flat-square">
-  <img src="https://img.shields.io/badge/License-MIT-2EA44F?style=flat-square">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Console-Student%20%26%20Admin-6C63FF">
+  <img src="https://img.shields.io/badge/Channels-WeCom%20%7C%20QQ%20%7C%20Feishu%20%7C%20More-00BFA6">
+  <img src="https://img.shields.io/badge/Memory-Knowledge%20%26%20Error%20Graphs-4F8EF7">
+  <img src="https://img.shields.io/badge/License-MIT-2EA44F">
 </p>
 
 > ⭐ 如果你喜欢这个项目，请点击右上角的 "Star" 按钮支持我们。你的支持是我们前进的动力！
