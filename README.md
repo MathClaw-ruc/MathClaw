@@ -77,15 +77,15 @@ flowchart LR
     M["MathClaw Console"]:::channel
 
     A ==> B ==> C ==> D
-    C -.-> M
+    C ==> M
     D ==> E
     D ==> F
     D ==> G
     D ==> H
     D ==> I
-    H -.-> J
-    H -.-> K
-    I -.-> L
+    H ==> J
+    H ==> K
+    I ==> L
 
     linkStyle default stroke:#457b9d,stroke-width:2.5px
 ```
